@@ -1,318 +1,209 @@
-
-/**
- * Module dependencies.
- */
+/*jslint node: true*/
+"use strict";
 
 var Emitter = require('events').EventEmitter;
-var debug = require('debug')('slate-irc');
 var Parser = require('slate-irc-parser');
 var replies = require('irc-replies');
+var util = require('util');
 
-/**
- * Core plugins.
- */
+function toArray(val) {
+    return Array.isArray(val) ? val : [val];
+}
 
-var welcome = require('./lib/plugins/welcome');
-var privmsg = require('./lib/plugins/privmsg');
-var notice = require('./lib/plugins/notice');
-var topic = require('./lib/plugins/topic');
-var names = require('./lib/plugins/names');
-var nick = require('./lib/plugins/nick');
-var quit = require('./lib/plugins/quit');
-var away = require('./lib/plugins/away');
-var pong = require('./lib/plugins/pong');
-var join = require('./lib/plugins/join');
-var part = require('./lib/plugins/part');
-var kick = require('./lib/plugins/kick');
-var whois = require('./lib/plugins/whois');
+function Client(stream) {
+    if (!(this instanceof Client)) {
+        return new Client(stream);
+    }
+    stream.setEncoding('utf8');
+    this.stream = stream;
+    this.parser = new Parser();
+    this.parser.on('message', this.onmessage.bind(this));
+    stream.pipe(this.parser);
+    this.setMaxListeners(100);
 
-/**
- * Expose `Client.`
- */
+    this.me = null;
+
+    this.use(require('./lib/plugins/server')());
+    this.use(require('./lib/plugins/user')());
+    this.use(require('./lib/plugins/channel')());
+
+    this.use(require('./lib/plugins/away')());
+    this.use(require('./lib/plugins/invite')());
+    this.use(require('./lib/plugins/join')());
+    this.use(require('./lib/plugins/kick')());
+    this.use(require('./lib/plugins/mode')());
+    this.use(require('./lib/plugins/motd')());
+    this.use(require('./lib/plugins/names')());
+    this.use(require('./lib/plugins/nick')());
+    this.use(require('./lib/plugins/notice')());
+    this.use(require('./lib/plugins/part')());
+    this.use(require('./lib/plugins/ping')());
+    this.use(require('./lib/plugins/privmsg')());
+    this.use(require('./lib/plugins/quit')());
+    this.use(require('./lib/plugins/topic')());
+    this.use(require('./lib/plugins/welcome')());
+    this.use(require('./lib/plugins/whois')());
+}
 
 module.exports = Client;
 
-/**
- * Initialize a new IRC client with the
- * given duplex `stream`.
- *
- * @param {Stream} stream
- * @api public
- */
+util.inherits(Client, Emitter);
 
-function Client(stream) {
-  if (!(this instanceof Client)) return new Client(stream);
-  stream.setEncoding('utf8');
-  this.stream = stream;
-  this.parser = new Parser;
-  this.parser.on('message', this.onmessage.bind(this));
-  stream.pipe(this.parser);
-  this.setMaxListeners(100);
-  this.use(welcome());
-  this.use(privmsg());
-  this.use(notice());
-  this.use(nick());
-  this.use(topic());
-  this.use(names());
-  this.use(away());
-  this.use(quit());
-  this.use(join());
-  this.use(part());
-  this.use(kick());
-  this.use(pong());
-  this.use(whois());
-}
-
-/**
- * Inherit from `Emitter.prototype`.
- */
-
-Client.prototype.__proto__ = Emitter.prototype;
-
-/**
- * Write `str` and invoke `fn(err)`.
- *
- * @param {String} str
- * @param {Function} [fn]
- * @api public
- */
-
-Client.prototype.write = function(str, fn){
-  this.stream.write(str + '\r\n', fn);
+Client.prototype.write = function (str, fn) {
+    this.stream.write(str + '\r\n', fn);
 };
 
-/**
- * PASS <pass>
- *
- * @param {String} pass
- * @param {Function} [fn]
- * @api public
- */
-
-Client.prototype.pass = function(pass, fn){
-  this.write('PASS ' + pass, fn);
+Client.prototype.pass = function (pass, fn) {
+    this.write('PASS ' + pass, fn);
 };
 
-/**
- * NICK <nick>
- *
- * @param {String} nick
- * @param {Function} [fn]
- * @api public
- */
-
-Client.prototype.nick = function(nick, fn){
-  this.me = nick;
-  this.write('NICK ' + nick, fn);
+Client.prototype.nick = function (nick, fn) {
+    if (this.me === null) {
+        this.me = this.getUser(nick);
+    } else {
+        this.me.nick = nick;
+    }
+    this.write('NICK ' + nick, fn);
 };
 
-/**
- * USER <username> <realname>
- *
- * @param {String} username
- * @param {String} realname
- * @param {Function} [fn]
- * @api public
- */
-
-Client.prototype.user = function(username, realname, fn){
-  this.write('USER ' + username + ' 0 * :' + realname, fn);
+Client.prototype.user = function (username, realname, fn) {
+    this.me.username = username;
+    this.me.realname = realname;
+    this.write('USER ' + username + ' 0 * :' + realname, fn);
 };
 
-/**
- * Send an invite to `name`, for a `channel`.
- *
- * @param {String} name
- * @param {String} channel
- * @param {Function} [fn]
- * @api public
- */
-
-Client.prototype.invite = function(name, channel, fn){
-  this.write('INVITE ' + name + ' ' + channel, fn);
+Client.prototype.invite = function (name, channel, fn) {
+    name = typeof name === "string" ? name : name.getNick();
+    this.write('INVITE ' + name + ' ' + channel, fn);
 };
 
-/**
- * Send `msg` to `target`, where `target`
- * is a channel or user name.
- *
- * @param {String} target
- * @param {String} msg
- * @param {Function} [fn]
- * @api public
- */
-
-Client.prototype.send = function(target, msg, fn){
-  this.write('PRIVMSG ' + target + ' :' + msg, fn);
+Client.prototype.send = function (target, msg) {
+    if (typeof target !== "string") {
+        if (this.isUser(target)) {
+            target = target.getNick();
+        } else if (this.isChannel(target)) {
+            target = target.getName();
+        } else {
+            target = target.toString();
+        }
+    }
+    var leading, maxlen, self;
+    self = this;
+    leading = 'PRIVMSG ' + target + ' :';
+    maxlen = 512
+            - (1 + this.me.getNick().length + 1 + this.me.getUsername().length + 1 + this.me.getHostname().length + 1)
+            - leading.length
+            - 2;
+    /*jslint regexp: true*/
+    msg.match(new RegExp('.{1,' + maxlen + '}', 'g')).forEach(function (str) {
+        if (str[0] === ' ') { //leading whitespace
+            str = str.substring(1);
+        }
+        if (str[str.length - 1] === ' ') { //trailing whitespace
+            str = str.substring(0, str.length - 1);
+        }
+        self.write(leading + str);
+    });
+    /*jslint regexp: false*/
 };
 
-/**
- * Send `msg` to `target` as a NOTICE, where `target`
- * is a channel or user name.
- *
- * @param {String} target
- * @param {String} msg
- * @param {Function} [fn]
- * @api public
- */
-
-Client.prototype.notice = function(target, msg, fn){
-  this.write('NOTICE ' + target + ' :' + msg, fn);
+Client.prototype.notice = function (target, msg) {
+    if (typeof target !== "string") {
+        if (this.isUser(target)) {
+            target = target.getNick();
+        } else if (this.isChannel(target)) {
+            target = target.getName();
+        } else {
+            target = target.toString();
+        }
+    }
+    var leading, maxlen, self;
+    self = this;
+    leading = 'NOTICE ' + target + ' :';
+    maxlen = 512
+            - (1 + this.me.getNick().length + 1 + this.me.getUsername().length + 1 + this.me.getHostname().length + 1)
+            - leading.length
+            - 2;
+    /*jslint regexp: true*/
+    msg.match(new RegExp('.{1,' + maxlen + '}', 'g')).forEach(function (str) {
+        if (str[0] === ' ') { //leading whitespace
+            str = str.substring(1);
+        }
+        if (str[str.length - 1] === ' ') { //trailing whitespace
+            str = str.substring(0, str.length - 1);
+        }
+        self.write(leading + str);
+    });
+    /*jslint regexp: false*/
 };
 
-/**
- * Join channel(s).
- *
- * @param {String|Array} channels
- * @api public
- */
-
-Client.prototype.join = function(channels, fn){
-  this.write('JOIN ' + toArray(channels).join(','), fn);
+Client.prototype.join = function (channels, fn) {
+    this.write('JOIN ' + toArray(channels).join(','), fn);
 };
 
-/**
- * Leave channel(s) with optional `msg`.
- *
- * @param {String|Array} channels
- * @param {String|Function} [msg or fn]
- * @param {Function} [fn]
- * @return {Type}
- * @api public
- */
-
-Client.prototype.part = function(channels, msg, fn){
-  if ('function' == typeof msg) {
-    fn = msg;
-    msg = '';
-  }
-
-  this.write('PART ' + toArray(channels).join(',') + ' :' + msg, fn);
+Client.prototype.part = function (channels, msg, fn) {
+    if (typeof msg === 'function') {
+        fn = msg;
+        msg = '';
+    }
+    this.write('PART ' + toArray(channels).join(',') + ' :' + msg, fn);
 };
 
-/**
- * Set topic with optional `msg`.
- *
- * @param {String} channel
- * @param {String|Function} [topic or fn]
- * @param {Function} [fn]
- * @return {Type}
- * @api public
- */
-
-Client.prototype.topic = function(channel, topic, fn){
-  if ('function' == typeof topic) {
-    fn = topic;
-    topic = '';
-  }
-
-  this.write('TOPIC ' + channel + ' :' + topic, fn);
+Client.prototype.topic = function (channel, topic, fn) {
+    channel = typeof channel !== "string" ? channel.getName() : channel;
+    if (typeof topic === 'function') {
+        fn = topic;
+        topic = '';
+    }
+    this.write('TOPIC ' + channel + ' :' + topic, fn);
 };
 
-/**
- * Kick nick(s) from channel(s) with optional `msg`.
- *
- * @param {String|Array} channels
- * @param {String|Array} nicks
- * @param {String|Function} [msg or fn]
- * @param {Function} [fn]
- * @return {Type}
- * @api public
- */
-
-Client.prototype.kick = function(channels, nicks, msg, fn){
-  if ('function' == typeof msg) {
-    fn = msg;
-    msg = '';
-  }
-
-  channels = toArray(channels).join(',');
-  nicks = toArray(nicks).join(',');
-  this.write('KICK ' + channels + ' ' + nicks + ' :' + msg, fn);
+Client.prototype.kick = function (channels, nicks, msg, fn) {
+    if (typeof msg === 'function') {
+        fn = msg;
+        msg = '';
+    }
+    channels = toArray(channels).join(',');
+    nicks = toArray(nicks).join(',');
+    this.write('KICK ' + channels + ' ' + nicks + ' :' + msg, fn);
 };
 
-/**
- * Disconnect from the server with `msg`.
- *
- * @param {String} [msg]
- * @param {Function} [fn]
- * @api public
- */
-
-Client.prototype.quit = function(msg, fn){
-  msg = msg || 'Bye!';
-  this.write('QUIT :' + msg, fn);
+Client.prototype.quit = function (msg, fn) {
+    msg = msg || 'Bye!';
+    this.write('QUIT :' + msg, fn);
 };
 
-/**
- * Used to obtain operator privileges. 
- * The combination of `name` and `password` are required 
- * to gain Operator privileges.  Upon success, a `'mode'` 
- * event will be emitted.
- * 
- * @param {String} name
- * @param {String} password
- * @param {Function} [fn]
- * @api public
- */
-
-Client.prototype.oper = function(name, password, fn){
-  this.write('OPER ' + name + ' ' + password, fn);
+Client.prototype.oper = function (name, password, fn) {
+    this.write('OPER ' + name + ' ' + password, fn);
 };
 
-/**
- * Used to set a user's mode or channel's mode for a user;
- * 
- * @param {String} [nick or channel]
- * @param {String} flags
- * @param {String} params [nick - if setting channel mode]
- * @param {Function} [fn]
- * @api public
- */
-
-Client.prototype.mode = function(target, flags, params, fn){
-  if ('function' === typeof params) {
-    fn = params;
-    params = '';
-  }
-  if (params) {
-    this.write('MODE ' + target + ' ' + flags + ' ' + params, fn);
-  } else {
-    this.write('MODE ' + target + ' ' + flags, fn);
-  }
+Client.prototype.mode = function (target, flags, params, fn) {
+    if (typeof target !== "string") {
+        if (this.isUser(target)) {
+            target = target.getNick();
+        } else if (this.isChannel(target)) {
+            target = target.getName();
+        } else {
+            target = target.toString();
+        }
+    }
+    if ('function' === typeof params) {
+        fn = params;
+        params = '';
+    }
+    if (params) {
+        this.write('MODE ' + target + ' ' + flags + ' ' + params, fn);
+    } else {
+        this.write('MODE ' + target + ' ' + flags, fn);
+    }
 };
 
-/**
- * Use the given plugin `fn`.
- *
- * @param {Function} fn
- * @return {Client} self
- * @api public
- */
-
-Client.prototype.use = function(fn){
-  fn(this);
-  return this;
+Client.prototype.use = function (fn) {
+    fn(this);
+    return this;
 };
 
-/**
- * Handle messages.
- * 
- * Emit "message" (msg).
- * 
- * @api private
- */
-
-Client.prototype.onmessage = function(msg){
-  msg.command = replies[msg.command] || msg.command;
-  debug('message %s %s', msg.command, msg.string);
-  this.emit('data', msg);
+Client.prototype.onmessage = function (msg) {
+    msg.command = replies[msg.command] || msg.command;
+    this.emit('data', msg);
 };
-
-/**
- * Array helper.
- */
-
-function toArray(val) {
-  return Array.isArray(val) ? val : [val];
-}

@@ -5,19 +5,19 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('join()', function () {
+describe('motd()', function () {
     describe('on JOIN', function () {
-        it('should emit "join"', function (done) {
+        it('should emit "motd"', function (done) {
             var stream = new Stream(),
                 client = irc(stream);
-            client.nick('foo');
 
-            client.on('join', function (event) {
+            client.on('invite', function (event) {
                 event.user.getNick().should.equal('foo');
+                event.target.getNick().should.equal('bar');
                 event.channel.getName().should.equal('#foo');
                 done();
             });
-            stream.write(':foo!bar@baz.com JOIN :#foo\r\n');
+            stream.write(':foo!bar@baz.com INVITE bar :#foo\r\n');
         });
     });
 });

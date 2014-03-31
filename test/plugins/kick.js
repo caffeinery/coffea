@@ -1,21 +1,25 @@
+/*jslint node: true*/
+/*global describe, it*/
+"use strict";
 
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('kick()', function(){
-  describe('on KICK', function(){
-    it('should emit "kick"', function(done){
-      var stream = new Stream;
-      var client = irc(stream);
-      
-      client.on('kick', function(e){
-        e.nick.should.equal('tjholowaychuk');
-        e.client.should.equal('tobi');
-        e.channel.should.eql('#express');
-        done();
-      });
+describe('kick()', function () {
+    describe('on KICK', function () {
+        it('should emit "kick"', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+            client.nick('foo');
 
-      stream.write(':tjholowaychuk!~tjholoway@S01067cb21b2fd643.gv.shawcable.net KICK #express tobi :Too ferrety\r\n');
-    })
-  })
-})
+            client.on('kick', function (event) {
+                event.channel.getName().should.equal('#foo');
+                event.user.getNick().should.equal('targetnick');
+                event.by.getNick().should.equal('foo');
+                event.reason.should.equal('goodbye cruel world');
+                done();
+            });
+            stream.write(':foo!bar@baz.com KICK #foo targetnick :goodbye cruel world\r\n');
+        });
+    });
+});

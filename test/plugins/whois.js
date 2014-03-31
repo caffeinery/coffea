@@ -1,132 +1,189 @@
+/*jslint node: true*/
+/*global describe, it*/
+"use strict";
 
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('whois()', function(){
-  describe('client.whois(target, mask, fn)', function(){
+describe('whois()', function () {
+    describe('client.whois(target, mask, fn)', function () {
 
-    it('should respond with user info', function(done){
-      var stream = new Stream;
-      var client = irc(stream);
+        it('should parse user information', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
 
-      client.whois('colinm', function(err, e){
-        if (err) return done(err);e.hostname.should.equal('client.host.net');
-        e.username.should.equal('~colinm');
-        e.realname.should.equal('Colin Milhench');
-        e.server.should.equal('other.host.net');
-        e.channels.should.be.instanceof(Array).and.have.lengthOf(4);
-        e.channels.should.include('#Node.js');
-        e.channels.should.include('#express');
-        e.channels.should.include('#some');
-        e.channels.should.include('#more');
-        e.away.should.equal('brb');
-        e.sign.should.equal('1384330635');
-        e.idle.should.equal('10543');
-        done();
-      });
+            client.whois('nick', function (err, data) {
+                if (err) {
+                    return done(err);
+                }
+                data.nick.should.equal('nick');
+                data.username.should.equal('user');
+                data.hostname.should.equal('host.com');
+                data.realname.should.equal('realname');
+                done();
+            });
 
-      stream.write(':irc.host.net 311 me colinm ~colinm client.host.net * :Colin Milhench\r\n');
-      stream.write(':irc.host.net 319 me colinm #Node.js #express\r\n');
-      stream.write(':irc.host.net 319 me colinm #some #more\r\n');
-      stream.write(':irc.host.net 312 me colinm other.host.net :Paris, FR\r\n');
-      stream.write(':irc.host.net 301 me colinm :brb\r\n');
-      stream.write(':irc.host.net 378 me colinm is connecting from *@client.host.net 127.0.0.1\r\n');
-      stream.write(':irc.host.net 317 me colinm 10543 1384330635 seconds idle, signon time\r\n');
-      stream.write(':irc.host.net 330 me colinm cmilhench :is logged in as\r\n');
-      stream.write(':irc.host.net 318 me colinm :End of /WHOIS list.\r\n');
+            stream.write(':vulcanus.kerat.net 311 foo nick user host.com * :realname\r\n');
+            stream.write(':vulcanus.kerat.net 318 foo nick :End of /WHOIS list.\r\n');
+        });
+
+        it('should parse channels (with modes)', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+
+            client.whois('nick', function (err, data) {
+                if (err) {
+                    return done(err);
+                }
+                data.channels.should.be.an.instanceOf(Object).and.have.properties({
+                    '#b0wm': [],
+                    '#breadfish++': [],
+                    '#dev': ['%'],
+                    '#foreveralone': ['~'],
+                    '#glados': [],
+                    '#kerat': ['~'],
+                    '#kerat-op': [],
+                    '#kochstube': [],
+                    '#pupskuchen': [],
+                    '#sa-mp.de': ['~'],
+                    '#zncbnc': ['~'],
+                });
+                done();
+            });
+
+            stream.write(':vulcanus.kerat.net 319 foo nick :~#kerat ~#zncbnc #kerat-op #b0wm %#dev #kochstube #glados #pupskuchen ~#foreveralone ~#sa-mp.de #breadfish++\r\n');
+            stream.write(':vulcanus.kerat.net 318 foo nick :End of /WHOIS list.\r\n');
+        });
+
+        it('should parse server information', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+
+            client.whois('nick', function (err, data) {
+                if (err) {
+                    return done(err);
+                }
+                data.server.should.equal('server.com');
+                data.serverInfo.should.equal('Server Info');
+                done();
+            });
+
+            stream.write(':vulcanus.kerat.net 312 foo nick server.com :Server Info\r\n');
+            stream.write(':vulcanus.kerat.net 318 foo nick :End of /WHOIS list.\r\n');
+        });
+
+        it('should parse operator', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+
+            client.whois('nick', function (err, data) {
+                if (err) {
+                    return done(err);
+                }
+                data.oper.should.equal(true);
+                done();
+            });
+
+            stream.write(':vulcanus.kerat.net 313 foo nick :is a NetAdmin on KeratNet\r\n');
+            stream.write(':vulcanus.kerat.net 318 foo nick :End of /WHOIS list.\r\n');
+        });
+
+        it('should parse account', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+
+            client.whois('nick', function (err, data) {
+                if (err) {
+                    return done(err);
+                }
+                data.account.should.equal('Nick');
+                done();
+            });
+
+            stream.write(':vulcanus.kerat.net 330 foo nick Nick :is logged in as\r\n');
+            stream.write(':vulcanus.kerat.net 318 foo nick :End of /WHOIS list.\r\n');
+        });
+
+        it('should parse registered', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+
+            client.whois('nick', function (err, data) {
+                if (err) {
+                    return done(err);
+                }
+                data.registered.should.equal(true);
+                done();
+            });
+
+            stream.write(':vulcanus.kerat.net 307 foo nick :is a registered nick\r\n');
+            stream.write(':vulcanus.kerat.net 318 foo nick :End of /WHOIS list.\r\n');
+        });
+
+        it('should parse secure connection', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+
+            client.whois('nick', function (err, data) {
+                if (err) {
+                    return done(err);
+                }
+                data.secure.should.equal(true);
+                done();
+            });
+
+            stream.write(':vulcanus.kerat.net 671 foo nick :is using a secure connection\r\n');
+            stream.write(':vulcanus.kerat.net 318 foo nick :End of /WHOIS list.\r\n');
+        });
+
+        it('should parse secure connection', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+
+            client.whois('nick', function (err, data) {
+                if (err) {
+                    return done(err);
+                }
+                data.idle.should.equal(1076);
+                data.signon.should.be.an.instanceof(Date);
+                data.signon.getTime().should.equal(1390235346 * 1000);
+                done();
+            });
+
+            stream.write(':vulcanus.kerat.net 317 foo nick 1076 1390235346 :seconds idle, signon time\r\n');
+            stream.write(':vulcanus.kerat.net 318 foo nick :End of /WHOIS list.\r\n');
+        });
+
+        it('should err with No such nick/channel', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+            client.whois('unusednickorchannel');
+            client.on('whois', function (err) {
+                err.should.equal('No such nick/channel');
+                done();
+            });
+            stream.write(':vulcanus.kerat.net 401 maggin unusednickorchannel :No such nick/channel\r\n');
+            stream.write(':vulcanus.kerat.net 318 maggin unusednickorchannel :End of /WHOIS list.\r\n');
+        });
+
+        it('should err with No such server', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+            client.whois('not.a.valid.server', function (err) {
+                err.should.equal('No such server');
+                done();
+            });
+            stream.write(':vulcanus.kerat.net 402 foo not.a.valid.server :No such server\r\n');
+        });
+
+        it('should err with Not enough parameters', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+            client.on('whois', function (err) {
+                err.should.equal('Not enough parameters');
+                done();
+            });
+            stream.write(':vulcanus.kerat.net 461 foo WHOIS :Not enough parameters.\r\n');
+        });
     });
-
-    it('should emit "info"', function(done){
-      var stream = new Stream;
-      var client = irc(stream);
-
-      client.on('whois', function(err, e){
-        e.hostname.should.equal('client.host.net');
-        e.username.should.equal('~colinm');
-        e.realname.should.equal('Colin Milhench');
-        e.server.should.equal('other.host.net');
-        e.channels.should.be.instanceof(Array).and.have.lengthOf(4);
-        e.channels.should.include('#Node.js');
-        e.channels.should.include('#express');
-        e.channels.should.include('#some');
-        e.channels.should.include('#more');
-        e.sign.should.equal('1384330635');
-        e.idle.should.equal('10543');
-        done();
-      });
-
-      stream.write(':irc.host.net 311 me colinm ~colinm client.host.net * :Colin Milhench\r\n');
-      stream.write(':irc.host.net 319 me colinm #Node.js #express\r\n');
-      stream.write(':irc.host.net 319 me colinm #some #more\r\n');
-      stream.write(':irc.host.net 312 me colinm other.host.net :Paris, FR\r\n');
-      stream.write(':irc.host.net 378 me colinm is connecting from *@client.host.net 127.0.0.1\r\n');
-      stream.write(':irc.host.net 317 me colinm 10543 1384330635 seconds idle, signon time\r\n');
-      stream.write(':irc.host.net 330 me colinm cmilhench :is logged in as\r\n');
-      stream.write(':irc.host.net 318 me colinm :End of /WHOIS list.\r\n');
-    });
-
-    it('should emit "info"', function(done){
-      var stream = new Stream;
-      var client = irc(stream);
-
-      client.whois('colinm');
-
-      client.on('whois', function(err, e){
-        e.hostname.should.equal('client.host.net');
-        e.username.should.equal('~colinm');
-        e.realname.should.equal('Colin Milhench');
-        e.server.should.equal('other.host.net');
-        e.channels.should.be.instanceof(Array).and.have.lengthOf(4);
-        e.channels.should.include('#Node.js');
-        e.channels.should.include('#express');
-        e.channels.should.include('#some');
-        e.channels.should.include('#more');
-        e.sign.should.equal('1384330635');
-        e.idle.should.equal('10543');
-        done();
-      });
-
-      stream.write(':irc.host.net 311 me colinm ~colinm client.host.net * :Colin Milhench\r\n');
-      stream.write(':irc.host.net 319 me colinm #Node.js #express\r\n');
-      stream.write(':irc.host.net 319 me colinm #some #more\r\n');
-      stream.write(':irc.host.net 312 me colinm other.host.net :Paris, FR\r\n');
-      stream.write(':irc.host.net 378 me colinm is connecting from *@client.host.net 127.0.0.1\r\n');
-      stream.write(':irc.host.net 317 me colinm 10543 1384330635 seconds idle, signon time\r\n');
-      stream.write(':irc.host.net 330 me colinm cmilhench :is logged in as\r\n');
-      stream.write(':irc.host.net 318 me colinm :End of /WHOIS list.\r\n');
-    });
-
-    it('should err with No such nick/channel', function(done){
-      var stream = new Stream;
-      var client = irc(stream);
-      client.whois('nonick');
-      client.on('whois', function(err, e){
-        err.should.equal('No such nick/channel');
-        done();
-      });
-      stream.write(':irc.freenode.net 401 me nonick :No such nick/channel\r\n');
-      stream.write(':irc.freenode.net 318 me nonick :End of /WHOIS list.\r\n');
-    });
-
-    it('should err with No such server', function(done){
-      var stream = new Stream;
-      var client = irc(stream);
-      client.whois('nonick', function(err, e){
-        err.should.equal('No such server');
-        done();
-      });
-      stream.write(':holmes.freenode.net 402 me nonick :No such server\r\n');
-    });
-
-    it('should err with Not enough parameters', function(done){
-      var stream = new Stream;
-      var client = irc(stream);
-      client.on('whois', function(err, e){
-        err.should.equal('Not enough parameters');
-        done();
-      });
-      stream.write(':irc.freenode.net 461 me WHOIS :Not enough parameters\r\n');
-    });
-
-  });
 });

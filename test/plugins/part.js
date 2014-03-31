@@ -1,21 +1,26 @@
+/*jslint node: true*/
+/*global describe, it*/
+"use strict";
 
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('part()', function(){
-  describe('on PART', function(){
-    it('should emit "part"', function(done){
-      var stream = new Stream;
-      var client = irc(stream);
-      
-      client.on('part', function(e){
-        e.nick.should.equal('tjholowaychuk');
-        e.channels.should.eql(['#express']);
-        e.message.should.equal('So long!');
-        done();
-      });
+describe('part()', function () {
+    describe('on PART', function () {
+        it('should emit "part"', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+            client.nick('foo');
 
-      stream.write(':tjholowaychuk!~tjholoway@S01067cb21b2fd643.gv.shawcable.net PART #express :So long!\r\n');
-    })
-  })
-})
+            client.on('part', function (event) {
+                event.user.getNick().should.equal('foo');
+                event.channels[0].getName().should.eql('#foo');
+                event.channels[1].getName().should.eql('#bar');
+                event.message.should.equal('So long!');
+                done();
+            });
+
+            stream.write(':foo!bar@baz.com PART #foo,#bar :So long!\r\n');
+        });
+    });
+});

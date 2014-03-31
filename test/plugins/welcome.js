@@ -1,28 +1,35 @@
+/*jslint node: true*/
+/*global describe, it*/
+"use strict";
 
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('welcome()', function(){
-  describe('on RPL_WELCOME', function(){
-    it('should set client.me to the users nick', function(){
-      var stream = new Stream;
-      var client = irc(stream);
-      stream.write(':cameron.freenode.net 001 tobi :Welcome to the freenode Internet Relay Chat Network tobi\r\n');
-      process.nextTick(function() {
-        client.me.should.equal('tobi');
-      }); 
-    })
+describe('welcome()', function () {
+    describe('on RPL_WELCOME', function () {
+        it('should set client.me to the users object', function () {
+            var stream = new Stream(),
+                client = irc(stream);
+            client.nick('foo');
 
-    it('should emit "welcome"', function(done){
-      var stream = new Stream;
-      var client = irc(stream);
-      
-      client.on('welcome', function(nick){
-        nick.should.equal('tobi');
-        done();
-      });
+            stream.write(':vulcanus.kerat.net 001 foo :Welcome to the KeratNet IRC Network foo!bar@baz.com\r\n');
+            process.nextTick(function () {
+                client.me.getNick().should.equal('foo');
+            });
+        });
 
-      stream.write(':cameron.freenode.net 001 tobi :Welcome to the freenode Internet Relay Chat Network tobi\r\n');
-    })
-  })
-})
+        it('should emit "welcome"', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+            client.nick('foo');
+
+            client.on('welcome', function (event) {
+                event.nick.should.equal('foo');
+                event.message.should.equal('Welcome to the KeratNet IRC Network foo!bar@baz.com');
+                done();
+            });
+
+            stream.write(':vulcanus.kerat.net 001 foo :Welcome to the KeratNet IRC Network foo!bar@baz.com\r\n');
+        });
+    });
+});

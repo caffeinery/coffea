@@ -1,21 +1,28 @@
+/*jslint node: true*/
+/*global describe, it*/
+"use strict";
 
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('nick()', function(){
-  describe('on NICK', function(){
+describe('nick()', function () {
+    describe('on NICK', function () {
 
-    it('should emit "nick"', function(done){
-      var stream = new Stream;
-      var client = irc(stream);
-      
-      client.on('nick', function(e){
-        e.nick.should.eql('colinm');
-        e.new.should.equal('cmilhench');
-        done();
-      });
+        it('should emit "nick"', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+            client.nick('foo');
 
-      stream.write(':colinm!~colinm@host-92-17-247-88.as13285.net NICK :cmilhench\r\n');
-    })
-  })
-})
+            client.once('nick', function () {
+                client.once('nick', function (event) {
+                    event.user.getNick().should.equal('bar');
+                    event.oldNick.should.equal('foo');
+                    client.me.getNick().should.equal('bar');
+                    done();
+                });
+            });
+
+            stream.write(':foo!bar@baz.com NICK bar\r\n');
+        });
+    });
+});

@@ -1,21 +1,30 @@
 {
-  "name": "slate-irc",
-  "version": "0.4.0",
-  "repository": "slate/slate-irc",
+  "name": "coffea",
+  "version": "0.1.0",
   "description": "General purpose IRC client",
+  "author": "Martin Rump <admin@maddin.cc>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thecoffeehouse/coffea.git"
+  },
   "keywords": [
     "irc",
     "client",
-    "chat"
+    "chat",
   ],
+  "bugs": {
+    "url": "https://github.com/thecoffeehouse/coffea/issues"
+  },
   "dependencies": {
-    "irc-replies": "~2.0.0",
-    "slate-irc-parser": "0.0.2",
-    "debug": "*"
+    "irc-replies": "^2.0.0",
+    "slate-irc-parser": "^0.0.2",
+    "underscore": "^1.6.0"
   },
   "devDependencies": {
-    "mocha": "*",
-    "should": "*"
+    "should": "^3.2.0"
   },
-  "license": "MIT"
+  "scripts": {
+    "test": "mocha --require should --bail --reporter spec test/plugins/*"
+  },
+  "license": "BSD-3"
 }
