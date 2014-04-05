@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('topic()', function () {
+describe('topic.js', function () {
     describe('on TOPIC', function () {
         it('should emit "topic"', function (done) {
             var stream = new Stream(),

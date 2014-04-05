@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('mode()', function () {
+describe('mode.js', function () {
     describe('on MODE', function () {
         it('should parse usermode', function (done) {
             var stream = new Stream(),

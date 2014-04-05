@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('welcome()', function () {
+describe('welcome.js', function () {
     describe('on RPL_WELCOME', function () {
         it('should set client.me to the users object', function () {
             var stream = new Stream(),

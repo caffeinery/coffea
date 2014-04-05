@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('motd()', function () {
+describe('motd.js', function () {
     describe('on JOIN', function () {
         it('should emit "motd"', function (done) {
             var stream = new Stream(),

@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('nick()', function () {
+describe('nick.js', function () {
     describe('on NICK', function () {
 
         it('should emit "nick"', function (done) {

@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('ping()', function () {
+describe('ping.js', function () {
     describe('on PING', function () {
         it('should emit PING', function (done) {
             var stream = new Stream(),

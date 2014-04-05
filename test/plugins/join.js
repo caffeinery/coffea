@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('join()', function () {
+describe('join.js', function () {
     describe('on JOIN', function () {
         it('should emit "join"', function (done) {
             var stream = new Stream(),

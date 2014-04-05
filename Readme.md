@@ -26,6 +26,7 @@
         - [`use(fn)`](#usefn)
         - [`Events`](#events)
             - [`away`](#away-event)
+            - [`data`](#data-data)
             - [`invite`](#invite-event)
             - [`join`](#join-event)
             - [`kick`](#kick-event)
@@ -80,7 +81,10 @@ client.pass('sup3rS3cur3P4ssw0rd');
 client.nick('GLaDOS');
 client.user('GLaDOS', 'Genetic Lifeform and Disk Operating System');
 
-client.join(['#foo', '#bar', '#baz']);
+client.on('motd', function (motd) {
+    client.join(['#foo', '#bar', '#baz']);
+});
+
 client.on('message', function (event) {
     console.log('[' event.channel.getName() '] ' + event.user.getNick() + ': ' + event.message);
     //[#foo] nick: message
@@ -108,7 +112,10 @@ client.pass('sup3rS3cur3P4ssw0rd');
 client.nick('GLaDOS');
 client.user('GLaDOS', 'Genetic Lifeform and Disk Operating System');
 
-client.join(['#foo', '#bar', '#baz']);
+client.on('motd', function (motd) {
+    client.join(['#foo', '#bar', '#baz']);
+});
+
 client.on('message', function (event) {
     console.log('[' event.channel.getName() '] ' + event.user.getNick() + ': ' + event.message);
     //[#foo] nick: message
@@ -334,6 +341,30 @@ ___
 ```javascript
 client.on('away', function (event) {
     console.log(event.user.getNick() + ' is away: ' + event.message); 
+});
+```
+
+___
+
+#### "data" `(parsed)`
+[`Client`](#clientstream) will emit `data` whenever we recieve a line from the server. 
+
+`parsed` is the parsed message as an object, containing prefix, command, params, trailing and the original string.
+
+```javascript
+client.on('data', function (parsed) {
+    /*
+    Original Message:
+    :hitchcock.freenode.net NOTICE * :*** Looking up your hostname...\r\n
+    Parsed object:
+    {
+        "prefix": "hitchcock.freenode.net",
+        "command": "NOTICE",
+        "params": "*"
+        "trailing": "*** Looking up your hostname..."
+        "string": ":hitchcock.freenode.net NOTICE * :*** Looking up your hostname..."
+    }
+    */
 });
 ```
 
@@ -639,7 +670,7 @@ client.on('whois', function (err, data) {
 ### `User(nick)`
 Represents a User by the given nick. 
 Please use `client.getUser('some_nick')` to get a User object, and not `new User('some_nick')`.
-Please note that most of these information is recieved through parsing the [`whois`](#whois-err-data) event data. Coffea itself wont whois automatically, so you have to do it urself in order to get these information.
+Please note that most of these information is recieved through parsing the [`whois`](#whois-err-data) event data. Coffea itself won't whois automatically, so you have to do it yourself in order to get these information.
 
 ___
 #### `toString()`

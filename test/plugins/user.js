@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('user()', function () {
+describe('user.js', function () {
     describe('getUser()', function () {
         it('should return User object', function (done) {
             var stream = new Stream(),

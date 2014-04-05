@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('part()', function () {
+describe('part.js', function () {
     describe('on PART', function () {
         it('should emit "part"', function (done) {
             var stream = new Stream(),

@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('privmsg()', function () {
+describe('privmsg.js', function () {
     describe('on PRIVMSG', function () {
         it('should emit "message"', function (done) {
             var stream = new Stream(),

@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('names()', function () {
+describe('names.js', function () {
     describe('client.names(chan, fn)', function () {
         it('should respond with user names', function (done) {
             var stream = new Stream(),

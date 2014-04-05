@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('channel()', function () {
+describe('channel.js', function () {
     describe('getChannel()', function () {
         it('should return Channel object', function (done) {
             var stream = new Stream(),

@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('quit()', function () {
+describe('quit.js', function () {
     describe('on QUIT', function () {
         it('should emit "quit"', function (done) {
             var stream = new Stream(),
@@ -18,6 +18,21 @@ describe('quit()', function () {
             });
 
             stream.write(':foo!bar@baz.com QUIT :Remote host closed the connection\r\n');
+        });
+    });
+    describe('client.quit()', function () {
+        it('should emit "quit" aswell', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+            client.nick('foo');
+            client.user('baz', 'bar');
+
+            client.on('quit', function (event) {
+                event.user.getNick().should.equal('foo');
+                event.message.should.eql('POOF');
+                done();
+            });
+            client.quit('POOF');
         });
     });
 });

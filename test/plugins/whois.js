@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('whois()', function () {
+describe('whois.js', function () {
     describe('client.whois(target, mask, fn)', function () {
 
         it('should parse user information', function (done) {

@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('notice()', function () {
+describe('notice.js', function () {
     describe('on NOTICE', function () {
         it('should emit "notice"', function (done) {
             var stream = new Stream(),

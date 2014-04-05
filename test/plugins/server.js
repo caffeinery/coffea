@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('server()', function () {
+describe('server.js', function () {
     describe('getServerInfo()', function () {
         it('should parse RPL_YOURHOST', function (done) {
             var stream = new Stream(),

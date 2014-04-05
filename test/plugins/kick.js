@@ -5,7 +5,7 @@
 var irc = require('../..');
 var Stream = require('stream').PassThrough;
 
-describe('kick()', function () {
+describe('kick.js', function () {
     describe('on KICK', function () {
         it('should emit "kick"', function (done) {
             var stream = new Stream(),
