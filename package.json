@@ -1,6 +1,6 @@
 {
   "name": "coffea",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "General purpose IRC client",
   "author": "Martin Rump <admin@maddin.cc>",
   "repository": {
