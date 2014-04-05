@@ -26,7 +26,7 @@
         - [`use(fn)`](#usefn)
         - [`Events`](#events)
             - [`away`](#away-event)
-            - [`data`](#data-data)
+            - [`data`](#data-parsed)
             - [`invite`](#invite-event)
             - [`join`](#join-event)
             - [`kick`](#kick-event)
@@ -59,11 +59,22 @@
         - [`getIdle()`](#getidle)
         - [`getSignonTime()`](#getsignontime)
         - [`isOper()`](#isoper)
+        - [`notice(msg)`](#noticemsg)
+        - [`say(msg)`](#saymsg)
+        - [`whois(fn)`](#whoisfn)
     - [`Channel`](#channel)
-        - [`toString()`](#channel.toString)
-        - [`getName()`](#channel.getName)
-        - [`getTopic()`](#channel.getTopic)
-        - [`getNames()`](#channel.getNames)
+        - [`toString()`](#tostring-1)
+        - [`getName()`](#getname)
+        - [`getTopic()`](#gettopic)
+        - [`getNames()`](#getnames)
+        - [`userHasMode(user, mode)`](#userhasmodeuser-mode)
+        - [`isUserInChannel(user)`](#isuserinchanneluser)
+        - [`notice(msg)`](#noticemsg-1)
+        - [`say(msg)`](#saymsg-1)
+        - [`reply(user, msg)`](#replyuser-msg)
+        - [`kick(user, reason)`](#kickuser-reason)
+        - [`ban(mask)`](#banmask)
+        - [`unban(mask)`](#unbanmask)
 
 # Example
 ### Normal Connection
@@ -186,7 +197,7 @@ client.invite('maggin', '#dev');
 ___
 #### `send(target, msg, fn)` 
 Send a `msg` to the `target`. 
-`target` can either be a string, a [`[User object]`](#usermick) or a [`[Channel object]`](#channelname). 
+`target` can either be a string, a [`[User object]`](#usernick) or a [`[Channel object]`](#channelname). 
 If the message exceeds the Length of 512 Chars, it will be splitted into Multiple Lines.
 
 ```javascript
@@ -199,7 +210,7 @@ client.send(client.getChannel('#foo'), 'Why hello there');
 ___
 #### `notice(target, msg, fn)` 
 Send a `msg` as a notice to the `target`.
-`target` can either be a string, a [`[User object]`](#usermick) or a [`[Channel object]`](#channelname).
+`target` can either be a string, a [`[User object]`](#usernick) or a [`[Channel object]`](#channelname).
 If the message exceeds the Length of 512 Chars, it will be splitted into Multiple Lines.
 
 ```javascript
@@ -272,7 +283,7 @@ client.oper('foo', 'bar');
 ___
 #### `mode(target, flags, params, fn)`
 Used to set a user's mode or channel's mode for a user.
-`target` can either be a string, a [`[User object]`](#usermick) or a [`[Channel object]`](#channelname).
+`target` can either be a string, a [`[User object]`](#usernick) or a [`[Channel object]`](#channelname).
 
 ```javascript
 client.mode('#foo', '+o', 'bar');
@@ -316,7 +327,7 @@ Returns the Info we recieved in the `RPL_YOURHOST`, `RPL_CREATED` & `RPL_ISUPPOR
 
 ___
 #### `whois(target, fn)`
-Used to query for whois info or `target` and invoke `fn(err, data)`. If `fn` is not given, the method will call the [whois event](#whois-err-data).
+Used to query for whois info of `target` and invoke `fn(err, data)`. If `fn` is not given, the method will call the [whois event](#whois-err-data).
 
 See [`whois`](#whois-err-data) for what `data` will look like.
 
@@ -335,7 +346,7 @@ ___
 #### "away" `(event)`
 [`Client`](#clientstream) will emit `away` when we recieve the `RPL_AWAY` message, which happens either when we sent a PRIVMSG to a client which is away, or when we query WHOIS information about particular user.
 
-`event.user` is a [`[User object]`](#usermick), representing the user who is away.
+`event.user` is a [`[User object]`](#usernick), representing the user who is away.
 `event.message` is the away message.
 
 ```javascript
@@ -374,8 +385,8 @@ ___
 [`Client`](#clientstream) will emit `invite` when we recieve the `INVITE` message, which happens when we invite someone or when we get invited.
 
 `event.channel` is a [`[Channel object]`](#channelname), representing the Channel where `event.user` got invited to.
-`event.user` is a [`[User object]`](#usermick), representing the user who sent the invite.
-`event.target` is a [`[User object]`](#usermick), representing the user who got invited.
+`event.user` is a [`[User object]`](#usernick), representing the user who sent the invite.
+`event.target` is a [`[User object]`](#usernick), representing the user who got invited.
 
 ```javascript
 client.on('invite', function (event) {
@@ -388,7 +399,7 @@ ___
 #### "join" `(event)`
 [`Client`](#clientstream) will emit `join` when we recieve the `JOIN` message, which happens when someone (possibly us) joins a channel.
 
-`event.user` is a [`[User object]`](#usermick), representing the user who joined `event.channel`.
+`event.user` is a [`[User object]`](#usernick), representing the user who joined `event.channel`.
 `event.channel` is a [`[Channel object]`](#channelname), representing the Channel where `event.user` joined.
 
 ```javascript
@@ -403,8 +414,8 @@ ___
 [`Client`](#clientstream) will emit `kick` when we recieve the `KICK` message, which happens when someone gets kicked out of a channel.
 
 `event.channel` is a [`[Channel object]`](#channelname), representing the Channel where someone got kicked.
-`event.user` is a [`[User object]`](#usermick), representing the user who got kicked.
-`event.by` is a [`[User object]`](#usermick), representing the user who kicked `event.user`.
+`event.user` is a [`[User object]`](#usernick), representing the user who got kicked.
+`event.by` is a [`[User object]`](#usernick), representing the user who kicked `event.user`.
 `event.reason` is either the comment, or the nick of `event.user`.
 
 ```javascript
@@ -419,7 +430,7 @@ ___
 [`Client`](#clientstream) will emit `mode` when we recieve the `MODE` message, which happens when someone changes the mode of a user or a channel.
 
 `event.channel` is either a [`[Channel object]`](#channelname), representing the channel which the mode is being set on/in, or `null` when a user mode was changed.
-`event.by` is either a [`[User object]`](#usermick), representing the user setting the mode, or a string if the mode was not changed by a user.
+`event.by` is either a [`[User object]`](#usernick), representing the user setting the mode, or a string if the mode was not changed by a user.
 `event.argument` is the nick of the user, if the mode is being set on a user, or null if there was no argument.
 `event.adding` is either `true` of `false`, depending on if the mode was set or removed.
 `event.mode` is the single character mode indentifier.
@@ -473,7 +484,7 @@ ___
 #### "nick" `(event)`
 [`Client`](#clientstream) will emit `nick` after we recieve the `NICK` message, which happens when a user (propably us) changes his nick.
 
-`event.user` is a [`[User object]`](#usermick), representing the user who changed his nick.
+`event.user` is a [`[User object]`](#usernick), representing the user who changed his nick.
 `event.oldNick` is the old nick of the user as a string.
 
 ```javascript
@@ -487,7 +498,7 @@ ___
 #### "notice" `(event)`
 [`Client`](#clientstream) will emit `notice` after we recieve the `NOTICE` message, which happens when someone sent a notice to us, or to a channel.
 
-`event.from` is either a [`[User object]`](#usermick), representing the user who sent the notice, or a string if its not sent by a user (e.g the server).
+`event.from` is either a [`[User object]`](#usernick), representing the user who sent the notice, or a string if its not sent by a user (e.g the server).
 `event.to` is the recipient of the notice as a string.
 `event.message` is the message.
 
@@ -502,7 +513,7 @@ ___
 #### "part" `(event)`
 [`Client`](#clientstream) will emit `part` after we recieve the `PART` message, which happens when someone leave one or multiple channels.
 
-`event.user` is a [`[User object]`](#usermick), representing the user who left the channel.
+`event.user` is a [`[User object]`](#usernick), representing the user who left the channel.
 `event.channels` is an array of [`[Channel object]`](#channelname) with the the channels the user left.
 `event.message` is the message the user sent when leaving the channels.
 
@@ -531,7 +542,7 @@ ___
 [`Client`](#clientstream) will emit `message` after we recieve the `PRIVMSG` message which is sent to a channel.
 
 `event.channel` is a [`[Channel object]`](#channelname), representing the channel which recieved the message.
-`event.user` is a [`[User object]`](#usermick), representing the user who sent the message.
+`event.user` is a [`[User object]`](#usernick), representing the user who sent the message.
 `event.message` is the message the user sent.
 `event.isAction` is either `true` if the message was sent as an ACTION, or `false` if not.
 
@@ -550,7 +561,7 @@ ___
 #### "privatemessage" `(event)`
 [`Client`](#clientstream) will emit `privatemessage` after we recieve the `PRIVMSG` message which is sent to us.
 
-`event.user` is a [`[User object]`](#usermick), representing the user who sent the message.
+`event.user` is a [`[User object]`](#usernick), representing the user who sent the message.
 `event.message` is the message the user sent.
 `event.isAction` is either `true` if the message was sent as an ACTION, or `false` if not.
 
@@ -569,7 +580,7 @@ ___
 #### "quit" `(event)`
 [`Client`](#clientstream) will emit `quit` after we recieve the `QUIT` message, which happens when someone leaves the server.
 
-`event.user` is a [`[User object]`](#usermick), representing the user who quit.
+`event.user` is a [`[User object]`](#usernick), representing the user who quit.
 `event.message` is the message the user sent when leaving the server.
 
 ```javascript
@@ -584,7 +595,7 @@ ___
 [`Client`](#clientstream) will emit `topic` after we recieve the `RPL_TOPIC` message (which is sent after we join a channel), or after the topic got manually changed.
 
 `event.channel` is a [`[Channel object]`](#channelname), representing the channel.
-`event.user` is a [`[User object]`](#usermick), representing the user who changed/set the topic.
+`event.user` is a [`[User object]`](#usernick), representing the user who changed/set the topic.
 `event.topic` is the topic that was set as a string.
 `event.time` is a `[Date object]` of the time the topic was changed.
 `event.changed` is either `true` if the topic got changed, or `false` if we recieved the topic after we joined a channel.
@@ -667,9 +678,10 @@ client.on('whois', function (err, data) {
 }
 ```
 
-### `User(nick)`
+___
+### `User(nick, client)`
 Represents a User by the given nick. 
-Please use `client.getUser('some_nick')` to get a User object, and not `new User('some_nick')`.
+Please use `client.getUser('some_nick')` to get a User object, and not `new User('some_nick', client)`.
 Please note that most of these information is recieved through parsing the [`whois`](#whois-err-data) event data. Coffea itself won't whois automatically, so you have to do it yourself in order to get these information.
 
 ___
@@ -810,9 +822,38 @@ console.log(user.isOper());
 //false
 ```
 
-### `Channel(name)`
+___
+#### `notice(msg)`
+Sends a notice `msg` to the user.
+
+```javascript
+user.notice('Why hello there');
+```
+
+___
+#### `say(msg)`
+Sends a message `msg` to the user.
+
+```javascript
+user.say('Why hello there');
+```
+
+___
+#### `whois(fn)`
+Used to query for whois info of the user and invoke `fn(err, data)`.
+
+See [`whois`](#whois-err-data) for what `data` will look like.
+
+```javascript
+user.whois(function (err, data) {
+    //process data.
+});
+```
+
+___
+### `Channel(name, client)`
 Represents a Channel by the given name. 
-Please use `client.getChannel('#foo')` to get a Channel object, and not `new Channel('#foo')`.
+Please use `client.getChannel('#foo')` to get a Channel object, and not `new Channel('#foo', client)`.
 
 ___
 #### `toString()`
@@ -834,7 +875,7 @@ console.log(channel.getName());
 
 ___
 #### `getTopic()`
-Returns the Channel topic as object, containing the Topic itself, a [`User`](#usermick) object representing the User who set the Topic, and a Date object representing the time the topic was set.
+Returns the Channel topic as object, containing the Topic itself, a [`User`](#usernick) object representing the User who set the Topic, and a Date object representing the time the topic was set.
 
 ```javascript
 console.log(channel.getTopic());
@@ -852,4 +893,71 @@ Returns a List of Nicks that are currently in the channel, with possible modes.
 ```javascript
 console.log(channel.getName());
 //{'foo': ['~'], 'bar': ['%'], 'baz': []}
+```
+
+___
+#### `userHasMode(user, mode)`
+Returns `true` if `user` has the usermode `mode` in the channel, `false` if otherwise. `user` can either be a string or a [`[User object]`](#usernick).
+
+```javascript
+console.log(channel.userHasMode('foo', '~'));
+//false
+```
+
+___
+#### `isUserInChannel(user)`
+Returns `true` if `user` is in the channel, `false` if otherwise. `user` can either be a string or a [`[User object]`](#usernick).
+
+```javascript
+console.log(channel.isUserInChannel('foo'));
+//false
+```
+
+___
+#### `notice(msg)`
+Sends a notice `msg` to the channel.
+
+```javascript
+channel.notice('Why hello there');
+```
+
+___
+#### `say(msg)`
+Sends a message `msg` to the channel.
+
+```javascript
+channel.say('Why hello there');
+```
+
+___
+#### `reply(user, msg)`
+Sends a reply `msg` to a user into the channel. `user` can either be a string or a [`[User object]`](#usernick).
+
+```javascript
+channel.reply('foo', 'Why hello there');
+//foo: Why hello there
+```
+
+___
+#### `kick(user, reason)`
+Kicks `user` out of the channel with the given reason. `user` can either be a string or a [`[User object]`](#usernick).
+
+```javascript
+channel.kick('foo', 'Get out!');
+```
+
+___
+#### `ban(mask)`
+Sets the mode `+b` for `mask` in the channel.
+
+```javascript
+channel.ban('foo!bar@baz.com');
+```
+
+___
+#### `unban(mask)`
+Sets the mode `-b` for `mask` in the channel.
+
+```javascript
+channel.unban('foo!bar@baz.com');
 ```
