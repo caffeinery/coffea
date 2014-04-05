@@ -171,6 +171,10 @@ Client.prototype.kick = function (channels, nicks, msg, fn) {
 Client.prototype.quit = function (msg, fn) {
     msg = msg || 'Bye!';
     this.write('QUIT :' + msg, fn);
+    this.emit('quit', {
+        "user": this.me,
+        "message": msg
+    });
 };
 
 Client.prototype.oper = function (name, password, fn) {

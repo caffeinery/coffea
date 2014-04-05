@@ -1,6 +1,6 @@
 {
   "name": "coffea",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "General purpose IRC client",
   "author": "Martin Rump <admin@maddin.cc>",
   "repository": {
@@ -10,7 +10,7 @@
   "keywords": [
     "irc",
     "client",
-    "chat",
+    "chat"
   ],
   "bugs": {
     "url": "https://github.com/thecoffeehouse/coffea/issues"
