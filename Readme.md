@@ -164,7 +164,7 @@ client.getChannel('#foo');
 
 ___
 #### `pass(pass, fn)`
-Sends the Passwort `pass` to the server.
+Sends the password `pass` to the server.
 
 ```javascript
 client.pass('topsecret');
