@@ -19,6 +19,24 @@ describe('mode.js', function () {
             });
             stream.write(':foo!bar@baz.com MODE test +x\r\n');
         });
+        it('should parse usermode aswell', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+
+            client.once('mode', function (event) {
+                event.by.should.equal('foo');
+                event.adding.should.equal(true);
+                event.mode.should.equal('Z');
+
+                client.once('mode', function (event) {
+                    event.by.should.equal('foo');
+                    event.adding.should.equal(true);
+                    event.mode.should.equal('i');
+                    done();
+                });
+            });
+            stream.write(':foo MODE foo :+Zi\r\n');
+        });
         it('should parse channelmode', function (done) {
             var stream = new Stream(),
                 client = irc(stream);
