@@ -43,7 +43,7 @@
             - [`topic`](#topic-event)
             - [`welcome`](#welcome-event)
             - [`whois`](#whois-err-data)
-    - [`User`](#usernick)
+    - [`User`](#usernick-client)
         - [`toString()`](#tostring)
         - [`getNick()`](#getnick)
         - [`getUsername()`](#getusername)
@@ -62,7 +62,7 @@
         - [`notice(msg)`](#noticemsg)
         - [`say(msg)`](#saymsg)
         - [`whois(fn)`](#whoisfn)
-    - [`Channel`](#channel)
+    - [`Channel`](#channelname-client)
         - [`toString()`](#tostring-1)
         - [`getName()`](#getname)
         - [`getTopic()`](#gettopic)
@@ -148,7 +148,7 @@ client.write('PRIVMSG #channel: Why hello there');
 
 ___
 #### `getUser(nick)`
-Get the [`[User  object]`](#usernick) representing the user by the given `nick`.
+Get the [`[User  object]`](#usernick) representing the user by the given `nick`. If no n `nick` is given, the function will return the [`[User  object]`](#usernick) representing the client.
 
 ```javascript
 client.getUser('foo');
