@@ -15,6 +15,15 @@ describe('user.js', function () {
             user.getNick().should.equal('foo');
             done();
         });
+        it('should return User object of bot', function (done) {
+            var stream = new Stream(),
+                client = irc(stream);
+
+            client.nick('foo');
+
+            client.getUser().getNick().should.equal('foo');
+            done();
+        });
     });
     describe('isUser()', function () {
         it('should return true', function (done) {
