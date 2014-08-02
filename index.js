@@ -87,6 +87,7 @@ Client.prototype.send = function (target, msg) {
             target = target.toString();
         }
     }
+    msg = msg.toString();
     var leading, maxlen, self;
     self = this;
     leading = 'PRIVMSG ' + target + ' :';
