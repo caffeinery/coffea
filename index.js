@@ -5,10 +5,7 @@ var Emitter = require('events').EventEmitter;
 var Parser = require('slate-irc-parser');
 var replies = require('irc-replies');
 var util = require('util');
-
-function toArray(val) {
-    return Array.isArray(val) ? val : [val];
-}
+var utils = require('./lib/utils.js');
 
 function Client(stream) {
     if (!(this instanceof Client)) {
@@ -78,7 +75,7 @@ Client.prototype.invite = function (name, channel, fn) {
     this.write('INVITE ' + name + ' ' + channel, fn);
 };
 
-Client.prototype.send = function (target, msg) {
+Client.prototype.send = function (target) {
     if (typeof target !== "string") {
         if (this.isUser(target)) {
             target = target.getNick();
@@ -88,7 +85,11 @@ Client.prototype.send = function (target, msg) {
             target = target.toString();
         }
     }
-    var leading, maxlen, self;
+
+    var leading, maxlen, self, message, args = Array.prototype.slice.call(arguments);
+    args.shift();
+    message = args.join(' ');
+
     self = this;
     leading = 'PRIVMSG ' + target + ' :';
     maxlen = 512
@@ -96,7 +97,7 @@ Client.prototype.send = function (target, msg) {
             - leading.length
             - 2;
     /*jslint regexp: true*/
-    msg.match(new RegExp('.{1,' + maxlen + '}', 'g')).forEach(function (str) {
+    message.match(new RegExp('.{1,' + maxlen + '}', 'g')).forEach(function (str) {
         if (str[0] === ' ') { //leading whitespace
             str = str.substring(1);
         }
@@ -108,7 +109,7 @@ Client.prototype.send = function (target, msg) {
     /*jslint regexp: false*/
 };
 
-Client.prototype.notice = function (target, msg) {
+Client.prototype.notice = function (target) {
     if (typeof target !== "string") {
         if (this.isUser(target)) {
             target = target.getNick();
@@ -118,7 +119,11 @@ Client.prototype.notice = function (target, msg) {
             target = target.toString();
         }
     }
-    var leading, maxlen, self;
+
+    var leading, maxlen, self, message, args = Array.prototype.slice.call(arguments);
+    args.shift();
+    message = args.join(' ');
+
     self = this;
     leading = 'NOTICE ' + target + ' :';
     maxlen = 512
@@ -126,7 +131,7 @@ Client.prototype.notice = function (target, msg) {
             - leading.length
             - 2;
     /*jslint regexp: true*/
-    msg.match(new RegExp('.{1,' + maxlen + '}', 'g')).forEach(function (str) {
+    message.match(new RegExp('.{1,' + maxlen + '}', 'g')).forEach(function (str) {
         if (str[0] === ' ') { //leading whitespace
             str = str.substring(1);
         }
@@ -139,7 +144,7 @@ Client.prototype.notice = function (target, msg) {
 };
 
 Client.prototype.join = function (channels, fn) {
-    this.write('JOIN ' + toArray(channels).join(','), fn);
+    this.write('JOIN ' + utils.toArray(channels).join(','), fn);
 };
 
 Client.prototype.part = function (channels, msg, fn) {
@@ -147,7 +152,7 @@ Client.prototype.part = function (channels, msg, fn) {
         fn = msg;
         msg = '';
     }
-    this.write('PART ' + toArray(channels).join(',') + ' :' + msg, fn);
+    this.write('PART ' + utils.toArray(channels).join(',') + ' :' + msg, fn);
 };
 
 Client.prototype.topic = function (channel, topic, fn) {
@@ -164,8 +169,8 @@ Client.prototype.kick = function (channels, nicks, msg, fn) {
         fn = msg;
         msg = '';
     }
-    channels = toArray(channels).join(',');
-    nicks = toArray(nicks).join(',');
+    channels = utils.toArray(channels).join(',');
+    nicks = utils.toArray(nicks).join(',');
     this.write('KICK ' + channels + ' ' + nicks + ' :' + msg, fn);
 };
 
