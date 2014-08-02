@@ -14,9 +14,9 @@ function Client(stream) {
     if (!(this instanceof Client)) {
         return new Client(stream);
     }
-    this.streams = [];
     this.setMaxListeners(100);
 
+    this.streams = {};
     this.useStream(stream);
 
     this.me = null;
@@ -47,19 +47,25 @@ module.exports = Client;
 
 util.inherits(Client, Emitter);
 
-Client.prototype.useStream = function (stream) {
-    stream.setEncoding('utf8');
-    stream.coffea_id = this.streams.length; // assign unique id to stream
+Client.prototype.useStream = function (stream, stream_id) {
+    if (stream_id) stream.coffea_id = stream_id; // user-defined stream id
+    else stream.coffea_id = Object.keys(this.streams).length.toString(); // assign unique id to stream
 
+    stream.setEncoding('utf8'); // set stream encoding
+
+    // set up parser
     var parser = new Parser();
     var _this = this;
     parser.on('message', function (msg) {
         _this.onmessage(msg, stream.coffea_id);
     });
-
     stream.pipe(parser);
 
-    this.streams.push(stream);
+    // add stream to client
+    this.streams[stream.coffea_id] = stream;
+
+    // return stream id
+    return stream.coffea_id;
 };
 
 // TODO: plugins should have multi-network support too. identify networks by
@@ -76,12 +82,14 @@ Client.prototype.write = function (str, stream_id, fn) {
       stream_id = stream_id.coffea_id;
     }
 
-    // TODO: check if stream_id exists?
-    if (stream_id) this.streams[stream_id].write(str + '\r\n', fn);
-    else {
-      this.streams.forEach(function (stream) {
-          stream.write(str + '\r\n');
-      });
+    if (stream_id && this.streams.hasOwnProperty(stream_id)) {
+      this.streams[stream_id].write(str + '\r\n', fn);
+    } else {
+      for (var id in this.streams) {
+        if (this.streams.hasOwnProperty(id)) {
+          this.streams[id].write(str + '\r\n');
+        }
+      }
       if (fn) fn();
     }
 };
