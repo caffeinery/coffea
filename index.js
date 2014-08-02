@@ -14,12 +14,10 @@ function Client(stream) {
     if (!(this instanceof Client)) {
         return new Client(stream);
     }
-    stream.setEncoding('utf8');
-    this.stream = stream;
-    this.parser = new Parser();
-    this.parser.on('message', this.onmessage.bind(this));
-    stream.pipe(this.parser);
+    this.streams = [];
     this.setMaxListeners(100);
+
+    this.useStream(stream);
 
     this.me = null;
 
@@ -49,8 +47,31 @@ module.exports = Client;
 
 util.inherits(Client, Emitter);
 
+Client.prototype.useStream = function (stream) {
+  stream.setEncoding('utf8');
+  stream.coffea_id = this.streams.length; // assign unique id to stream
+
+  var parser = new Parser();
+  var _this = this;
+  parser.on('message', function (msg) {
+    _this.onmessage(msg, stream.coffea_id);
+  });
+
+  stream.pipe(parser);
+
+  this.streams.push(stream);
+};
+
+// TODO: we should be able to set a network-specific nick, thus we need to
+//       rewrite all those functions below and make them multi-network
+// TODO: plugins should have multi-network support too. identify networks by
+//       stream.coffea_id and stream_id passed with on('data')
+
 Client.prototype.write = function (str, fn) {
-    this.stream.write(str + '\r\n', fn);
+    this.streams.forEach(function (stream) {
+      stream.write(str + '\r\n', fn);
+    });
+    if (fn) fn();
 };
 
 Client.prototype.pass = function (pass, fn) {
@@ -77,7 +98,7 @@ Client.prototype.invite = function (name, channel, fn) {
     this.write('INVITE ' + name + ' ' + channel, fn);
 };
 
-Client.prototype.send = function (target, msg) {
+Client.prototype.send = function (target, msg, fn) {
     if (typeof target !== "string") {
         if (this.isUser(target)) {
             target = target.getNick();
@@ -102,12 +123,12 @@ Client.prototype.send = function (target, msg) {
         if (str[str.length - 1] === ' ') { //trailing whitespace
             str = str.substring(0, str.length - 1);
         }
-        self.write(leading + str);
+        self.write(leading + str, fn);
     });
     /*jslint regexp: false*/
 };
 
-Client.prototype.notice = function (target, msg) {
+Client.prototype.notice = function (target, msg, fn) {
     if (typeof target !== "string") {
         if (this.isUser(target)) {
             target = target.getNick();
@@ -132,7 +153,7 @@ Client.prototype.notice = function (target, msg) {
         if (str[str.length - 1] === ' ') { //trailing whitespace
             str = str.substring(0, str.length - 1);
         }
-        self.write(leading + str);
+        self.write(leading + str, fn);
     });
     /*jslint regexp: false*/
 };
@@ -203,7 +224,7 @@ Client.prototype.use = function (fn) {
     return this;
 };
 
-Client.prototype.onmessage = function (msg) {
+Client.prototype.onmessage = function (msg, stream_id) {
     msg.command = replies[msg.command] || msg.command;
-    this.emit('data', msg);
+    this.emit('data', msg, stream_id);
 };
