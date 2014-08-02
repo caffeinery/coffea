@@ -48,57 +48,69 @@ module.exports = Client;
 util.inherits(Client, Emitter);
 
 Client.prototype.useStream = function (stream) {
-  stream.setEncoding('utf8');
-  stream.coffea_id = this.streams.length; // assign unique id to stream
+    stream.setEncoding('utf8');
+    stream.coffea_id = this.streams.length; // assign unique id to stream
 
-  var parser = new Parser();
-  var _this = this;
-  parser.on('message', function (msg) {
-    _this.onmessage(msg, stream.coffea_id);
-  });
+    var parser = new Parser();
+    var _this = this;
+    parser.on('message', function (msg) {
+        _this.onmessage(msg, stream.coffea_id);
+    });
 
-  stream.pipe(parser);
+    stream.pipe(parser);
 
-  this.streams.push(stream);
+    this.streams.push(stream);
 };
 
-// TODO: we should be able to set a network-specific nick, thus we need to
-//       rewrite all those functions below and make them multi-network
 // TODO: plugins should have multi-network support too. identify networks by
 //       stream.coffea_id and stream_id passed with on('data')
 
-Client.prototype.write = function (str, fn) {
-    this.streams.forEach(function (stream) {
-      stream.write(str + '\r\n', fn);
-    });
-    if (fn) fn();
+Client.prototype.write = function (str, stream_id, fn) {
+    if (typeof(stream_id) == 'function') {
+      fn = stream_id;
+      stream_id = undefined;
+    }
+
+    // somebody passed the stream, not the id, get id from stream
+    if (stream_id !== null && typeof stream_id === 'object') {
+      stream_id = stream_id.coffea_id;
+    }
+
+    // TODO: check if stream_id exists?
+    if (stream_id) this.streams[stream_id].write(str + '\r\n', fn);
+    else {
+      this.streams.forEach(function (stream) {
+          stream.write(str + '\r\n');
+      });
+      if (fn) fn();
+    }
 };
 
-Client.prototype.pass = function (pass, fn) {
-    this.write('PASS ' + pass, fn);
+Client.prototype.pass = function (pass, stream_id, fn) {
+    this.write('PASS ' + pass, stream_id, fn);
 };
 
-Client.prototype.nick = function (nick, fn) {
+Client.prototype.nick = function (nick, stream_id, fn) {
     if (this.me === null) {
         this.me = this.getUser(nick);
     } else {
         this.me.nick = nick;
     }
-    this.write('NICK ' + nick, fn);
+    this.write('NICK ' + nick, stream_id, fn);
 };
 
-Client.prototype.user = function (username, realname, fn) {
+Client.prototype.user = function (username, realname, stream_id, fn) {
     this.me.username = username;
     this.me.realname = realname;
-    this.write('USER ' + username + ' 0 * :' + realname, fn);
+    this.write('USER ' + username + ' 0 * :' + realname, stream_id, fn);
 };
 
-Client.prototype.invite = function (name, channel, fn) {
+Client.prototype.invite = function (name, channel, stream_id, fn) {
     name = typeof name === "string" ? name : name.getNick();
-    this.write('INVITE ' + name + ' ' + channel, fn);
+    this.write('INVITE ' + name + ' ' + channel, stream_id, fn);
 };
 
-Client.prototype.send = function (target, msg, fn) {
+Client.prototype.send = function (target, msg, stream_id, fn) {
     if (typeof target !== "string") {
         if (this.isUser(target)) {
             target = target.getNick();
@@ -123,12 +135,12 @@ Client.prototype.send = function (target, msg, fn) {
         if (str[str.length - 1] === ' ') { //trailing whitespace
             str = str.substring(0, str.length - 1);
         }
-        self.write(leading + str, fn);
+        self.write(leading + str, stream_id, fn);
     });
     /*jslint regexp: false*/
 };
 
-Client.prototype.notice = function (target, msg, fn) {
+Client.prototype.notice = function (target, msg, stream_id, fn) {
     if (typeof target !== "string") {
         if (this.isUser(target)) {
             target = target.getNick();
@@ -153,52 +165,80 @@ Client.prototype.notice = function (target, msg, fn) {
         if (str[str.length - 1] === ' ') { //trailing whitespace
             str = str.substring(0, str.length - 1);
         }
-        self.write(leading + str, fn);
+        self.write(leading + str, stream_id, fn);
     });
     /*jslint regexp: false*/
 };
 
-Client.prototype.join = function (channels, fn) {
-    this.write('JOIN ' + toArray(channels).join(','), fn);
+Client.prototype.join = function (channels, stream_id, fn) {
+    if (typeof(stream_id) == 'function') {
+      fn = stream_id;
+      stream_id = undefined;
+    }
+    this.write('JOIN ' + toArray(channels).join(','), stream_id, fn);
 };
 
-Client.prototype.part = function (channels, msg, fn) {
+Client.prototype.part = function (channels, msg, stream_id, fn) {
+    if (typeof(stream_id) == 'function') {
+      fn = stream_id;
+      stream_id = undefined;
+    }
     if (typeof msg === 'function') {
         fn = msg;
         msg = '';
     }
-    this.write('PART ' + toArray(channels).join(',') + ' :' + msg, fn);
+    this.write('PART ' + toArray(channels).join(',') + ' :' + msg, stream_id, fn);
 };
 
-Client.prototype.topic = function (channel, topic, fn) {
+Client.prototype.topic = function (channel, topic, stream_id, fn) {
+    if (typeof(stream_id) == 'function') {
+      fn = stream_id;
+      stream_id = undefined;
+    }
     channel = typeof channel !== "string" ? channel.getName() : channel;
     if (typeof topic === 'function') {
         fn = topic;
         topic = '';
     }
-    this.write('TOPIC ' + channel + ' :' + topic, fn);
+    this.write('TOPIC ' + channel + ' :' + topic, stream_id, fn);
 };
 
-Client.prototype.kick = function (channels, nicks, msg, fn) {
+Client.prototype.kick = function (channels, nicks, msg, stream_id, fn) {
+    if (typeof(stream_id) == 'function') {
+      fn = stream_id;
+      stream_id = undefined;
+    }
     if (typeof msg === 'function') {
         fn = msg;
         msg = '';
     }
     channels = toArray(channels).join(',');
     nicks = toArray(nicks).join(',');
-    this.write('KICK ' + channels + ' ' + nicks + ' :' + msg, fn);
+    this.write('KICK ' + channels + ' ' + nicks + ' :' + msg, stream_id, fn);
 };
 
-Client.prototype.quit = function (msg, fn) {
+Client.prototype.quit = function (msg, stream_id, fn) {
+    if (typeof(stream_id) == 'function') {
+      fn = stream_id;
+      stream_id = undefined;
+    }
     msg = msg || 'Bye!';
-    this.write('QUIT :' + msg, fn);
+    this.write('QUIT :' + msg, stream_id, fn);
 };
 
-Client.prototype.oper = function (name, password, fn) {
-    this.write('OPER ' + name + ' ' + password, fn);
+Client.prototype.oper = function (name, password, stream_id, fn) {
+    if (typeof(stream_id) == 'function') {
+      fn = stream_id;
+      stream_id = undefined;
+    }
+    this.write('OPER ' + name + ' ' + password, stream_id, fn);
 };
 
-Client.prototype.mode = function (target, flags, params, fn) {
+Client.prototype.mode = function (target, flags, params, stream_id, fn) {
+    if (typeof(stream_id) == 'function') {
+      fn = stream_id;
+      stream_id = undefined;
+    }
     if (typeof target !== "string") {
         if (this.isUser(target)) {
             target = target.getNick();
@@ -213,9 +253,9 @@ Client.prototype.mode = function (target, flags, params, fn) {
         params = '';
     }
     if (params) {
-        this.write('MODE ' + target + ' ' + flags + ' ' + params, fn);
+        this.write('MODE ' + target + ' ' + flags + ' ' + params, stream_id, fn);
     } else {
-        this.write('MODE ' + target + ' ' + flags, fn);
+        this.write('MODE ' + target + ' ' + flags, stream_id, fn);
     }
 };
 
