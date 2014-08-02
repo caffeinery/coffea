@@ -143,7 +143,7 @@ Client.prototype.notice = function (target) {
 };
 
 Client.prototype.join = function (channels, fn) {
-    this.write('JOIN ' + utils(channels).join(','), fn);
+    this.write('JOIN ' + utils.toArray(channels).join(','), fn);
 };
 
 Client.prototype.part = function (channels, msg, fn) {
@@ -151,7 +151,7 @@ Client.prototype.part = function (channels, msg, fn) {
         fn = msg;
         msg = '';
     }
-    this.write('PART ' + utils(channels).join(',') + ' :' + msg, fn);
+    this.write('PART ' + utils.toArray(channels).join(',') + ' :' + msg, fn);
 };
 
 Client.prototype.topic = function (channel, topic, fn) {
@@ -168,8 +168,8 @@ Client.prototype.kick = function (channels, nicks, msg, fn) {
         fn = msg;
         msg = '';
     }
-    channels = utils(channels).join(',');
-    nicks = utils(nicks).join(',');
+    channels = utils.toArray(channels).join(',');
+    nicks = utils.toArray(nicks).join(',');
     this.write('KICK ' + channels + ' ' + nicks + ' :' + msg, fn);
 };
 
