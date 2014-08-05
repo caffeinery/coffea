@@ -23,11 +23,11 @@ function Client(info) {
 
     if (info instanceof Array) {
         // We've been passed multiple server information
-        for(var network in info) {
+        info.forEach(function(network) {
             stream = net.connect({host: network.host, port: network.port});
             this.useStream(stream, network.name);
-        }
-    } else if (info instanceof Object) {
+        });
+    } else if (info instanceof Object && !(info instanceof net.Socket)) {
         // We've been passed single server information
         stream = net.connect({host: info.host, port: info.port});
         this.useStream(stream, info.name);
