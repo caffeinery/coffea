@@ -3,6 +3,7 @@
 
 var Emitter = require('events').EventEmitter;
 var Parser = require('slate-irc-parser');
+var net = require('net');
 var replies = require('irc-replies');
 var util = require('util');
 
@@ -10,16 +11,30 @@ function toArray(val) {
     return Array.isArray(val) ? val : [val];
 }
 
-function Client(stream) {
+
+function Client(info) {
     if (!(this instanceof Client)) {
-        return new Client(stream);
+        return new Client(info);
     }
     this.setMaxListeners(100);
 
     this.streams = {};
-    this.useStream(stream);
-
     this.me = null;
+
+    if (info instanceof Array) {
+        // We've been passed multiple server information
+        for(var network in info) {
+            stream = net.connect({host: network.host, port: network.port});
+            this.useStream(stream, network.name);
+        }
+    } else if (info instanceof Object) {
+        // We've been passed single server information
+        stream = net.connect({host: info.host, port: info.port});
+        this.useStream(stream, info.name);
+    } else {
+        // Assume we've been passed the legaxy stream.
+        this.useStream(info);
+    }
 
     this.use(require('./lib/plugins/server')());
     this.use(require('./lib/plugins/user')());
