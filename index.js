@@ -6,6 +6,7 @@ var Parser = require('slate-irc-parser');
 var net = require('net');
 var replies = require('irc-replies');
 var util = require('util');
+var Stream = require('stream').PassThrough;
 
 function toArray(val) {
     return Array.isArray(val) ? val : [val];
@@ -27,12 +28,12 @@ function Client(info) {
             stream = net.connect({host: network.host, port: network.port});
             this.useStream(stream, network.name);
         });
-    } else if (info instanceof Object && !(info instanceof net.Socket)) {
+    } else if (info instanceof Object && !(info instanceof net.Socket) && !(info instanceof Stream)) {
         // We've been passed single server information
         stream = net.connect({host: info.host, port: info.port});
         this.useStream(stream, info.name);
     } else {
-        // Assume we've been passed the legaxy stream.
+        // Assume we've been passed the legacy stream.
         this.useStream(info);
     }
 
