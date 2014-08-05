@@ -22,7 +22,7 @@
         - [`mode(target, flags, params, fn)`](#modetarget-flags-params-fn)
         - [`names(channel, fn)`](#nameschannel-fn)
         - [`getServerInfo()`](#getserverinfo)
-        - [`whois(target, fn)`](#whoistarget-fn)
+        - [`whois(target, fn, network)`](#whoistarget-fn)
         - [`use(fn)`](#usefn)
         - [`Events`](#events)
             - [`away`](#away-event)
@@ -326,7 +326,7 @@ Returns the Info we recieved in the `RPL_YOURHOST`, `RPL_CREATED` & `RPL_ISUPPOR
 ```
 
 ___
-#### `whois(target, fn)`
+#### `whois(target, fn, network)`
 Used to query for whois info of `target` and invoke `fn(err, data)`. If `fn` is not given, the method will call the [whois event](#whois-err-data).
 
 See [`whois`](#whois-err-data) for what `data` will look like.
