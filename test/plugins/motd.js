@@ -12,9 +12,9 @@ describe('motd.js', function () {
                 client = irc(stream);
 
             client.on('motd', function (motd) {
-                motd[0].should.equal('vulcanus.kerat.net message of the day');
-                motd[1].should.equal('- THE CAKE IS A LIE');
-                motd[2].should.equal('End of message of the day.');
+                motd.motd[0].should.equal('vulcanus.kerat.net message of the day');
+                motd.motd[1].should.equal('- THE CAKE IS A LIE');
+                motd.motd[2].should.equal('End of message of the day.');
                 done();
             });
             stream.write(':vulcanus.kerat.net 375 foo :vulcanus.kerat.net message of the day\r\n');
