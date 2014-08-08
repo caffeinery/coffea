@@ -71,7 +71,8 @@ module.exports = Client;
 
 util.inherits(Client, Emitter);
 
-/* Internal function that does a sanity check
+/**
+ * Internal function that does a sanity check
  * on the network information, adding defaults
  * 
  * @params {Object} network
