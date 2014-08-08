@@ -60,7 +60,7 @@ function Client(info) {
         stream = net.connect({host: info.host, port: info.port});
         this.useStream(stream, info.name);
         this.nick(info.nick);
-        this.user(info.username, network.realname);
+        this.user(info.username, info.realname);
     } else {
         // Assume we've been passed the legacy stream.
         this.useStream(info);
