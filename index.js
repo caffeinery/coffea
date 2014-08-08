@@ -22,21 +22,6 @@ function Client(info) {
     this.streams = {};
     this.me = null;
 
-    if (info instanceof Array) {
-        // We've been passed multiple server information
-        info.forEach(function(network) {
-            stream = net.connect({host: network.host, port: network.port});
-            this.useStream(stream, network.name);
-        });
-    } else if (info instanceof Object && !(info instanceof net.Socket) && !(info instanceof Stream)) {
-        // We've been passed single server information
-        stream = net.connect({host: info.host, port: info.port});
-        this.useStream(stream, info.name);
-    } else {
-        // Assume we've been passed the legacy stream.
-        this.useStream(info);
-    }
-
     this.use(require('./lib/plugins/server')());
     this.use(require('./lib/plugins/user')());
     this.use(require('./lib/plugins/channel')());
@@ -57,11 +42,56 @@ function Client(info) {
     this.use(require('./lib/plugins/topic')());
     this.use(require('./lib/plugins/welcome')());
     this.use(require('./lib/plugins/whois')());
+
+    var stream, _this;
+    if (info instanceof Array) {
+        // We've been passed multiple server information
+        _this = this;
+        info.forEach(function(network) {
+            network = _this._check(network);
+            stream = net.connect({host: network.host, port: network.port});
+            this.useStream(stream, network.name);
+            this.nick(network.nick);
+            this.user(network.user);
+        });
+    } else if (info instanceof Object && !(info instanceof net.Socket) && !(info instanceof Stream)) {
+        // We've been passed single server information
+        info = this._check(info);
+        stream = net.connect({host: info.host, port: info.port});
+        this.useStream(stream, info.name);
+        this.nick(info.nick);
+        this.user(info.user);
+    } else {
+        // Assume we've been passed the legacy stream.
+        this.useStream(info);
+    }
 }
 
 module.exports = Client;
 
 util.inherits(Client, Emitter);
+
+/* Internal function that does a sanity check
+ * on the network information, adding defaults
+ * 
+ * @params {Object} network
+ * @return {Object} network
+ * @api private
+ */
+Client.prototype._check = function(network) {
+    var ret = {}
+    var randnick = "coffea"+Math.floor(Math.random() * 100000);
+
+    ret.host = network.host === undefined ? null : network.host // Required.
+    
+    ret.nick = network.nick === undefined ? randnick : network.nick
+    ret.port = network.port === undefined ? 6667 : network.port
+    ret.ssl = network.ssl === undefined ? false : network.ssl
+    ret.username = network.username === undefined ? network.nick : network.username
+    ret.realname = network.realname === undefined ? network.nick : network.realname
+
+    return ret
+}
 
 Client.prototype.useStream = function (stream, stream_id) {
     if (stream_id) stream.coffea_id = stream_id; // user-defined stream id
