@@ -29,10 +29,10 @@ describe('nick.js', function () {
             var stream = new Stream(),
                 client = irc(stream);
             client.nick('foo');
-            stream.write(':vulcanus.kerat.net 433 * foo :Nickname is already in use.\r\n');
+            stream.write(':irc.local 433 * foo :Nickname is already in use.\r\n');
             process.nextTick(function () {
                 client.getUser().getNick().should.equal('foo_');
-                stream.write(':vulcanus.kerat.net 433 * foo :Nickname is already in use.\r\n');
+                stream.write(':irc.local 433 * foo :Nickname is already in use.\r\n');
                 process.nextTick(function () {
                     client.getUser().getNick().should.equal('foo__');
                     done();

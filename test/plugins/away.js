@@ -16,7 +16,7 @@ describe('away.js', function () {
                 event.message.should.equal('nope');
                 done();
             });
-            stream.write(':vulcanus.kerat.net 301 mynick targetnick :nope\r\n');
+            stream.write(':irc.local 301 mynick targetnick :nope\r\n');
         });
     });
 });

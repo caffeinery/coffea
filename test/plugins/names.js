@@ -10,7 +10,7 @@ describe('names.js', function () {
         it('should respond with user names', function (done) {
             var stream = new Stream(),
                 client = irc(stream);
-            client.nick('maggin');
+            client.nick('coffea');
 
             client.names('#foo', function (names) {
                 names.should.eql({
@@ -39,9 +39,9 @@ describe('names.js', function () {
             });
 
             setImmediate(function () {
-                stream.write(':vulcanus.kerat.net 353 maggin @ #foo :Ditti pot maggin Joshua coleytab SteveJobs SSL dan Krystal Ares hdrv Stats ~@pupskuchen\r\n');
-                stream.write(':vulcanus.kerat.net 353 maggin @ #foo :TokeBot @Coley cock FapBot benvei GLaDOS KeratBot\r\n');
-                stream.write(':vulcanus.kerat.net 366 maggin #foo :End of /NAMES list.\r\n');
+                stream.write(':irc.local 353 coffea @ #foo :Ditti pot maggin Joshua coleytab SteveJobs SSL dan Krystal Ares hdrv Stats ~@pupskuchen\r\n');
+                stream.write(':irc.local 353 coffea @ #foo :TokeBot @Coley cock FapBot benvei GLaDOS KeratBot\r\n');
+                stream.write(':irc.local 366 coffea #foo :End of /NAMES list.\r\n');
             });
         });
     });
@@ -79,8 +79,8 @@ describe('names.js', function () {
         });
 
         stream.write(':foo!bar@baz.com JOIN :#dev\r\n');
-        stream.write(':vulcanus.kerat.net 353 foo @ #foo :Ditti pot maggin Joshua coleytab SteveJobs SSL dan Krystal Ares hdrv Stats ~@pupskuchen\r\n');
-        stream.write(':vulcanus.kerat.net 353 foo @ #foo :TokeBot @Coley cock FapBot benvei GLaDOS KeratBot\r\n');
-        stream.write(':vulcanus.kerat.net 366 foo #foo :End of /NAMES list.\r\n');
+        stream.write(':irc.local 353 foo @ #foo :Ditti pot maggin Joshua coleytab SteveJobs SSL dan Krystal Ares hdrv Stats ~@pupskuchen\r\n');
+        stream.write(':irc.local 353 foo @ #foo :TokeBot @Coley cock FapBot benvei GLaDOS KeratBot\r\n');
+        stream.write(':irc.local 366 foo #foo :End of /NAMES list.\r\n');
     });
 });

@@ -12,14 +12,14 @@ describe('motd.js', function () {
                 client = irc(stream);
 
             client.on('motd', function (event) {
-                event.motd[0].should.equal('vulcanus.kerat.net message of the day');
+                event.motd[0].should.equal('irc.local message of the day');
                 event.motd[1].should.equal('- THE CAKE IS A LIE');
                 event.motd[2].should.equal('End of message of the day.');
                 done();
             });
-            stream.write(':vulcanus.kerat.net 375 foo :vulcanus.kerat.net message of the day\r\n');
-            stream.write(':vulcanus.kerat.net 372 foo :- THE CAKE IS A LIE\r\n');
-            stream.write(':vulcanus.kerat.net 376 foo :End of message of the day.\r\n');
+            stream.write(':irc.local 375 foo :irc.local message of the day\r\n');
+            stream.write(':irc.local 372 foo :- THE CAKE IS A LIE\r\n');
+            stream.write(':irc.local 376 foo :End of message of the day.\r\n');
         });
     });
 });
