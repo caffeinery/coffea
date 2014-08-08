@@ -54,10 +54,19 @@ describe('mode.js', function () {
                     event.argument.should.equal('baz');
                     event.adding.should.equal(true);
                     event.mode.should.equal('v');
-                    done();
+
+                    client.once('mode', function (event) {
+                        event.channel.getName().should.equal('#foo');
+                        event.by.getNick().should.equal('op');
+                        event.argument.should.equal('badguy');
+                        event.adding.should.equal(true);
+                        event.mode.should.equal('b');
+                        done();
+                    });
                 });
             });
             stream.write(':foo!bar@baz.com MODE #foo -o+v bar baz\r\n');
+            stream.write(':op!bar@baz.com MODE #foo +b badguy\r\n');
         });
     });
 });
