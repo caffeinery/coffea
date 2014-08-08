@@ -68,29 +68,26 @@ Client.prototype.useStream = function (stream, stream_id) {
     return stream.coffea_id;
 };
 
-// TODO: plugins should have multi-network support too. identify networks by
-//       stream.coffea_id and stream_id passed with on('data')
-
 Client.prototype.write = function (str, stream_id, fn) {
     if (typeof(stream_id) == 'function') {
-      fn = stream_id;
-      stream_id = undefined;
+        fn = stream_id;
+        stream_id = undefined;
     }
 
     // somebody passed the stream, not the id, get id from stream
     if (stream_id !== null && typeof stream_id === 'object') {
-      stream_id = stream_id.coffea_id;
+        stream_id = stream_id.coffea_id;
     }
 
     if (stream_id && this.streams.hasOwnProperty(stream_id)) {
-      this.streams[stream_id].write(str + '\r\n', fn);
+        this.streams[stream_id].write(str + '\r\n', fn);
     } else {
-      for (var id in this.streams) {
-        if (this.streams.hasOwnProperty(id)) {
-          this.streams[id].write(str + '\r\n');
+        for (var id in this.streams) {
+            if (this.streams.hasOwnProperty(id)) {
+                this.streams[id].write(str + '\r\n');
+            }
         }
-      }
-      if (fn) fn();
+        if (fn) fn();
     }
 };
 
@@ -119,7 +116,21 @@ Client.prototype.invite = function (name, channel, stream_id, fn) {
 };
 
 Client.prototype.send = function (target, msg, stream_id, fn) {
+    // if stream_id is the callback, then it wasn't defined either
+    // we usually don't need this in every function because client.write does it
+    // in this case it's needed because we check for !stream_id later
+    if (typeof stream_id === 'function') {
+        fn = stream_id;
+        stream_id = undefined;
+    }
+
     if (typeof target !== "string") {
+        // extract network from channel/user object
+        if (!stream_id) {
+            if (target.hasOwnProperty('getNetwork') && typeof target.getNetwork === 'function') {
+                stream_id = target.getNetwork();
+            }
+        }
         if (this.isUser(target)) {
             target = target.getNick();
         } else if (this.isChannel(target)) {
