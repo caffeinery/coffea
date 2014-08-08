@@ -165,9 +165,10 @@ Client.prototype.invite = function (name, channel, stream_id, fn) {
 };
 
 Client.prototype.send = function (target, msg, stream_id, fn) {
-    if (typeof stream_id === "function") {
+    if (typeof stream_id === "function" || stream_id === undefined) {
         fn = stream_id;
         stream_id = null;
+        var network, channel;
         network = target.split(':')[0];
         channel = target.split(':')[1];
 
