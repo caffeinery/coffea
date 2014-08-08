@@ -135,33 +135,42 @@ Client.prototype.invite = function (name, channel, stream_id, fn) {
 };
 
 Client.prototype.send = function (target, msg, stream_id, fn) {
-    if (typeof target !== "string") {
-        if (this.isUser(target)) {
-            target = target.getNick();
-        } else if (this.isChannel(target)) {
-            target = target.getName();
-        } else {
-            target = target.toString();
+    if (typeof stream_id === "function") {
+        fn = stream_id;
+        stream_id = null;
+        network = target.split(':')[0];
+        channel = target.split(':')[1];
+
+        this.send(channel, msg, network, fn);
+    } else {
+        if (typeof target !== "string") {
+            if (this.isUser(target)) {
+                target = target.getNick();
+            } else if (this.isChannel(target)) {
+                target = target.getName();
+            } else {
+                target = target.toString();
+            }
         }
+        var leading, maxlen, self;
+        self = this;
+        leading = 'PRIVMSG ' + target + ' :';
+        maxlen = 512
+                - (1 + this.me.getNick().length + 1 + this.me.getUsername().length + 1 + this.me.getHostname().length + 1)
+                - leading.length
+                - 2;
+        /*jslint regexp: true*/
+        msg.match(new RegExp('.{1,' + maxlen + '}', 'g')).forEach(function (str) {
+            if (str[0] === ' ') { //leading whitespace
+                str = str.substring(1);
+            }
+            if (str[str.length - 1] === ' ') { //trailing whitespace
+                str = str.substring(0, str.length - 1);
+            }
+            self.write(leading + str, stream_id, fn);
+        });
+        /*jslint regexp: false*/
     }
-    var leading, maxlen, self;
-    self = this;
-    leading = 'PRIVMSG ' + target + ' :';
-    maxlen = 512
-            - (1 + this.me.getNick().length + 1 + this.me.getUsername().length + 1 + this.me.getHostname().length + 1)
-            - leading.length
-            - 2;
-    /*jslint regexp: true*/
-    msg.match(new RegExp('.{1,' + maxlen + '}', 'g')).forEach(function (str) {
-        if (str[0] === ' ') { //leading whitespace
-            str = str.substring(1);
-        }
-        if (str[str.length - 1] === ' ') { //trailing whitespace
-            str = str.substring(0, str.length - 1);
-        }
-        self.write(leading + str, stream_id, fn);
-    });
-    /*jslint regexp: false*/
 };
 
 Client.prototype.notice = function (target, msg, stream_id, fn) {
