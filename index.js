@@ -5,6 +5,7 @@ var Emitter = require('events').EventEmitter;
 var Parser = require('slate-irc-parser');
 var replies = require('irc-replies');
 var util = require('util');
+var utils = require('./lib/utils');
 
 function toArray(val) {
     return Array.isArray(val) ? val : [val];
@@ -126,18 +127,8 @@ Client.prototype.send = function (target, msg, stream_id, fn) {
 
     if (typeof target !== "string") {
         // extract network from channel/user object
-        if (!stream_id) {
-            if (target.hasOwnProperty('getNetwork') && typeof target.getNetwork === 'function') {
-                stream_id = target.getNetwork();
-            }
-        }
-        if (this.isUser(target)) {
-            target = target.getNick();
-        } else if (this.isChannel(target)) {
-            target = target.getName();
-        } else {
-            target = target.toString();
-        }
+        if (!stream_id) stream_id = utils.extractNetwork(target);
+        target = utils.targetString(target); // TODO: move this helper function to user/channel plugin?
     }
     var leading, maxlen, self;
     self = this;
@@ -161,13 +152,7 @@ Client.prototype.send = function (target, msg, stream_id, fn) {
 
 Client.prototype.notice = function (target, msg, stream_id, fn) {
     if (typeof target !== "string") {
-        if (this.isUser(target)) {
-            target = target.getNick();
-        } else if (this.isChannel(target)) {
-            target = target.getName();
-        } else {
-            target = target.toString();
-        }
+        target = utils.targetString(target);
     }
     var leading, maxlen, self;
     self = this;
@@ -259,13 +244,7 @@ Client.prototype.mode = function (target, flags, params, stream_id, fn) {
       stream_id = undefined;
     }
     if (typeof target !== "string") {
-        if (this.isUser(target)) {
-            target = target.getNick();
-        } else if (this.isChannel(target)) {
-            target = target.getName();
-        } else {
-            target = target.toString();
-        }
+        target = utils.targetString(target);
     }
     if ('function' === typeof params) {
         fn = params;
