@@ -52,7 +52,7 @@ function Client(info) {
             stream = net.connect({host: network.host, port: network.port});
             this.useStream(stream, network.name);
             this.nick(network.nick);
-            this.user(network.user);
+            this.user(network.username, network.realname);
         });
     } else if (info instanceof Object && !(info instanceof net.Socket) && !(info instanceof Stream)) {
         // We've been passed single server information
@@ -60,7 +60,7 @@ function Client(info) {
         stream = net.connect({host: info.host, port: info.port});
         this.useStream(stream, info.name);
         this.nick(info.nick);
-        this.user(info.user);
+        this.user(info.username, network.realname);
     } else {
         // Assume we've been passed the legacy stream.
         this.useStream(info);
@@ -87,8 +87,8 @@ Client.prototype._check = function(network) {
     ret.nick = network.nick === undefined ? randnick : network.nick
     ret.port = network.port === undefined ? 6667 : network.port
     ret.ssl = network.ssl === undefined ? false : network.ssl
-    ret.username = network.username === undefined ? network.nick : network.username
-    ret.realname = network.realname === undefined ? network.nick : network.realname
+    ret.username = network.username === undefined ? randnick : network.username
+    ret.realname = network.realname === undefined ? randnick : network.realname
 
     return ret
 }
