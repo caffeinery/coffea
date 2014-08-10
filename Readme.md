@@ -1,3 +1,7 @@
+# Coffea
+
+_Note that this API documentation is currently outdated and we are working on an up-to-date version in the wiki on github_
+
 ## Table of Contents
 - [Example](#example)
     - [`Normal Connection`](#normal-connection)
