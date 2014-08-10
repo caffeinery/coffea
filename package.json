@@ -1,17 +1,13 @@
 {
   "name": "coffea",
-  "version": "0.1.3",
-  "description": "General purpose IRC client",
-  "author": "Martin Rump <admin@maddin.cc>",
+  "version": "0.2.0",
+  "description": "event based and extensible irc client library with multi-network support",
+  "author": "The Coffeehouse Devs <daniel.bugl@touchlay.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/thecoffeehouse/coffea.git"
   },
-  "keywords": [
-    "irc",
-    "client",
-    "chat"
-  ],
+  "keywords": ["irc", "library", "client", "chat", "multi-network", "multiple", "networks", "event-based", "events", "coffeehouse", "extensible", "plugins"],
   "bugs": {
     "url": "https://github.com/thecoffeehouse/coffea/issues"
   },
@@ -26,5 +22,5 @@
   "scripts": {
     "test": "mocha --require should --bail --reporter spec test/plugins/*"
   },
-  "license": "BSD-3"
+  "license": "BSD"
 }
