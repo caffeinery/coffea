@@ -6,7 +6,7 @@
     - [`Client`](#clientstream)
         - [`write(str, fn)`](#writestr-fn)
         - [`getUser(nick)`](#getusernick)
-        - [`getChannel(name)`](#getchannelname)
+        - [`getChannel(name, network)`](#getchannelname)
         - [`pass(pass, fn)`](#passpass-fn)
         - [`nick(nick, fn)`](#nicknick-fn)
         - [`user(username, realname, fn)`](#userusername-realname-fn)
@@ -22,7 +22,7 @@
         - [`mode(target, flags, params, fn)`](#modetarget-flags-params-fn)
         - [`names(channel, fn)`](#nameschannel-fn)
         - [`getServerInfo()`](#getserverinfo)
-        - [`whois(target, fn)`](#whoistarget-fn)
+        - [`whois(target, fn, network)`](#whoistarget-fn)
         - [`use(fn)`](#usefn)
         - [`Events`](#events)
             - [`away`](#away-event)
@@ -155,11 +155,11 @@ client.getUser('foo');
 ```
 
 ___
-#### `getChannel(name)`
+#### `getChannel(name, network)`
 Get the [`[Channel object]`](#channelname) representing the channel by the given `name`.
 
 ```javascript
-client.getChannel('#foo');
+client.getChannel('#foo', 'testnetwork');
 ```
 
 ___
@@ -195,20 +195,20 @@ client.invite('maggin', '#dev');
 ```
 
 ___
-#### `send(target, msg, fn)` 
-Send a `msg` to the `target`. 
-`target` can either be a string, a [`[User object]`](#usernick) or a [`[Channel object]`](#channelname). 
+#### `send(target, msg, fn)`
+Send a `msg` to the `target`.
+`target` can either be a string, a [`[User object]`](#usernick) or a [`[Channel object]`](#channelname).
 If the message exceeds the Length of 512 Chars, it will be splitted into Multiple Lines.
 
 ```javascript
 client.send('foo', 'Why hello there');
 client.send('#foo', 'Why hello there');
 client.send(client.getUser('foo'), 'Why hello there');
-client.send(client.getChannel('#foo'), 'Why hello there');
+client.send(client.getChannel('#foo', 'testnetwork'), 'Why hello there');
 ```
 
 ___
-#### `notice(target, msg, fn)` 
+#### `notice(target, msg, fn)`
 Send a `msg` as a notice to the `target`.
 `target` can either be a string, a [`[User object]`](#usernick) or a [`[Channel object]`](#channelname).
 If the message exceeds the Length of 512 Chars, it will be splitted into Multiple Lines.
@@ -217,7 +217,7 @@ If the message exceeds the Length of 512 Chars, it will be splitted into Multipl
 client.notice('foo', 'Why hello there');
 client.notice('#foo', 'Why hello there');
 client.notice(client.getUser('foo'), 'Why hello there');
-client.notice(client.getChannel('#foo'), 'Why hello there');
+client.notice(client.getChannel('#foo', 'testnetwork'), 'Why hello there');
 ```
 
 ___
@@ -231,7 +231,7 @@ client.join(['#foo', '#bar']);
 
 ___
 #### `part(channels, msg, fn)`
-Leave channel(s) with optional `msg`. 
+Leave channel(s) with optional `msg`.
 `channels` can either be a string, or an array.
 
 ```javascript
@@ -242,12 +242,12 @@ client.part(['#foo', '#bar']);
 ___
 #### `topic(channel, topic, fn)`
 Change or view the Topic of `channel`.
-`channel` can either be a string or a [`[Channel object]`](#channelname). 
+`channel` can either be a string or a [`[Channel object]`](#channelname).
 If the `topic` parameter is present, the topic for `channel` will be changed. If the `topic` parameter is an empty string, the topic for that channel will be removed.
 
 ```javascript
 client.topic('#foo', 'So long');
-client.topic(client.getChannel('#foo'));
+client.topic(client.getChannel('#foo', 'testnetwork'));
 ```
 
 ___
@@ -272,7 +272,7 @@ client.quit('So Long');
 
 ___
 #### `oper(name, password, fn)`
-Used to obtain operator privileges. 
+Used to obtain operator privileges.
 The combination of `name` and `password` are required to gain Operator privileges.
 Upon success, a `'mode'` event will be emitted.
 
@@ -287,7 +287,7 @@ Used to set a user's mode or channel's mode for a user.
 
 ```javascript
 client.mode('#foo', '+o', 'bar');
-client.mode(client.getChannel('#foo'), '+o', 'bar');
+client.mode(client.getChannel('#foo', 'testnetwork'), '+o', 'bar');
 ```
 
 ___
@@ -326,7 +326,7 @@ Returns the Info we recieved in the `RPL_YOURHOST`, `RPL_CREATED` & `RPL_ISUPPOR
 ```
 
 ___
-#### `whois(target, fn)`
+#### `whois(target, fn, network)`
 Used to query for whois info of `target` and invoke `fn(err, data)`. If `fn` is not given, the method will call the [whois event](#whois-err-data).
 
 See [`whois`](#whois-err-data) for what `data` will look like.
@@ -351,14 +351,14 @@ ___
 
 ```javascript
 client.on('away', function (event) {
-    console.log(event.user.getNick() + ' is away: ' + event.message); 
+    console.log(event.user.getNick() + ' is away: ' + event.message);
 });
 ```
 
 ___
 
 #### "data" `(parsed)`
-[`Client`](#clientstream) will emit `data` whenever we recieve a line from the server. 
+[`Client`](#clientstream) will emit `data` whenever we recieve a line from the server.
 
 `parsed` is the parsed message as an object, containing prefix, command, params, trailing and the original string.
 
@@ -390,7 +390,7 @@ ___
 
 ```javascript
 client.on('invite', function (event) {
-    console.log(event.target.getNick() + ' got invited to join ' + event.channel.getName()); 
+    console.log(event.target.getNick() + ' got invited to join ' + event.channel.getName());
 });
 ```
 
@@ -404,7 +404,7 @@ ___
 
 ```javascript
 client.on('join', function (event) {
-    console.log(event.user.getNick() + ' joined ' + event.channel.getName()); 
+    console.log(event.user.getNick() + ' joined ' + event.channel.getName());
 });
 ```
 
@@ -420,7 +420,7 @@ ___
 
 ```javascript
 client.on('kick', function (event) {
-    console.log(event.by.getNick() + ' kicked ' + event.user.getNick() + ' from ' + event.channel.getName() + '. Reason: ' + event.reason); 
+    console.log(event.by.getNick() + ' kicked ' + event.user.getNick() + ' from ' + event.channel.getName() + '. Reason: ' + event.reason);
 });
 ```
 
@@ -437,7 +437,7 @@ ___
 
 ```javascript
 client.on('mode', function (event) {
-    console.log('[' + event.channel.getName() + '] ' + event.by.getNick() + ' sets the mode ' + (event.adding ? '+' : '-') + event.mode + ' on ' + event.argument); 
+    console.log('[' + event.channel.getName() + '] ' + event.by.getNick() + ' sets the mode ' + (event.adding ? '+' : '-') + event.mode + ' on ' + event.argument);
 });
 ```
 
@@ -680,7 +680,7 @@ client.on('whois', function (err, data) {
 
 ___
 ### `User(nick, client)`
-Represents a User by the given nick. 
+Represents a User by the given nick.
 Please use `client.getUser('some_nick')` to get a User object, and not `new User('some_nick', client)`.
 Please note that most of these information is recieved through parsing the [`whois`](#whois-err-data) event data. Coffea itself won't whois automatically, so you have to do it yourself in order to get these information.
 
@@ -852,7 +852,7 @@ user.whois(function (err, data) {
 
 ___
 ### `Channel(name, client)`
-Represents a Channel by the given name. 
+Represents a Channel by the given name.
 Please use `client.getChannel('#foo')` to get a Channel object, and not `new Channel('#foo', client)`.
 
 ___
