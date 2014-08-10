@@ -48,8 +48,8 @@ module.exports = Client;
 
 util.inherits(Client, Emitter);
 
-Client.prototype.useStream = function (stream, stream_id) {
-    if (stream_id) stream.coffea_id = stream_id; // user-defined stream id
+Client.prototype.useStream = function (stream, network) {
+    if (network) stream.coffea_id = network; // user-defined stream id
     else stream.coffea_id = Object.keys(this.streams).length.toString(); // assign unique id to stream
 
     stream.setEncoding('utf8'); // set stream encoding
@@ -69,19 +69,20 @@ Client.prototype.useStream = function (stream, stream_id) {
     return stream.coffea_id;
 };
 
-Client.prototype.write = function (str, stream_id, fn) {
-    if (typeof(stream_id) == 'function') {
-        fn = stream_id;
-        stream_id = undefined;
+Client.prototype.write = function (str, network, fn) {
+    // if network is the callback, then it wasn't defined either
+    if (typeof(network) == 'function') {
+        fn = network;
+        network = undefined;
     }
 
     // somebody passed the stream, not the id, get id from stream
-    if (stream_id !== null && typeof stream_id === 'object') {
-        stream_id = stream_id.coffea_id;
+    if (network !== null && typeof network === 'object') {
+        network = network.coffea_id;
     }
 
-    if (stream_id && this.streams.hasOwnProperty(stream_id)) {
-        this.streams[stream_id].write(str + '\r\n', fn);
+    if (network && this.streams.hasOwnProperty(network)) {
+        this.streams[network].write(str + '\r\n', fn);
     } else {
         for (var id in this.streams) {
             if (this.streams.hasOwnProperty(id)) {
@@ -92,46 +93,46 @@ Client.prototype.write = function (str, stream_id, fn) {
     }
 };
 
-Client.prototype.pass = function (pass, stream_id, fn) {
-    this.write('PASS ' + pass, stream_id, fn);
+Client.prototype.pass = function (pass, network, fn) {
+    this.write('PASS ' + pass, network, fn);
 };
 
-Client.prototype.nick = function (nick, stream_id, fn) {
+Client.prototype.nick = function (nick, network, fn) {
     if (this.me === null) {
         this.me = this.getUser(nick);
     } else {
         this.me.nick = nick;
     }
-    this.write('NICK ' + nick, stream_id, fn);
+    this.write('NICK ' + nick, network, fn);
 };
 
-Client.prototype.user = function (username, realname, stream_id, fn) {
+Client.prototype.user = function (username, realname, network, fn) {
     this.me.username = username;
     this.me.realname = realname;
-    this.write('USER ' + username + ' 0 * :' + realname, stream_id, fn);
+    this.write('USER ' + username + ' 0 * :' + realname, network, fn);
 };
 
-Client.prototype.invite = function (name, channel, stream_id, fn) {
+Client.prototype.invite = function (name, channel, network, fn) {
     name = typeof name === "string" ? name : name.getNick();
-    this.write('INVITE ' + name + ' ' + channel, stream_id, fn);
+    this.write('INVITE ' + name + ' ' + channel, network, fn);
 };
 
-Client.prototype.send = function (target, msg, stream_id, fn) {
-    // if stream_id is the callback, then it wasn't defined either
+Client.prototype.send = function (target, msg, network, fn) {
+    // if network is the callback, then it wasn't defined either
     // we usually don't need this in every function because client.write does it
-    // in this case it's needed because we check for !stream_id later
-    if (typeof stream_id === 'function') {
-        fn = stream_id;
-        stream_id = undefined;
+    // in this case it's needed because we check for !network later
+    if (typeof network === 'function') {
+        fn = network;
+        network = undefined;
     }
 
     if (typeof target !== "string") {
         // extract network from channel/user object
-        if (!stream_id) stream_id = utils.extractNetwork(target);
+        if (!network) network = utils.extractNetwork(target);
         target = utils.targetString(target); // TODO: move this helper function to user/channel plugin?
     }
-    var leading, maxlen, self;
-    self = this;
+    var leading, maxlen, _this;
+    _this = this;
     leading = 'PRIVMSG ' + target + ' :';
     maxlen = 512
             - (1 + this.me.getNick().length + 1 + this.me.getUsername().length + 1 + this.me.getHostname().length + 1)
@@ -145,17 +146,17 @@ Client.prototype.send = function (target, msg, stream_id, fn) {
         if (str[str.length - 1] === ' ') { //trailing whitespace
             str = str.substring(0, str.length - 1);
         }
-        self.write(leading + str, stream_id, fn);
+        _this.write(leading + str, network, fn);
     });
     /*jslint regexp: false*/
 };
 
-Client.prototype.notice = function (target, msg, stream_id, fn) {
+Client.prototype.notice = function (target, msg, network, fn) {
     if (typeof target !== "string") {
         target = utils.targetString(target);
     }
-    var leading, maxlen, self;
-    self = this;
+    var leading, maxlen, _this;
+    _this = this;
     leading = 'NOTICE ' + target + ' :';
     maxlen = 512
             - (1 + this.me.getNick().length + 1 + this.me.getUsername().length + 1 + this.me.getHostname().length + 1)
@@ -169,80 +170,52 @@ Client.prototype.notice = function (target, msg, stream_id, fn) {
         if (str[str.length - 1] === ' ') { //trailing whitespace
             str = str.substring(0, str.length - 1);
         }
-        self.write(leading + str, stream_id, fn);
+        _this.write(leading + str, network, fn);
     });
     /*jslint regexp: false*/
 };
 
-Client.prototype.join = function (channels, stream_id, fn) {
-    if (typeof(stream_id) == 'function') {
-      fn = stream_id;
-      stream_id = undefined;
-    }
-    this.write('JOIN ' + toArray(channels).join(','), stream_id, fn);
+Client.prototype.join = function (channels, network, fn) {
+    this.write('JOIN ' + toArray(channels).join(','), network, fn);
 };
 
-Client.prototype.part = function (channels, msg, stream_id, fn) {
-    if (typeof(stream_id) == 'function') {
-      fn = stream_id;
-      stream_id = undefined;
-    }
+Client.prototype.part = function (channels, msg, network, fn) {
     if (typeof msg === 'function') {
         fn = msg;
         msg = '';
     }
-    this.write('PART ' + toArray(channels).join(',') + ' :' + msg, stream_id, fn);
+    this.write('PART ' + toArray(channels).join(',') + ' :' + msg, network, fn);
 };
 
-Client.prototype.topic = function (channel, topic, stream_id, fn) {
-    if (typeof(stream_id) == 'function') {
-      fn = stream_id;
-      stream_id = undefined;
-    }
+Client.prototype.topic = function (channel, topic, network, fn) {
     channel = typeof channel !== "string" ? channel.getName() : channel;
     if (typeof topic === 'function') {
         fn = topic;
         topic = '';
     }
-    this.write('TOPIC ' + channel + ' :' + topic, stream_id, fn);
+    this.write('TOPIC ' + channel + ' :' + topic, network, fn);
 };
 
-Client.prototype.kick = function (channels, nicks, msg, stream_id, fn) {
-    if (typeof(stream_id) == 'function') {
-      fn = stream_id;
-      stream_id = undefined;
-    }
+Client.prototype.kick = function (channels, nicks, msg, network, fn) {
     if (typeof msg === 'function') {
         fn = msg;
         msg = '';
     }
     channels = toArray(channels).join(',');
     nicks = toArray(nicks).join(',');
-    this.write('KICK ' + channels + ' ' + nicks + ' :' + msg, stream_id, fn);
+    this.write('KICK ' + channels + ' ' + nicks + ' :' + msg, network, fn);
 };
 
-Client.prototype.quit = function (msg, stream_id, fn) {
-    if (typeof(stream_id) == 'function') {
-      fn = stream_id;
-      stream_id = undefined;
-    }
+Client.prototype.quit = function (msg, network, fn) {
     msg = msg || 'Bye!';
-    this.write('QUIT :' + msg, stream_id, fn);
+    this.write('QUIT :' + msg, network, fn);
 };
 
-Client.prototype.oper = function (name, password, stream_id, fn) {
-    if (typeof(stream_id) == 'function') {
-      fn = stream_id;
-      stream_id = undefined;
-    }
-    this.write('OPER ' + name + ' ' + password, stream_id, fn);
+Client.prototype.oper = function (name, password, network, fn) {
+    this.write('OPER ' + name + ' ' + password, network, fn);
 };
 
-Client.prototype.mode = function (target, flags, params, stream_id, fn) {
-    if (typeof(stream_id) == 'function') {
-      fn = stream_id;
-      stream_id = undefined;
-    }
+Client.prototype.mode = function (target, flags, params, network, fn) {
     if (typeof target !== "string") {
         target = utils.targetString(target);
     }
@@ -251,9 +224,9 @@ Client.prototype.mode = function (target, flags, params, stream_id, fn) {
         params = '';
     }
     if (params) {
-        this.write('MODE ' + target + ' ' + flags + ' ' + params, stream_id, fn);
+        this.write('MODE ' + target + ' ' + flags + ' ' + params, network, fn);
     } else {
-        this.write('MODE ' + target + ' ' + flags, stream_id, fn);
+        this.write('MODE ' + target + ' ' + flags, network, fn);
     }
 };
 
@@ -262,7 +235,7 @@ Client.prototype.use = function (fn) {
     return this;
 };
 
-Client.prototype.onmessage = function (msg, stream_id) {
+Client.prototype.onmessage = function (msg, network) {
     msg.command = replies[msg.command] || msg.command;
-    this.emit('data', msg, stream_id);
+    this.emit('data', msg, network);
 };
