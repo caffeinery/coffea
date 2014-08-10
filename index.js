@@ -4,13 +4,10 @@
 var Emitter = require('events').EventEmitter;
 var Parser = require('slate-irc-parser');
 var replies = require('irc-replies');
-var util = require('util');
 var utils = require('./lib/utils');
 
 function Client(stream) {
-    if (!(this instanceof Client)) {
-        return new Client(stream);
-    }
+    if (!(this instanceof Client)) return new Client(stream);
     this.setMaxListeners(100);
 
     this.streams = {};
@@ -18,6 +15,7 @@ function Client(stream) {
 
     this.me = null;
 
+    // Core plugins
     this.use(require('./lib/plugins/server')());
     this.use(require('./lib/plugins/user')());
     this.use(require('./lib/plugins/channel')());
@@ -32,17 +30,20 @@ function Client(stream) {
     this.use(require('./lib/plugins/nick')());
     this.use(require('./lib/plugins/notice')());
     this.use(require('./lib/plugins/part')());
-    this.use(require('./lib/plugins/ping')());
+    this.use(require('./lib/plugins/pong')());
     this.use(require('./lib/plugins/privmsg')());
     this.use(require('./lib/plugins/quit')());
     this.use(require('./lib/plugins/topic')());
     this.use(require('./lib/plugins/welcome')());
     this.use(require('./lib/plugins/whois')());
+    this.use(require('./lib/plugins/errors')());
 }
 
+// expose client
 module.exports = Client;
 
-util.inherits(Client, Emitter);
+// inherit from Emitter.prototype to make Client and EventEmitter
+Client.prototype.__proto__ = Emitter.prototype;
 
 Client.prototype.useStream = function (stream, network) {
     if (network) stream.coffea_id = network; // user-defined stream id
@@ -152,6 +153,10 @@ Client.prototype.send = function (target, msg, network, fn) {
     /*jslint regexp: false*/
 };
 
+Client.prototype.action = function(target, msg, network, fn) {
+    this.send(target, '\u0001' + 'ACTION ' + msg + '\u0001', network, fn);
+};
+
 Client.prototype.notice = function (target, msg, network, fn) {
     if (typeof target !== "string") {
         target = utils.targetString(target);
@@ -180,8 +185,16 @@ Client.prototype.notice = function (target, msg, network, fn) {
     /*jslint regexp: false*/
 };
 
-Client.prototype.join = function (channels, network, fn) {
-    this.write('JOIN ' + utils.toArray(channels).join(','), network, fn);
+Client.prototype.join = function (channels, keys, network, fn) {
+    if (typeof keys == 'function') { // join(channels, fn)
+        fn = keys;
+        network = undefined;
+        keys = '';
+    } else if (typeof network == 'function') { // join(channels, network, fn)
+        fn = network;
+        network = keys;
+    }
+    this.write('JOIN ' + utils.toArray(channels).join(',') + ' ' + utils.toArray(keys).join(','), network, fn);
 };
 
 Client.prototype.part = function (channels, msg, network, fn) {
