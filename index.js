@@ -5,7 +5,8 @@ var Emitter = require('events').EventEmitter;
 var Parser = require('slate-irc-parser');
 var net = require('net');
 var replies = require('irc-replies');
-var Stream = require('stream').PassThrough;
+var StreamReadable = require('stream').Readable;
+var StreamWritable = require('stream').Writable;
 var utils = require('./lib/utils');
 
 function Client(info) {
@@ -26,7 +27,7 @@ function Client(info) {
             this.nick(network.nick);
             this.user(network.username, network.realname);
         });
-    } else if (info instanceof Object && !(info instanceof net.Socket) && !(info instanceof Stream)) {
+    } else if (info instanceof Object && !(info instanceof StreamReadable) && !(info instanceof StreamWritable)) {
         // We've been passed single server information
         info = this._check(info);
         stream = net.connect({host: info.host, port: info.port});
