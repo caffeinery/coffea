@@ -67,7 +67,7 @@ function Client(info) {
 module.exports = Client;
 
 // inherit from Emitter.prototype to make Client and EventEmitter
-Client.prototype.__proto__ = Emitter.prototype;
+utils.inherit(Client, Emitter);
 
 /**
  * Internal function that does a sanity check
@@ -78,19 +78,19 @@ Client.prototype.__proto__ = Emitter.prototype;
  * @api private
  */
 Client.prototype._check = function(network) {
-    var ret = {}
+    var ret = {};
     var randnick = "coffea"+Math.floor(Math.random() * 100000);
 
-    ret.host = network.host === undefined ? null : network.host // Required.
+    ret.host = network.host === undefined ? null : network.host; // Required.
     
-    ret.nick = network.nick === undefined ? randnick : network.nick
-    ret.port = network.port === undefined ? 6667 : network.port
-    ret.ssl = network.ssl === undefined ? false : network.ssl
-    ret.username = network.username === undefined ? randnick : network.username
-    ret.realname = network.realname === undefined ? randnick : network.realname
+    ret.nick = network.nick === undefined ? randnick : network.nick;
+    ret.port = network.port === undefined ? 6667 : network.port;
+    ret.ssl = network.ssl === undefined ? false : network.ssl;
+    ret.username = network.username === undefined ? randnick : network.username;
+    ret.realname = network.realname === undefined ? randnick : network.realname;
 
-    return ret
-}
+    return ret;
+};
 
 Client.prototype.useStream = function (stream, network) {
     if (network) stream.coffea_id = network; // user-defined stream id
@@ -186,18 +186,13 @@ Client.prototype.send = function (target, msg, network, fn) {
         }
     }
 
-    var leading, maxlen, _this, message, args = Array.prototype.slice.call(arguments);
-    args.shift();
-    message = args.join(' ');
-
-    _this = this;
+    var leading, maxlen, _this = this;
     leading = 'PRIVMSG ' + target + ' :';
-    maxlen = 512
-            - (1 + this.me.getNick().length + 1 + this.me.getUsername().length + 1 + this.me.getHostname().length + 1)
-            - leading.length
-            - 2;
+    maxlen = 512 -
+        (1 + this.me.getNick().length + 1 + this.me.getUsername().length + 1 + this.me.getHostname().length + 1) -
+        leading.length - 2;
     /*jslint regexp: true*/
-    message.match(new RegExp('.{1,' + maxlen + '}', 'g')).forEach(function (str) {
+    msg.match(new RegExp('.{1,' + maxlen + '}', 'g')).forEach(function (str) {
         if (str[0] === ' ') { //leading whitespace
             str = str.substring(1);
         }
@@ -224,10 +219,9 @@ Client.prototype.notice = function (target, msg, network, fn) {
 
     _this = this;
     leading = 'NOTICE ' + target + ' :';
-    maxlen = 512
-            - (1 + this.me.getNick().length + 1 + this.me.getUsername().length + 1 + this.me.getHostname().length + 1)
-            - leading.length
-            - 2;
+    maxlen = 512 -
+            (1 + this.me.getNick().length + 1 + this.me.getUsername().length + 1 + this.me.getHostname().length + 1) - 
+            leading.length - 2;
     /*jslint regexp: true*/
     message.match(new RegExp('.{1,' + maxlen + '}', 'g')).forEach(function (str) {
         if (str[0] === ' ') { //leading whitespace
