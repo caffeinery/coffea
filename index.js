@@ -16,6 +16,29 @@ function Client(info) {
     this.streams = {};
     this.me = null;
 
+    this.use(require('./lib/plugins/server')());
+    this.use(require('./lib/plugins/user')());
+    this.use(require('./lib/plugins/channel')());
+
+    this.use(require('./lib/plugins/away')());
+    this.use(require('./lib/plugins/format')());
+    this.use(require('./lib/plugins/invite')());
+    this.use(require('./lib/plugins/join')());
+    this.use(require('./lib/plugins/kick')());
+    this.use(require('./lib/plugins/mode')());
+    this.use(require('./lib/plugins/motd')());
+    this.use(require('./lib/plugins/names')());
+    this.use(require('./lib/plugins/nick')());
+    this.use(require('./lib/plugins/notice')());
+    this.use(require('./lib/plugins/part')());
+    this.use(require('./lib/plugins/pong')());
+    this.use(require('./lib/plugins/privmsg')());
+    this.use(require('./lib/plugins/quit')());
+    this.use(require('./lib/plugins/topic')());
+    this.use(require('./lib/plugins/welcome')());
+    this.use(require('./lib/plugins/whois')());
+    this.use(require('./lib/plugins/errors')());
+
     var stream, _this;
     if (info instanceof Array) {
         // We've been passed multiple server information
@@ -38,29 +61,6 @@ function Client(info) {
         // Assume we've been passed the legacy stream.
         this.useStream(info);
     }
-
-    // Core plugins
-    this.use(require('./lib/plugins/server')());
-    this.use(require('./lib/plugins/user')());
-    this.use(require('./lib/plugins/channel')());
-
-    this.use(require('./lib/plugins/away')());
-    this.use(require('./lib/plugins/invite')());
-    this.use(require('./lib/plugins/join')());
-    this.use(require('./lib/plugins/kick')());
-    this.use(require('./lib/plugins/mode')());
-    this.use(require('./lib/plugins/motd')());
-    this.use(require('./lib/plugins/names')());
-    this.use(require('./lib/plugins/nick')());
-    this.use(require('./lib/plugins/notice')());
-    this.use(require('./lib/plugins/part')());
-    this.use(require('./lib/plugins/pong')());
-    this.use(require('./lib/plugins/privmsg')());
-    this.use(require('./lib/plugins/quit')());
-    this.use(require('./lib/plugins/topic')());
-    this.use(require('./lib/plugins/welcome')());
-    this.use(require('./lib/plugins/whois')());
-    this.use(require('./lib/plugins/errors')());
 }
 
 // expose client
