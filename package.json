@@ -1,6 +1,6 @@
 {
   "name": "coffea",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "event based and extensible irc client library with multi-network support",
   "author": "The Coffeehouse Devs <daniel.bugl@touchlay.com>",
   "repository": {
