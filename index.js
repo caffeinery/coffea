@@ -277,7 +277,7 @@ Client.prototype.mode = function (target, flags, params, network, fn) {
     var parse = utils.parseTarget(target);
     if (!network) network = parse.network;
     target = parse.target;
-    
+
     if ('function' === typeof params) {
         fn = params;
         params = '';
