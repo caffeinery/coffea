@@ -1,4 +1,4 @@
-var coffea = require("../..");
+var coffea = require('../..');
 var Stream = require('stream').PassThrough;
 
 describe('away.js', function() {
@@ -29,7 +29,7 @@ describe('away.js', function() {
 				done();
 			});
 
-			st1.write(':you!are@so.cool.com PRIVMSG #test :afk');
+			st1.write(':you!are@so.cool.com PRIVMSG #test :afk\r\n');
 			st2.write(':irc.local 301 me you :not here\r\n');
 		});
 
@@ -46,7 +46,7 @@ describe('away.js', function() {
 				done();
 			});
 
-			st2.write(':you!are@so.cool.com PRIVMSG #test :afk');
+			st2.write(':you!are@so.cool.com PRIVMSG #test :afk\r\n');
 			st1.write(':irc.local 301 me you :not here\r\n');
 		});
 	});
