@@ -6,7 +6,6 @@ describe('away.js', function() {
 		it('should emit "away" [single-network]', function (done) {
 			var st1 = new Stream();
 			var client = coffea(st1);
-
 			client.on("away", function (event) {
 				event.user.getNick().should.equal('you');
 				event.message.should.equal('not here');

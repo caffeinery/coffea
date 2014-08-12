@@ -171,20 +171,9 @@ Client.prototype.send = function (target, msg, network, fn) {
         network = undefined;
     }
 
-    if (typeof target !== "string") {
-        // extract network from channel/user object
-        if (!network) network = utils.extractNetwork(target);
-        target = utils.targetString(target); // TODO: move this helper function to user/channel plugin?
-    }
-
-    // user defined network overrides everything else
-    if (target.indexOf(':') > -1) {
-        var splits = target.split(':');
-        if (splits.length > 1) {
-            network = splits[0];
-            target = splits[1];
-        }
-    }
+    var parse = utils.parseTarget(target);
+    if (!network) network = parse.network;
+    target = parse.target;
 
     var leading, maxlen, _this = this;
     leading = 'PRIVMSG ' + target + ' :';
@@ -209,9 +198,9 @@ Client.prototype.action = function(target, msg, network, fn) {
 };
 
 Client.prototype.notice = function (target, msg, network, fn) {
-    if (typeof target !== "string") {
-        target = utils.targetString(target);
-    }
+    var parse = utils.parseTarget(target);
+    if (!network) network = parse.network;
+    target = parse.target;
 
     var leading, maxlen, _this, message, args = Array.prototype.slice.call(arguments);
     args.shift();
@@ -285,9 +274,10 @@ Client.prototype.oper = function (name, password, network, fn) {
 };
 
 Client.prototype.mode = function (target, flags, params, network, fn) {
-    if (typeof target !== "string") {
-        target = utils.targetString(target);
-    }
+    var parse = utils.parseTarget(target);
+    if (!network) network = parse.network;
+    target = parse.target;
+    
     if ('function' === typeof params) {
         fn = params;
         params = '';
