@@ -1,4 +1,5 @@
 # Coffea
+_event based and extensible irc client library with multi-network support_
 
 ## API
 The outdated (but currently more complete) version of the API is available [in the wiki](https://github.com/thecoffeehouse/coffea/wiki/API-(outdated)).
