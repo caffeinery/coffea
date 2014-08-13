@@ -46,9 +46,10 @@ function Client(info) {
         info.forEach(function(network) {
             network = _this._check(network);
             stream = net.connect({host: network.host, port: network.port});
-            this.useStream(stream, network.name);
-            this.nick(network.nick);
-            this.user(network.username, network.realname);
+            _this.useStream(stream, network.name);
+            if (network.pass) _this.pass(network.pass);
+            _this.nick(network.nick);
+            _this.user(network.username, network.realname);
         });
     } else if (info instanceof Object && !(info instanceof StreamReadable) && !(info instanceof StreamWritable)) {
         // We've been passed single server information
@@ -82,12 +83,15 @@ Client.prototype._check = function(network) {
     var randnick = "coffea"+Math.floor(Math.random() * 100000);
 
     ret.host = network.host === undefined ? null : network.host; // Required.
+
+    ret.name = network.name;
     
     ret.nick = network.nick === undefined ? randnick : network.nick;
     ret.port = network.port === undefined ? 6667 : network.port;
     ret.ssl = network.ssl === undefined ? false : network.ssl;
-    ret.username = network.username === undefined ? randnick : network.username;
-    ret.realname = network.realname === undefined ? randnick : network.realname;
+    ret.username = network.username === undefined ? ret.nick : network.username;
+    ret.realname = network.realname === undefined ? ret.nick : network.realname;
+    ret.pass = network.pass;
 
     return ret;
 };
