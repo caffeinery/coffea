@@ -7,7 +7,20 @@
     "type": "git",
     "url": "https://github.com/thecoffeehouse/coffea.git"
   },
-  "keywords": ["irc", "library", "client", "chat", "multi-network", "multiple", "networks", "event-based", "events", "coffeehouse", "extensible", "plugins"],
+  "keywords": [
+    "irc",
+    "library",
+    "client",
+    "chat",
+    "multi-network",
+    "multiple",
+    "networks",
+    "event-based",
+    "events",
+    "coffeehouse",
+    "extensible",
+    "plugins"
+  ],
   "bugs": {
     "url": "https://github.com/thecoffeehouse/coffea/issues"
   },
@@ -17,6 +30,7 @@
     "underscore": "^1.6.0"
   },
   "devDependencies": {
+    "mocha": "^1.21.4",
     "should": "^3.2.0"
   },
   "scripts": {
