@@ -65,6 +65,7 @@ function Client(info) {
             stream = tls.connect({host: info.host, port: info.port});
         }
         this.useStream(stream, info.name);
+        if(info.pass) this.pass(info.pass);
         this.nick(info.nick);
         this.user(info.username, info.realname);
     } else {
@@ -182,6 +183,12 @@ Client.prototype.send = function (target, msg, network, fn) {
     if (typeof network === 'function') {
         fn = network;
         network = undefined;
+    } else if (!(typeof msg === 'string')) {
+        if (msg !== null && typeof msg === 'object') {
+            msg = JSON.stringify(msg);
+        } else {
+            msg = String(msg);
+        }
     }
 
     var parse = utils.parseTarget(target);
@@ -258,6 +265,9 @@ Client.prototype.part = function (channels, msg, network, fn) {
 };
 
 Client.prototype.topic = function (channel, topic, network, fn) {
+    var parse = utils.parseTarget(target);
+    if (!network) network = parse.network;
+    channel = parse.target;
     channel = typeof channel !== "string" ? channel.getName() : channel;
     if (typeof topic === 'function') {
         fn = topic;
