@@ -4,6 +4,7 @@
 var Emitter = require('events').EventEmitter;
 var Parser = require('slate-irc-parser');
 var net = require('net');
+var tls = require('tls');
 var replies = require('irc-replies');
 var StreamReadable = require('stream').Readable;
 var StreamWritable = require('stream').Writable;
@@ -45,7 +46,11 @@ function Client(info) {
         _this = this;
         info.forEach(function(network) {
             network = _this._check(network);
-            stream = net.connect({host: network.host, port: network.port});
+            if (!network.ssl) {
+                stream = net.connect({host: network.host, port: network.port});
+            } else {
+                stream = tls.connect({host: network.host, port: network.port});
+            }
             _this.useStream(stream, network.name);
             if (network.pass) _this.pass(network.pass);
             _this.nick(network.nick);
@@ -54,7 +59,11 @@ function Client(info) {
     } else if (info instanceof Object && !(info instanceof StreamReadable) && !(info instanceof StreamWritable)) {
         // We've been passed single server information
         info = this._check(info);
-        stream = net.connect({host: info.host, port: info.port});
+        if (!info.ssl) {
+            stream = net.connect({host: info.host, port: info.port});
+        } else {
+            stream = tls.connect({host: info.host, port: info.port});
+        }
         this.useStream(stream, info.name);
         this.nick(info.nick);
         this.user(info.username, info.realname);
