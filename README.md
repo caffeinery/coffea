@@ -1,4 +1,4 @@
-# Coffea
+# Coffea [![Build Status](https://travis-ci.org/thecoffeehouse/coffea.svg?branch=master)](https://travis-ci.org/thecoffeehouse/coffea)
 _event based and extensible irc client library with multi-network support_
 
 ## API
