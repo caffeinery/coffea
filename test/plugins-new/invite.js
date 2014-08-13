@@ -10,7 +10,7 @@ describe('invite.js', function() {
 			client.on("invite", function (event) {
 				event.user.getNick().should.equal('you');
 				event.target.getNick().should.equal('me');
-				event.channel.should.equal('#test');
+				event.channel.name.should.equal('#test');
 				done();
 			});
 
@@ -24,20 +24,21 @@ describe('invite.js', function() {
 			client.useStream(st2);
 
 			client.on("invite", function (event) {
-				if (event.network === 0) {
+				if (event.network == 0) {
 					event.user.getNick().should.equal('you');
 					event.target.getNick().should.equal('me');
-					event.channel.should.equal('#test');
+					event.channel.name.should.equal('#test');
 				} else {
 					event.user.getNick().should.equal('xddjshali');
 					event.target.getNick().should.equal('you');
-					event.channel.should.equal('#random');
+					event.channel.name.should.equal('#random');
 				}
-				done();
 			});
 
 			st1.write(':you!are@so.cool.com INVITE me :#test\r\n');
 			st2.write(':xddjshali!i@make.no.sense INVITE you :#random\r\n');
+
+			done();
 		});
 
 		it('should emit "{network}:invite" [multi-network]', function (done) {
@@ -49,19 +50,19 @@ describe('invite.js', function() {
 			client.on("0:invite", function (event) {
 				event.user.getNick().should.equal('you');
 				event.target.getNick().should.equal('me');
-				event.channel.should.equal('#test');
-				done();
+				event.channel.name.should.equal('#test');
 			});
 
 			client.on("1:invite", function (event) {
 				event.user.getNick().should.equal('xddjshali');
 				event.target.getNick().should.equal('you');
-				event.channel.should.equal('#random');
-				done();
+				event.channel.name.should.equal('#random');
 			});
 
 			st1.write(':you!are@so.cool.com INVITE me :#test\r\n');
 			st2.write(':xddjshali!i@make.no.sense INVITE you :#random\r\n');
+
+			done();
 		});
 	});
 });

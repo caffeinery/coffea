@@ -21,11 +21,13 @@ describe('ping.js', function() {
 			client.useStream(st2);
 
 			client.on("ping", function (event) {
-				done();
+
 			});
 
 			st1.write('PING :rothfuss.freenode.net\r\n');
 			st2.write('PING :kornbluth.freenode.net\r\n');
+
+			done();
 		});
 
 		it('should emit "{network}:ping" [multi-network]', function (done) {
@@ -34,8 +36,10 @@ describe('ping.js', function() {
 			var client = coffea(st1);
 			client.useStream(st2);
 
+			var diditwork1 = false;
+			var diditwork2 = false;
+
 			client.on("0:ping", function (event) {
-				done();
 			});
 
 			client.on("1:ping", function (event) {
