@@ -13,6 +13,7 @@ describe('data.js', function() {
 				event.params.should.equal('*');
 				event.trailing.should.equal('*** Looking up your hostname...');
 				event.string.should.equal(':irc.local NOTICE * :*** Looking up your hostname...');
+				done();
 			});
 
 			st1.write(':irc.local NOTICE * :*** Looking up your hostname...\r\n');
@@ -38,11 +39,12 @@ describe('data.js', function() {
 					event.trailing.should.equal('*** Looking up your hostname...');
 					event.string.should.equal(':irc.local NOTICE * :*** Looking up your hostname...');
 				}
-				done();
 			});
 
 			st1.write(':mike!mike@mike.is.awesome PRIVMSG #test :Testing, one-two.\r\n');
 			st2.write(':irc.local NOTICE * :*** Looking up your hostname...\r\n');
+
+			done();
 		});
 
 		it('should emit "{network}:data" [multi-network]', function (done) {
@@ -57,7 +59,6 @@ describe('data.js', function() {
 				event.params.should.equal('#test');
 				event.trailing.should.equal('Testing, one-two.');
 				event.string.should.equal(':mike!mike@mike.is.awesome PRIVMSG #test :Testing, one-two.');
-				done();
 			});
 
 			client.on("1:data", function (event) {
@@ -66,11 +67,12 @@ describe('data.js', function() {
 				event.params.should.equal('*');
 				event.trailing.should.equal('*** Looking up your hostname...');
 				event.string.should.equal(':irc.local NOTICE * :*** Looking up your hostname...');
-				done();
 			});
 
 			st1.write(':mike!mike@mike.is.awesome PRIVMSG #test :Testing, one-two.\r\n');
 			st2.write(':irc.local NOTICE * :*** Looking up your hostname...\r\n');
+
+			done();
 		});
 	});
 });

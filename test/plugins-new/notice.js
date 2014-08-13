@@ -10,7 +10,7 @@ describe('notice.js', function() {
 			client.on("notice", function (event) {
 				event.from.getNick().should.equal('troll');
                 event.to.should.equal('#test');
-                event.message.should.equal('This pings a lot of clients. You mad \\:D/');
+                event.message.should.equal('This pings a lot of clients. You mad? \\:D/');
 				done();
 			});
 
@@ -24,20 +24,21 @@ describe('notice.js', function() {
 			client.useStream(st2);
 
 			client.on("notice", function (event) {
-				if (event.network === 0) {
+				if (event.network == 0) {
 					event.from.getNick().should.equal('NickServ');
                 	event.to.should.equal('foo');
                 	event.message.should.equal('This nickname is registered. Please choose a different nickname, or identify via /msg NickServ identify <password>.');
 				} else {
 					event.from.getNick().should.equal('troll');
                 	event.to.should.equal('#test');
-                	event.message.should.equal('This pings a lot of clients. You mad \\:D/');
+                	event.message.should.equal('This pings a lot of clients. You mad? \\:D/');
 				}
-				done();
 			});
 
 			st1.write(':NickServ!NickServ@services. NOTICE foo :This nickname is registered. Please choose a different nickname, or identify via /msg NickServ identify <password>.\r\n');
 			st2.write(':troll!pro@troll.co NOTICE #test :This pings a lot of clients. You mad? \\:D/\r\n');
+		
+			done();
 		});
 
 		it('should emit "{network}:notice" [multi-network]', function (done) {
@@ -50,18 +51,18 @@ describe('notice.js', function() {
 				event.from.getNick().should.equal('NickServ');
                 event.to.should.equal('foo');
                 event.message.should.equal('This nickname is registered. Please choose a different nickname, or identify via /msg NickServ identify <password>.');
-				done();
 			});
 
 			client.on("1:notice", function (event) {
 				event.from.getNick().should.equal('troll');
                 event.to.should.equal('#test');
-                event.message.should.equal('This pings a lot of clients. You mad \\:D/');
-				done();
+                event.message.should.equal('This pings a lot of clients. You mad? \\:D/');
 			});
 
 			st1.write(':NickServ!NickServ@services. NOTICE foo :This nickname is registered. Please choose a different nickname, or identify via /msg NickServ identify <password>.\r\n');
 			st2.write(':troll!pro@troll.co NOTICE #test :This pings a lot of clients. You mad? \\:D/\r\n');
+		
+			done();
 		});
 	});
 });

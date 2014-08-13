@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "irc-replies": "^2.0.0",
+    "node-emoji": "^0.1.0",
     "slate-irc-parser": "^0.0.2",
     "underscore": "^1.6.0"
   },
