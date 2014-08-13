@@ -253,7 +253,12 @@ Client.prototype.join = function (channels, keys, network, fn) {
         fn = network;
         network = keys;
     }
-    this.write('JOIN ' + utils.toArray(channels).join(',') + ' ' + utils.toArray(keys).join(','), network, fn);
+
+    for(var i=0; i < channels.length; i++) {
+        var parse = utils.parseTarget(channels[i]);
+        this.write('JOIN ' + parse.target + ' ' + keys[i], parse.network, fn);
+    }
+    //this.write('JOIN ' + utils.toArray(channels).join(',') + ' ' + utils.toArray(keys).join(','), network, fn);
 };
 
 Client.prototype.part = function (channels, msg, network, fn) {
