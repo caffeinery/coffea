@@ -165,7 +165,7 @@ Client.prototype.nick = function (nick, network, fn) {
 };
 
 Client.prototype.user = function (username, realname, network, fn) {
-    if (this.me === null) this.me = {};
+    if (this.me === null) { this.me = {}; }
     this.me.username = username;
     this.me.realname = realname;
     this.write('USER ' + username + ' 0 * :' + realname, network, fn);
