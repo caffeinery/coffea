@@ -11,7 +11,7 @@ var StreamWritable = require('stream').Writable;
 var utils = require('./lib/utils');
 
 function Client(info) {
-    if (!(this instanceof Client)) return new Client(info);
+    if (!(this instanceof Client)) { return new Client(info); }
     this.setMaxListeners(100);
 
     this.streams = {};
@@ -52,7 +52,7 @@ function Client(info) {
                 stream = tls.connect({host: network.host, port: network.port});
             }
             _this.useStream(stream, network.name);
-            if (network.pass) _this.pass(network.pass);
+            if (network.pass) { _this.pass(network.pass); }
             _this.nick(network.nick);
             _this.user(network.username, network.realname);
         });
@@ -65,7 +65,7 @@ function Client(info) {
             stream = tls.connect({host: info.host, port: info.port});
         }
         this.useStream(stream, info.name);
-        if(info.pass) this.pass(info.pass);
+        if(info.pass) { this.pass(info.pass); }
         this.nick(info.nick);
         this.user(info.username, info.realname);
     } else {
@@ -107,8 +107,8 @@ Client.prototype._check = function(network) {
 };
 
 Client.prototype.useStream = function (stream, network) {
-    if (network) stream.coffea_id = network; // user-defined stream id
-    else stream.coffea_id = Object.keys(this.streams).length.toString(); // assign unique id to stream
+    if (network) { stream.coffea_id = network; } // user-defined stream id
+    else { stream.coffea_id = Object.keys(this.streams).length.toString(); } // assign unique id to stream
 
     stream.setEncoding('utf8'); // set stream encoding
 
@@ -129,7 +129,7 @@ Client.prototype.useStream = function (stream, network) {
 
 Client.prototype.write = function (str, network, fn) {
     // if network is the callback, then it wasn't defined either
-    if (typeof(network) == 'function') {
+    if (typeof(network) === 'function') {
         fn = network;
         network = undefined;
     }
@@ -147,7 +147,7 @@ Client.prototype.write = function (str, network, fn) {
                 this.streams[id].write(str + '\r\n');
             }
         }
-        if (fn) fn();
+        if (fn) { fn(); }
     }
 };
 
@@ -183,7 +183,7 @@ Client.prototype.send = function (target, msg, network, fn) {
     if (typeof network === 'function') {
         fn = network;
         network = undefined;
-    } else if (!(typeof msg === 'string')) {
+    } else if (typeof msg !== 'string') {
         if (msg !== null && typeof msg === 'object') {
             msg = JSON.stringify(msg);
         } else {
@@ -192,7 +192,7 @@ Client.prototype.send = function (target, msg, network, fn) {
     }
 
     var parse = utils.parseTarget(target);
-    if (!network) network = parse.network;
+    if (!network) { network = parse.network; }
     target = parse.target;
 
     var leading, maxlen, _this = this;
@@ -219,7 +219,7 @@ Client.prototype.action = function(target, msg, network, fn) {
 
 Client.prototype.notice = function (target, msg, network, fn) {
     var parse = utils.parseTarget(target);
-    if (!network) network = parse.network;
+    if (!network) { network = parse.network; }
     target = parse.target;
 
     var leading, maxlen, _this, message, args = Array.prototype.slice.call(arguments);
@@ -245,11 +245,11 @@ Client.prototype.notice = function (target, msg, network, fn) {
 };
 
 Client.prototype.join = function (channels, keys, network, fn) {
-    if (typeof keys == 'function') { // join(channels, fn)
+    if (typeof keys === 'function') { // join(channels, fn)
         fn = keys;
         network = undefined;
         keys = '';
-    } else if (typeof network == 'function') { // join(channels, network, fn)
+    } else if (typeof network === 'function') { // join(channels, network, fn)
         fn = network;
         network = keys;
     }
@@ -270,8 +270,8 @@ Client.prototype.part = function (channels, msg, network, fn) {
 };
 
 Client.prototype.topic = function (channel, topic, network, fn) {
-    var parse = utils.parseTarget(target);
-    if (!network) network = parse.network;
+    var parse = utils.parseTarget(channel);
+    if (!network) { network = parse.network; }
     channel = parse.target;
     channel = typeof channel !== "string" ? channel.getName() : channel;
     if (typeof topic === 'function') {
@@ -303,7 +303,7 @@ Client.prototype.oper = function (name, password, network, fn) {
 
 Client.prototype.mode = function (target, flags, params, network, fn) {
     var parse = utils.parseTarget(target);
-    if (!network) network = parse.network;
+    if (!network) { network = parse.network; }
     target = parse.target;
 
     if ('function' === typeof params) {
