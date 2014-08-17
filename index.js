@@ -51,7 +51,7 @@ function Client(info) {
             } else {
                 stream = tls.connect({host: network.host, port: network.port});
             }
-            _this.useStream(stream, network.name);
+            _this._useStream(stream, network.name);
             if (network.pass) { _this.pass(network.pass); }
             _this.nick(network.nick);
             _this.user(network.username, network.realname);
@@ -64,13 +64,13 @@ function Client(info) {
         } else {
             stream = tls.connect({host: info.host, port: info.port});
         }
-        this.useStream(stream, info.name);
+        this._useStream(stream, info.name);
         if(info.pass) { this.pass(info.pass); }
         this.nick(info.nick);
         this.user(info.username, info.realname);
     } else {
         // Assume we've been passed the legacy stream.
-        this.useStream(info);
+        this._useStream(info);
     }
 }
 
@@ -106,7 +106,7 @@ Client.prototype._check = function(network) {
     return ret;
 };
 
-Client.prototype.useStream = function (stream, network) {
+Client.prototype.__useStream = function (stream, network) {
     if (network) { stream.coffea_id = network; } // user-defined stream id
     else { stream.coffea_id = Object.keys(this.streams).length.toString(); } // assign unique id to stream
 
@@ -126,6 +126,40 @@ Client.prototype.useStream = function (stream, network) {
     // return stream id
     return stream.coffea_id;
 };
+
+Client.prototype.add = function (info) {
+    if (info instanceof Array) {
+        // We've been passed multiple server information
+        _this = this;
+        info.forEach(function(network) {
+            network = _this._check(network);
+            if (!network.ssl) {
+                stream = net.connect({host: network.host, port: network.port});
+            } else {
+                stream = tls.connect({host: network.host, port: network.port});
+            }
+            _this.__useStream(stream, network.name);
+            if (network.pass) { _this.pass(network.pass); }
+            _this.nick(network.nick);
+            _this.user(network.username, network.realname);
+        });
+    } else if (info instanceof Object && !(info instanceof StreamReadable) && !(info instanceof StreamWritable)) {
+        // We've been passed single server information
+        info = this._check(info);
+        if (!info.ssl) {
+            stream = net.connect({host: info.host, port: info.port});
+        } else {
+            stream = tls.connect({host: info.host, port: info.port});
+        }
+        this.__useStream(stream, info.name);
+        if(info.pass) { this.pass(info.pass); }
+        this.nick(info.nick);
+        this.user(info.username, info.realname);
+    } else {
+        // Assume we've been passed the legacy stream.
+        this.__useStream(info);
+    }
+}
 
 Client.prototype.write = function (str, network, fn) {
     // if network is the callback, then it wasn't defined either
