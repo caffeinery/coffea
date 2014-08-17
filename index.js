@@ -106,7 +106,7 @@ Client.prototype._check = function(network) {
     return ret;
 };
 
-Client.prototype.__useStream = function (stream, network) {
+Client.prototype._useStream = function (stream, network) {
     if (network) { stream.coffea_id = network; } // user-defined stream id
     else { stream.coffea_id = Object.keys(this.streams).length.toString(); } // assign unique id to stream
 
@@ -127,6 +127,11 @@ Client.prototype.__useStream = function (stream, network) {
     return stream.coffea_id;
 };
 
+/* Depreciated. This is here for compatibility. */
+Client.prototype.useStream = function (stream, network) {
+    this._useStream(stream, network);
+}
+
 Client.prototype.add = function (info) {
     if (info instanceof Array) {
         // We've been passed multiple server information
@@ -138,7 +143,7 @@ Client.prototype.add = function (info) {
             } else {
                 stream = tls.connect({host: network.host, port: network.port});
             }
-            _this.__useStream(stream, network.name);
+            _this._useStream(stream, network.name);
             if (network.pass) { _this.pass(network.pass); }
             _this.nick(network.nick);
             _this.user(network.username, network.realname);
@@ -151,13 +156,13 @@ Client.prototype.add = function (info) {
         } else {
             stream = tls.connect({host: info.host, port: info.port});
         }
-        this.__useStream(stream, info.name);
+        this._useStream(stream, info.name);
         if(info.pass) { this.pass(info.pass); }
         this.nick(info.nick);
         this.user(info.username, info.realname);
     } else {
         // Assume we've been passed the legacy stream.
-        this.__useStream(info);
+        this._useStream(info);
     }
 }
 
