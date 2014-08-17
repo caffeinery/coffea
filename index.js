@@ -40,38 +40,7 @@ function Client(info) {
     this.use(require('./lib/plugins/whois')());
     this.use(require('./lib/plugins/errors')());
 
-    var stream, _this;
-    if (info instanceof Array) {
-        // We've been passed multiple server information
-        _this = this;
-        info.forEach(function(network) {
-            network = _this._check(network);
-            if (!network.ssl) {
-                stream = net.connect({host: network.host, port: network.port});
-            } else {
-                stream = tls.connect({host: network.host, port: network.port});
-            }
-            _this._useStream(stream, network.name);
-            if (network.pass) { _this.pass(network.pass); }
-            _this.nick(network.nick);
-            _this.user(network.username, network.realname);
-        });
-    } else if (info instanceof Object && !(info instanceof StreamReadable) && !(info instanceof StreamWritable)) {
-        // We've been passed single server information
-        info = this._check(info);
-        if (!info.ssl) {
-            stream = net.connect({host: info.host, port: info.port});
-        } else {
-            stream = tls.connect({host: info.host, port: info.port});
-        }
-        this._useStream(stream, info.name);
-        if(info.pass) { this.pass(info.pass); }
-        this.nick(info.nick);
-        this.user(info.username, info.realname);
-    } else {
-        // Assume we've been passed the legacy stream.
-        this._useStream(info);
-    }
+    this.add(info);
 }
 
 // expose client
