@@ -40,7 +40,7 @@ function Client(info) {
     this.use(require('./lib/plugins/whois')());
     this.use(require('./lib/plugins/errors')());
 
-    this.add(info);
+    if (info) this.add(info);
 }
 
 // expose client
@@ -99,12 +99,13 @@ Client.prototype._useStream = function (stream, network) {
 /* Depreciated. This is here for compatibility. */
 Client.prototype.useStream = function (stream, network) {
     this._useStream(stream, network);
-}
+};
 
 Client.prototype.add = function (info) {
+    var stream, stream_id;
     if (info instanceof Array) {
         // We've been passed multiple server information
-        _this = this;
+        var _this = this;
         info.forEach(function(network) {
             network = _this._check(network);
             if (!network.ssl) {
@@ -112,7 +113,7 @@ Client.prototype.add = function (info) {
             } else {
                 stream = tls.connect({host: network.host, port: network.port});
             }
-            _this._useStream(stream, network.name);
+            stream_id = _this._useStream(stream, network.name);
             if (network.pass) { _this.pass(network.pass); }
             _this.nick(network.nick);
             _this.user(network.username, network.realname);
@@ -125,15 +126,17 @@ Client.prototype.add = function (info) {
         } else {
             stream = tls.connect({host: info.host, port: info.port});
         }
-        this._useStream(stream, info.name);
+        stream_id = this._useStream(stream, info.name);
         if(info.pass) { this.pass(info.pass); }
         this.nick(info.nick);
         this.user(info.username, info.realname);
     } else {
         // Assume we've been passed the legacy stream.
-        this._useStream(info);
+        stream_id = this._useStream(info);
     }
-}
+
+    return stream_id;
+};
 
 Client.prototype.write = function (str, network, fn) {
     // if network is the callback, then it wasn't defined either
