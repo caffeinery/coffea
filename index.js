@@ -10,6 +10,16 @@ var StreamReadable = require('stream').Readable;
 var StreamWritable = require('stream').Writable;
 var utils = require('./lib/utils');
 
+/**
+ * Client constructor
+ *
+ * Initializes the client object, sets max listeners, 
+ * initializes stream buffer and other variables.
+ * Then loads plugins and parses the network info passed.
+ * Check Client.add for more information about the network info.
+ * 
+ * @param {object} info
+ */
 function Client(info) {
     if (!(this instanceof Client)) { return new Client(info); }
     this.setMaxListeners(100);
@@ -17,6 +27,26 @@ function Client(info) {
     this.streams = {};
     this.me = null;
 
+    this._loadPlugins();
+
+    if (info) {
+        this.add(info);
+    }
+}
+
+// expose client
+module.exports = Client;
+
+// inherit from Emitter.prototype to make Client and EventEmitter
+utils.inherit(Client, Emitter);
+
+/**
+ * Internal function that loads all plugins
+ * Later this should be replaced with a plugin manager
+ *
+ * @api private
+ */
+Client.prototype._loadPlugins = function() {
     this.use(require('./lib/plugins/core')());
 
     this.use(require('./lib/plugins/server')());
@@ -41,15 +71,7 @@ function Client(info) {
     this.use(require('./lib/plugins/welcome')());
     this.use(require('./lib/plugins/whois')());
     this.use(require('./lib/plugins/errors')());
-
-    if (info) this.add(info);
-}
-
-// expose client
-module.exports = Client;
-
-// inherit from Emitter.prototype to make Client and EventEmitter
-utils.inherit(Client, Emitter);
+};
 
 /**
  * Internal function that does a sanity check
@@ -77,6 +99,15 @@ Client.prototype._check = function(network) {
     return ret;
 };
 
+/**
+ * Internal function that loads a stream into the client
+ * Returns specified network name or generated stream id
+ * 
+ * @params {Object} stream      Must be an instanceof StreamReadable and StreamWritable
+ * @params {string} network     Specify a network name/stream id
+ * @return {string} stream_id
+ * @api private
+ */
 Client.prototype._useStream = function (stream, network) {
     if (network) { stream.coffea_id = network; } // user-defined stream id
     else { stream.coffea_id = Object.keys(this.streams).length.toString(); } // assign unique id to stream
@@ -103,6 +134,26 @@ Client.prototype.useStream = function (stream, network) {
     this._useStream(stream, network);
 };
 
+/**
+ * Internal function to handle incoming messages from the streams
+ * 
+ * @params {string} msg
+ * @api private
+ */
+Client.prototype.onmessage = function (msg, network) {
+    msg.command = replies[msg.command] || msg.command;
+    this.emit('data', msg, network);
+};
+
+/**
+ * Add a network to the client, the argument can be a stream, network config object
+ * or an array of network config objects (see README.md and wiki for more information)
+ * Returns specified network name or generated stream id
+ * 
+ * @params {Object} info
+ * @return {string} stream_id
+ * @api public
+ */
 Client.prototype.add = function (info) {
     var stream, stream_id;
     if (info instanceof Array) {
@@ -137,9 +188,18 @@ Client.prototype.add = function (info) {
         stream_id = this._useStream(info);
     }
 
+    // TODO: return array of stream_ids when multiple networks are specified
     return stream_id;
 };
 
+/**
+ * Write data to a specific network (stream)
+ * 
+ * @params {string} str
+ * @params {string} network
+ * @params {Function} fn
+ * @api public
+ */
 Client.prototype.write = function (str, network, fn) {
     // if network is the callback, then it wasn't defined either
     if (typeof(network) === 'function') {
@@ -164,12 +224,14 @@ Client.prototype.write = function (str, network, fn) {
     }
 };
 
+/**
+ * Load a plugin into the client
+ * 
+ * @params {Function} fn
+ * @return {Object} this
+ * @api public
+ */
 Client.prototype.use = function (fn) {
     fn(this);
     return this;
-};
-
-Client.prototype.onmessage = function (msg, network) {
-    msg.command = replies[msg.command] || msg.command;
-    this.emit('data', msg, network);
 };
