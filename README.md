@@ -77,32 +77,26 @@ client.on('message', function (event) {
 
 ### Using SSL
 ```javascript
-var coffea = require('coffea'),
-    tls = require('tls');
-
-var stream = tls.connect(6697, 'irc.freenode.org', {
-    rejectUnauthorized: false
-}, function () {
-    if (stream.authorized || stream.authorizationError === 'DEPTH_ZERO_SELF_SIGNED_CERT' || stream.authorizationError === 'CERT_HAS_EXPIRED' || stream.authorizationError === 'UNABLE_TO_VERIFY_LEAF_SIGNATURE') {
-        if (stream.authorizationError === 'CERT_HAS_EXPIRED') {
-            console.log('Connecting to server with expired certificate');
-        }
-    } else {
-        console.error('[SSL-Error]' + stream.authorizationError);
-    }
+var client = require('coffea')({
+    host: 'irc.freenode.org',
+    ssl: true,
+    port: 6697,
+    // nick: 'test', // default value: 'coffea' with random number
+    // username: 'test', // default value: username = nick
+    // realname: 'test', // default value: realname = nick
+    // pass: 'sup3rS3cur3P4ssw0rd' // by default no password will be sent
+    // nickserv: {
+    //     username: 'test',
+    //     password: 'l33tp455w0rD'
+    // }
 });
-var client = coffea(stream);
-
-client.pass('sup3rS3cur3P4ssw0rd');
-client.nick('GLaDOS');
-client.user('GLaDOS', 'Genetic Lifeform and Disk Operating System');
 
 client.on('motd', function (motd) {
     client.join(['#foo', '#bar', '#baz']);
 });
 
 client.on('message', function (event) {
-    console.log('[' event.channel.getName() '] ' + event.user.getNick() + ': ' + event.message);
+    console.log('[' + event.channel.getName() + '] ' + event.user.getNick() + ': ' + event.message);
     //[#foo] nick: message
 });
 ```
