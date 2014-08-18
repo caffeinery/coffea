@@ -7,7 +7,7 @@ describe('quit.js', function() {
 			var st1 = new Stream();
 			var client = coffea(st1);
 
-			client.on("quit", function (event) {
+			client.once("quit", function (event) {
 				event.user.getNick().should.equal('foo');
                 event.message.should.equal('Client Quit');
 				done();
@@ -17,12 +17,15 @@ describe('quit.js', function() {
 		});
 
 		it('should emit "quit" [multi-network]', function (done) {
-			var st1 = new Stream();
-			var st2 = new Stream();
-			var client = coffea(st1);
-			client.useStream(st2);
+			var client = coffea();
+            var st1 = new Stream();
+            var st2 = new Stream();
+            var st1_id = client.add(st1);
+            var st2_id = client.add(st2);
+            client.nick('foo', st1_id);
+            client.nick('ChanServ', st2_id);
 
-			client.on("quit", function (event) {
+			client.once("quit", function (event) {
 				if (event.network == 0) {
 					event.user.getNick().should.equal('foo');
 	                event.message.should.equal('Client Quit');
@@ -32,28 +35,31 @@ describe('quit.js', function() {
 				}
 			});
 
-			st2.write(':ChanServ!ChanServ@services.in QUIT :shutting down\r\n');
+			st2.write(':ChanServ!ChanServ@services.int QUIT :shutting down\r\n');
 			st1.write(':foo!bar@baz.com QUIT :Client Quit\r\n');
 			done();
 		});
 
 		it('should emit "{network}:quit" [multi-network]', function (done) {
-			var st1 = new Stream();
-			var st2 = new Stream();
-			var client = coffea(st1);
-			client.useStream(st2);
+			var client = coffea();
+            var st1 = new Stream();
+            var st2 = new Stream();
+            var st1_id = client.add(st1);
+            var st2_id = client.add(st2);
+            client.nick('foo', st1_id);
+            client.nick('ChanServ', st2_id);
 
-			client.on("0:quit", function (event) {
+			client.once(st1_id + ":quit", function (event) {
 				event.user.getNick().should.equal('foo');
 	            event.message.should.equal('Client Quit');
 			});
 
-			client.on("1:quit", function (event) {
+			client.once(st2_id + ":quit", function (event) {
 				event.user.getNick().should.equal('ChanServ');
                 event.message.should.equal('shutting down');
 			});
 
-			st2.write(':ChanServ!ChanServ@services.in QUIT :shutting down\r\n');
+			st2.write(':ChanServ!ChanServ@services.int QUIT :shutting down\r\n');
 			st1.write(':foo!bar@baz.com QUIT :Client Quit\r\n');
 			done();
 		});
