@@ -1,10 +1,10 @@
-# Coffea [![Build Status](https://travis-ci.org/thecoffeehouse/coffea.svg?branch=master)](https://travis-ci.org/thecoffeehouse/coffea) [![Code Climate](https://codeclimate.com/github/thecoffeehouse/coffea/badges/gpa.svg)](https://codeclimate.com/github/thecoffeehouse/coffea)
+# Coffea [![Build Status](https://travis-ci.org/caffeinery/coffea.svg?branch=master)](https://travis-ci.org/caffeinery/coffea) [![Code Climate](https://codeclimate.com/github/caffeinery/coffea/badges/gpa.svg)](https://codeclimate.com/github/caffeinery/coffea)
 _event based and extensible irc client library with multi-network support_
 
 ## API
-The outdated (but currently more complete) version of the API is available [in the wiki](https://github.com/thecoffeehouse/coffea/wiki/API-(outdated)).
+The outdated (but currently more complete) version of the API is available [in the wiki](https://github.com/caffeinery/coffea/wiki/API-(outdated)).
 
-We are working on an up-to-date version [on another page in the wiki](https://github.com/thecoffeehouse/coffea/wiki/API).
+We are working on an up-to-date version [on another page in the wiki](https://github.com/caffeinery/coffea/wiki/API).
 
 ## Examples
 ### Normal Connection (Single network)

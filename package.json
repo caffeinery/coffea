@@ -2,10 +2,10 @@
   "name": "coffea",
   "version": "0.3.4",
   "description": "event based and extensible irc client library with multi-network support",
-  "author": "The Coffeehouse Devs <daniel.bugl@touchlay.com>",
+  "author": "Caffeinery Developers <daniel.bugl@touchlay.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/thecoffeehouse/coffea.git"
+    "url": "https://github.com/caffeinery/coffea.git"
   },
   "keywords": [
     "irc",
@@ -22,7 +22,7 @@
     "plugins"
   ],
   "bugs": {
-    "url": "https://github.com/thecoffeehouse/coffea/issues"
+    "url": "https://github.com/caffeinery/coffea/issues"
   },
   "dependencies": {
     "irc-replies": "^2.0.0",
