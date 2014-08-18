@@ -16,6 +16,10 @@ var client = require('coffea')({
     // username: 'test', // default value: username = nick
     // realname: 'test', // default value: realname = nick
     // pass: 'sup3rS3cur3P4ssw0rd' // by default no password will be sent
+    // nickserv: {
+    //     username: 'test',
+    //     password: 'l33tp455w0rD'
+    // }
 });
 
 client.on('motd', function (motd) {
@@ -39,6 +43,10 @@ var client = require('coffea')([
         // username: 'test', // default value: username = nick
         // realname: 'test', // default value: realname = nick
         // pass: 'sup3rS3cur3P4ssw0rd' // by default no password will be sent
+        // nickserv: {
+        //     username: 'test',
+        //     password: 'l33tp455w0rD'
+        // }
     },
     {
         host: 'irc.oftc.net',
@@ -48,6 +56,10 @@ var client = require('coffea')([
         // username: 'test', // default value: username = nick
         // realname: 'test', // default value: realname = nick
         // pass: 'sup3rS3cur3P4ssw0rd' // by default no password will be sent
+        // nickserv: {
+        //     username: 'test',
+        //     password: 'l33tp455w0rD'
+        // }
     }
 ]);
 

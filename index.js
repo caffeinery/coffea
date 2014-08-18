@@ -119,6 +119,11 @@ Client.prototype.add = function (info) {
             if (network.pass) { _this.pass(network.pass); }
             _this.nick(network.nick);
             _this.user(network.username, network.realname);
+            if(network.nickserv.username && network.nickserv.password) {
+                _this.identify(network.nickserv.username, network.nickserv.password);
+            } else if (network.nickserv.password) {
+                _this.identify(network.nickserv.password);
+            }
         });
     } else if (info instanceof Object && !(info instanceof StreamReadable) && !(info instanceof StreamWritable)) {
         // We've been passed single server information
@@ -132,6 +137,11 @@ Client.prototype.add = function (info) {
         if(info.pass) { this.pass(info.pass); }
         this.nick(info.nick);
         this.user(info.username, info.realname);
+        if(info.nickserv.username && info.nickserv.password) {
+            this.identify(info.nickserv.username, info.nickserv.password);
+        } else if (info.nickserv.password) {
+            this.identify(info.nickserv.password);
+        }
     } else {
         // Assume we've been passed the legacy stream.
         stream_id = this._useStream(info);
