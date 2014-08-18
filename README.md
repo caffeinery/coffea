@@ -1,4 +1,4 @@
-# Coffea [![Build Status](https://travis-ci.org/caffeinery/coffea.svg?branch=master)](https://travis-ci.org/caffeinery/coffea) [![Code Climate](https://codeclimate.com/github/caffeinery/coffea/badges/gpa.svg)](https://codeclimate.com/github/caffeinery/coffea)
+# Coffea [![Build Status](https://travis-ci.org/caffeinery/coffea.svg?branch=master)](https://travis-ci.org/caffeinery/coffea) [![Code Climate](https://codeclimate.com/github/caffeinery/coffea/badges/gpa.svg)](https://codeclimate.com/github/caffeinery/coffea) [![NPM version](https://badge.fury.io/js/coffea.svg)](http://badge.fury.io/js/coffea)
 _event based and extensible irc client library with multi-network support_
 
 ## API
