@@ -4,10 +4,12 @@ var Stream = require('stream').PassThrough;
 describe('notice.js', function() {
 	describe('on NOTICE', function() {
 		it('should emit "notice" [single-network]', function (done) {
-			var st1 = new Stream();
-			var client = coffea(st1);
+            var client = coffea();
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('troll', st1_id);
 
-			client.on("notice", function (event) {
+			client.once("notice", function (event) {
 				event.from.getNick().should.equal('troll');
                 event.to.should.equal('#test');
                 event.message.should.equal('This pings a lot of clients. You mad? \\:D/');
@@ -18,13 +20,16 @@ describe('notice.js', function() {
 		});
 
 		it('should emit "notice" [multi-network]', function (done) {
-			var st1 = new Stream();
-			var st2 = new Stream();
-			var client = coffea(st1);
-			client.useStream(st2);
+            var client = coffea();
+            var st1 = new Stream();
+            var st2 = new Stream();
+            var st1_id = client.add(st1);
+            var st2_id = client.add(st2);
+            client.nick('N', st1_id);
+            client.nick('troll', st2_id);
 
-			client.on("notice", function (event) {
-				if (event.network == 0) {
+			client.once("notice", function (event) {
+				if (event.network === st1_id) {
 					event.from.getNick().should.equal('NickServ');
                 	event.to.should.equal('foo');
                 	event.message.should.equal('This nickname is registered. Please choose a different nickname, or identify via /msg NickServ identify <password>.');
@@ -42,18 +47,21 @@ describe('notice.js', function() {
 		});
 
 		it('should emit "{network}:notice" [multi-network]', function (done) {
-			var st1 = new Stream();
-			var st2 = new Stream();
-			var client = coffea(st1);
-			client.useStream(st2);
+            var client = coffea();
+            var st1 = new Stream();
+            var st2 = new Stream();
+            var st1_id = client.add(st1);
+            var st2_id = client.add(st2);
+            client.nick('NickServ', st1_id);
+            client.nick('troll', st2_id);
 
-			client.on("0:notice", function (event) {
+			client.once(st1_id + ":notice", function (event) {
 				event.from.getNick().should.equal('NickServ');
                 event.to.should.equal('foo');
                 event.message.should.equal('This nickname is registered. Please choose a different nickname, or identify via /msg NickServ identify <password>.');
 			});
 
-			client.on("1:notice", function (event) {
+			client.once(st2_id + ":notice", function (event) {
 				event.from.getNick().should.equal('troll');
                 event.to.should.equal('#test');
                 event.message.should.equal('This pings a lot of clients. You mad? \\:D/');
