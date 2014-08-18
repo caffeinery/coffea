@@ -176,10 +176,12 @@ Client.prototype.add = function (info) {
         if(info.pass) { this.pass(info.pass); }
         this.nick(info.nick);
         this.user(info.username, info.realname);
-        if(info.nickserv.username && info.nickserv.password) {
+        if(info.nickserv && info.nickserv.username && info.nickserv.password) {
             this.identify(info.nickserv.username, info.nickserv.password);
-        } else if (info.nickserv.password) {
+        } else if (info.nickserv && info.nickserv.password) {
             this.identify(info.nickserv.password);
+        } else if (info.nickserv) {
+            this.identify(info.nickserv);
         }
     } else {
         // Assume we've been passed the legacy stream.
