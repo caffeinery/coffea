@@ -49,11 +49,11 @@ utils.inherit(Client, Emitter);
  */
 Client.prototype._loadPlugins = function() {
     var _this = this;
-    var files = fs.readdirSync('./lib/plugins/');
+    var files = fs.readdirSync(__dirname + '/lib/plugins/');
     files.forEach(function (file) {
         if (file.substr(-3, 3) === '.js') {
             // console.log('Loading plugin', file);
-            _this.use(require('./lib/plugins/' + file)());
+            _this.use(require(__dirname + '/lib/plugins/' + file)());
         }
     });
 };
