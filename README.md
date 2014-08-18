@@ -80,7 +80,7 @@ client.on('message', function (event) {
 var client = require('coffea')({
     host: 'irc.freenode.org',
     ssl: true,
-    port: 6697,
+    // port: 6697, // will default to 6697 on ssl
     // nick: 'test', // default value: 'coffea' with random number
     // username: 'test', // default value: username = nick
     // realname: 'test', // default value: realname = nick
