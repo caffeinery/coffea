@@ -171,10 +171,12 @@ Client.prototype.add = function (info) {
             if (network.pass) { _this.pass(network.pass); }
             _this.nick(network.nick);
             _this.user(network.username, network.realname);
-            if(network.nickserv.username && network.nickserv.password) {
+            if (network.nickserv && network.nickserv.username && network.nickserv.password) {
                 _this.identify(network.nickserv.username, network.nickserv.password);
-            } else if (network.nickserv.password) {
+            } else if (network.nickserv && network.nickserv.password) {
                 _this.identify(network.nickserv.password);
+            } else if (network.nickserv) {
+                _this.identify(network.nickserv);
             }
         });
     } else if (info instanceof Object && !(info instanceof StreamReadable) && !(info instanceof StreamWritable)) {
