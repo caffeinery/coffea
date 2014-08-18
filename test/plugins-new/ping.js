@@ -15,35 +15,44 @@ describe('ping.js', function() {
 		});
 
 		it('should emit "ping" [multi-network]', function (done) {
-			var st1 = new Stream();
-			var st2 = new Stream();
-			var client = coffea(st1);
-			client.useStream(st2);
+			var client = coffea();
+            var st1 = new Stream();
+            var st2 = new Stream();
+            var st1_id = client.add(st1);
+            var st2_id = client.add(st2);
+            client.nick('foo', st1_id);
+            client.nick('bar', st2_id);
 
-			client.on("ping", function (event) {
-
+			client.once("ping", function (event) {
+				done();
 			});
 
 			st1.write('PING :rothfuss.freenode.net\r\n');
 			st2.write('PING :kornbluth.freenode.net\r\n');
-
-			done();
 		});
 
 		it('should emit "{network}:ping" [multi-network]', function (done) {
-			var st1 = new Stream();
-			var st2 = new Stream();
-			var client = coffea(st1);
-			client.useStream(st2);
+			var client = coffea();
+            var st1 = new Stream();
+            var st2 = new Stream();
+            var st1_id = client.add(st1);
+            var st2_id = client.add(st2);
+            client.nick('foo', st1_id);
+            client.nick('bar', st2_id);
 
-			var diditwork1 = false;
-			var diditwork2 = false;
-
-			client.on("0:ping", function (event) {
+			var test = 0;
+			client.on(st1_id + ":ping", function (event) {
+				test++;
+				if(test >= 2) {
+					done();
+				}
 			});
 
-			client.on("1:ping", function (event) {
-				done();
+			client.on(st2_id + ":ping", function (event) {
+				test++;
+				if(test >= 2) {
+					done();
+				}
 			});
 
 			st1.write('PING :rothfuss.freenode.net\r\n');
