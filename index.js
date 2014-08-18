@@ -51,8 +51,10 @@ Client.prototype._loadPlugins = function() {
     var _this = this;
     var files = fs.readdirSync('./lib/plugins/');
     files.forEach(function (file) {
-        // console.log('Loading plugin', file);
-        _this.use(require('./lib/plugins/' + file)());
+        if (file.substr(-3, 3) === '.js') {
+            // console.log('Loading plugin', file);
+            _this.use(require('./lib/plugins/' + file)());
+        }
     });
 };
 
