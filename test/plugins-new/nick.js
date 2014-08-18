@@ -6,58 +6,84 @@ describe('nick.js', function() {
         it('should emit "nick" [single-network]', function (done) {
             var st1 = new Stream();
             var client = coffea(st1);
+            client.nick('troll'); // initialize user
 
-            client.on("nick", function (event) {
-                event.user.getNick().should.equal('evilop');
-                event.oldNick.should.equal('troll');
-                done();
+            // first event is sent from initializing the user to 'troll'
+            client.once('nick', function () {
+                // second event is triggered by the parsed message
+                client.once('nick', function (event) {
+                    event.user.getNick().should.equal('evilop');
+                    event.oldNick.should.equal('troll');
+                    done();
+                });
             });
 
+            // send nick change message
             st1.write(':troll!evilop@yo.um.ad NICK evilop\r\n');
         });
 
         it('should emit "nick" [multi-network]', function (done) {
+            var client = coffea(); // initialize coffea
             var st1 = new Stream();
             var st2 = new Stream();
-            var client = coffea(st1);
-            client.useStream(st2);
+            var st1_id = client.add(st1); // add stream to client
+            var st2_id = client.add(st2); // add stream to client
+            client.nick('NickServ', st1_id); // initialize user on stream 1
+            client.nick('troll', st2_id); // initialize user on stream 2
 
-            client.on("nick", function (event) {
-                if (event.network === 0) {
-                    event.user.getNick().should.equal('ChanServ');
-                    event.oldNick.should.equal('NickServ');
-                } else {
-                    event.user.getNick().should.equal('evilop');
-                    event.oldNick.should.equal('troll');
-                }
+            // first event is sent from initializing the user to 'troll'/'NickServ'
+            client.once("nick", function () {
+                // second event is triggered by the parsed messages
+                client.once('nick', function (event) {
+                    if (event.network === st1_id) {
+                        event.user.getNick().should.equal('ChanServ');
+                        event.oldNick.should.equal('NickServ');
+                    } else {
+                        event.user.getNick().should.equal('evilop');
+                        event.oldNick.should.equal('troll');
+                    }
+                    done(); // call done when the test is actually done (async)
+                });
             });
 
             st1.write(':NickServ!NickServ@services. NICK ChanServ\r\n');
             st2.write(':troll!evilop@yo.um.ad NICK evilop\r\n');
-        
-            done();
         });
 
         it('should emit "{network}:nick" [multi-network]', function (done) {
+            var client = coffea(); // initialize coffea
             var st1 = new Stream();
             var st2 = new Stream();
-            var client = coffea(st1);
-            client.useStream(st2);
+            var st1_id = client.add(st1); // add stream to client
+            var st2_id = client.add(st2); // add stream to client
+            client.nick('NickServ', st1_id); // initialize user on stream 1
+            client.nick('troll', st2_id); // initialize user on stream 2
 
-            client.on("0:nick", function (event) {
-                event.user.getNick().should.equal('ChanServ');
-                event.oldNick.should.equal('NickServ');
+            var tests = 0;
+            client.once(st1_id + ":nick", function () {
+                client.once(st1_id + ":nick", function (event) {
+                    event.user.getNick().should.equal('ChanServ');
+                    event.oldNick.should.equal('NickServ');
+                    tests++;
+                    if (tests >= 2) {
+                        done(); // call done when the test is actually done (async)
+                    }
+                });
             });
 
-            client.on("1:nick", function (event) {
-                event.user.getNick().should.equal('evilop');
-                event.oldNick.should.equal('troll');
+            client.once(st2_id + ":nick", function () {
+                client.once(st2_id + ":nick", function (event) {
+                    event.user.getNick().should.equal('evilop');
+                    event.oldNick.should.equal('troll');
+                    tests++;
+                    if (tests >= 2) {
+                        done(); // call done when the test is actually done (async)
+                    }
+                });
             });
 
             st1.write(':NickServ!NickServ@services. NICK ChanServ\r\n');
-            st2.write(':troll!evilop@yo.um.ad NICK evilop\r\n');            st2.write(':troll!evilop@yo.um.ad NICK evilop\r\n');
-        
-            done();
+            st2.write(':troll!evilop@yo.um.ad NICK evilop\r\n');
         });
     });
 
@@ -66,14 +92,14 @@ describe('nick.js', function() {
             var st1 = new Stream();
             var client = coffea(st1);
 
-            client.nick('bar');
+            client.nick('foo');
             st1.write(':irc.local 433 * foo :Nickname is already in use.\r\n');
 
             process.nextTick(function () {
-                client.getUser.getNick.should.equal('foo_');
+                client.getUser().getNick().should.equal('foo_');
                 st1.write(':irc.local 433 * foo_ :Nickname is already in use.\r\n');
                 process.nextTick(function () {
-                    client.getUser.getNick.should.equal('foo__');
+                    client.getUser().getNick().should.equal('foo__');
                     done();
                 });
             });
