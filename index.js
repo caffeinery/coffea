@@ -5,6 +5,7 @@ var Emitter = require('events').EventEmitter;
 var Parser = require('slate-irc-parser');
 var net = require('net');
 var tls = require('tls');
+var fs = require('fs');
 var replies = require('irc-replies');
 var StreamReadable = require('stream').Readable;
 var StreamWritable = require('stream').Writable;
@@ -47,30 +48,12 @@ utils.inherit(Client, Emitter);
  * @api private
  */
 Client.prototype._loadPlugins = function() {
-    this.use(require('./lib/plugins/core')());
-
-    this.use(require('./lib/plugins/server')());
-    this.use(require('./lib/plugins/user')());
-    this.use(require('./lib/plugins/channel')());
-
-    this.use(require('./lib/plugins/away')());
-    this.use(require('./lib/plugins/format')());
-    this.use(require('./lib/plugins/invite')());
-    this.use(require('./lib/plugins/join')());
-    this.use(require('./lib/plugins/kick')());
-    this.use(require('./lib/plugins/mode')());
-    this.use(require('./lib/plugins/motd')());
-    this.use(require('./lib/plugins/names')());
-    this.use(require('./lib/plugins/nick')());
-    this.use(require('./lib/plugins/notice')());
-    this.use(require('./lib/plugins/part')());
-    this.use(require('./lib/plugins/pong')());
-    this.use(require('./lib/plugins/privmsg')());
-    this.use(require('./lib/plugins/quit')());
-    this.use(require('./lib/plugins/topic')());
-    this.use(require('./lib/plugins/welcome')());
-    this.use(require('./lib/plugins/whois')());
-    this.use(require('./lib/plugins/errors')());
+    var _this = this;
+    var files = fs.readdirSync('./lib/plugins/');
+    files.forEach(function (file) {
+        // console.log('Loading plugin', file);
+        _this.use(require('./lib/plugins/' + file)());
+    });
 };
 
 /**
