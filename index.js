@@ -154,8 +154,8 @@ Client.prototype.add = function (info) {
             }
             stream_id = _this._useStream(stream, network.name);
             if (network.pass) { _this.pass(network.pass); }
-            _this.nick(network.nick);
-            _this.user(network.username, network.realname);
+            _this.nick(network.nick, stream_id);
+            _this.user(network.username, network.realname, stream_id);
             if (network.nickserv && network.nickserv.username && network.nickserv.password) {
                 _this.identify(network.nickserv.username, network.nickserv.password);
             } else if (network.nickserv && network.nickserv.password) {
@@ -174,8 +174,8 @@ Client.prototype.add = function (info) {
         }
         stream_id = this._useStream(stream, info.name);
         if(info.pass) { this.pass(info.pass); }
-        this.nick(info.nick);
-        this.user(info.username, info.realname);
+        this.nick(info.nick, stream_id);
+        this.user(info.username, info.realname, stream_id);
         if(info.nickserv && info.nickserv.username && info.nickserv.password) {
             this.identify(info.nickserv.username, info.nickserv.password);
         } else if (info.nickserv && info.nickserv.password) {
