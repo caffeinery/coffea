@@ -4,10 +4,12 @@ var Stream = require('stream').PassThrough;
 describe('kick.js', function() {
 	describe('on KICK', function() {
 		it('should emit "kick" [single-network]', function (done) {
-			var st1 = new Stream();
-			var client = coffea(st1);
+			var client = coffea();
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('foo', st1_id);
 
-			client.on("kick", function (event) {
+			client.once("kick", function (event) {
                 event.channel.getName().should.equal('#foo');
                 event.user.getNick().should.equal('bar');
                 event.by.getNick().should.equal('foo');
@@ -19,13 +21,16 @@ describe('kick.js', function() {
 		});
 
 		it('should emit "kick" [multi-network]', function (done) {
-			var st1 = new Stream();
-			var st2 = new Stream();
-			var client = coffea(st1);
-			client.useStream(st2);
+			var client = coffea();
+            var st1 = new Stream();
+            var st2 = new Stream();
+            var st1_id = client.add(st1);
+            var st2_id = client.add(st2);
+            client.nick('foo', st1_id);
+            client.nick('evilop', st2_id);
 
-			client.on("kick", function (event) {
-				if (event.network === 0) {
+			client.once("kick", function (event) {
+				if (event.network === st1_id) {
 					event.channel.getName().should.equal('#foo');
                 	event.user.getNick().should.equal('bar');
                 	event.by.getNick().should.equal('foo');
@@ -44,25 +49,35 @@ describe('kick.js', function() {
 		});
 
 		it('should emit "{network}:kick" [multi-network]', function (done) {
-			var st1 = new Stream();
-			var st2 = new Stream();
-			var client = coffea(st1);
-			client.useStream(st2);
+			var client = coffea();
+            var st1 = new Stream();
+            var st2 = new Stream();
+            var st1_id = client.add(st1);
+            var st2_id = client.add(st2);
+            client.nick('foo', st1_id);
+            client.nick('evilop', st2_id);
 
-			client.on("0:kick", function (event) {
+            var tests = 0;
+			client.once(st1_id + ":kick", function (event) {
 				event.channel.getName().should.equal('#foo');
                 event.user.getNick().should.equal('bar');
                 event.by.getNick().should.equal('foo');
                 event.reason.should.equal('Your behaviour is not conductive to the desired environment.');
-				done();
+				tests++;
+                if(tests >= 2) {
+                    done();
+                }
 			});
 
-			client.on("1:kick", function (event) {
+			client.once(st2_id + ":kick", function (event) {
 				event.channel.getName().should.equal('#foo');
                 event.user.getNick().should.equal('foo');
                 event.by.getNick().should.equal('evilop');
                 event.reason.should.equal('You have got to be kidding.');
-				done();
+				tests++;
+                if(tests >= 2) {
+                    done();
+                }
 			});
 
 			st1.write(':foo!bar@baz.com KICK #foo bar :Your behaviour is not conductive to the desired environment.\r\n');
