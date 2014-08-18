@@ -52,7 +52,7 @@ describe('join.js', function() {
             client.nick('foo', st2_id);
 
             var tests = 0;
-            client.on(st1_id + ":join", function (event) {
+            client.once(st1_id + ":join", function (event) {
                 event.user.getNick().should.equal('ChanServ');
                 event.channel.should.equal('#servies');
                 tests++;
@@ -61,7 +61,7 @@ describe('join.js', function() {
                 }
             });
 
-            client.on(st2_id + ":join", function (event) {
+            client.once(st2_id + ":join", function (event) {
                 event.user.getNick().should.equal('foo');
                 event.channel.should.equal('#baz');
                 tests++;

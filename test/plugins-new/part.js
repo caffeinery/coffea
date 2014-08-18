@@ -45,8 +45,6 @@ describe('part.js', function() {
 
             st1.write(':ChanServ!ChanServ@services.in PART #services\r\n');
             st2.write(':foo!bar@baz.com PART #baz,#bar :Part\r\n');
-
-            done();
         });
 
         it('should emit "{network}:part" [multi-network]', function (done) {
@@ -82,8 +80,6 @@ describe('part.js', function() {
 
             st1.write(':ChanServ!ChanServ@services.in PART #services\r\n');
             st2.write(':foo!bar@baz.com PART #baz,#bar :Part\r\n');
-
-            done();
         });
     });
 });
