@@ -39,7 +39,7 @@ describe('join.js', function() {
             });
 
             st1.write(':ChanServ!ChanServ@services.in JOIN :#services\r\n');
-            st1.write(':foo!bar@baz.com JOIN :#baz\r\n');
+            st2.write(':foo!bar@baz.com JOIN :#baz\r\n');
         });
 
         it('should emit "{network}:join" [multi-network]', function (done) {
