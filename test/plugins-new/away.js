@@ -2,51 +2,77 @@ var coffea = require('../..');
 var Stream = require('stream').PassThrough;
 
 describe('away.js', function() {
-	describe('on RPL_AWAY', function() {
-		it('should emit "away" [single-network]', function (done) {
-			var st1 = new Stream();
-			var client = coffea(st1);
-			client.on("away", function (event) {
-				event.user.getNick().should.equal('you');
-				event.message.should.equal('not here');
-				done();
-			});
+    describe('on RPL_AWAY', function() {
+        it('should emit "away" [single-network]', function (done) {
+            var client = coffea();
+            var st1 = new Stream();
+            var st2 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('me', st1_id);
 
-			st1.write(':irc.local 301 me you :not here\r\n');
-		});
+            client.once("away", function (event) {
+                event.user.getNick().should.equal('you');
+                event.message.should.equal('not here');
+                done();
+            });
 
-		it('should emit "away" [multi-network]', function (done) {
-			var st1 = new Stream();
-			var st2 = new Stream();
-			var client = coffea(st1);
-			client.useStream(st2);
+            st1.write(':irc.local 301 me you :not here\r\n');
+        });
 
-			client.on("away", function (event) {
-				event.network.should.equal(1);
-				event.user.getNick().should.equal('you');
-				event.message.should.equal('not here');
-				done();
-			});
+        it('should emit "away" [multi-network]', function (done) {
+            var client = coffea();
+            var st1 = new Stream();
+            var st2 = new Stream();
+            var st1_id = client.add(st1);
+            var st2_id = client.add(st2);
+            client.nick('you', st1_id);
+            client.nick('me', st2_id);
 
-			st1.write(':you!are@so.cool.com PRIVMSG #test :afk\r\n');
-			st2.write(':irc.local 301 me you :not here\r\n');
-		});
+            client.on("away", function (event) {
+                if (event.network === st1_id) {
+                    event.user.getNick().should.equal('me');
+                    event.message.should.equal('auto away');
+                } else {
+                    event.user.getNick().should.equal('you');
+                    event.message.should.equal('not here');
+                }
+                done();
+            });
 
-		it('should emit "{network}:away" [multi-network]', function (done) {
-			var st1 = new Stream();
-			var st2 = new Stream();
-			var client = coffea(st1);
-			client.useStream(st2);
+            st1.write(':irc.local 301 you me :auto away\r\n');
+            st2.write(':irc.local 301 me you :not here\r\n');
+        });
 
-			client.on("0:away", function (event) {
-				event.network.should.equal(0);
-				event.user.getNick().should.equal('you');
-				event.message.should.equal('not here');
-				done();
-			});
+        it('should emit "{network}:away" [multi-network]', function (done) {
+            var client = coffea();
+            var st1 = new Stream();
+            var st2 = new Stream();
+            var st1_id = client.add(st1);
+            var st2_id = client.add(st2);
+            client.nick('you', st1_id);
+            client.nick('me', st2_id);
 
-			st2.write(':you!are@so.cool.com PRIVMSG #test :afk\r\n');
-			st1.write(':irc.local 301 me you :not here\r\n');
-		});
-	});
+            var tests = 0;
+            client.on(st1_id + ":away", function (event) {
+                event.user.getNick().should.equal('me');
+                event.message.should.equal('auto away');
+                tests++;
+                if(tests >= 2) {
+                    done();
+                }
+            });
+
+            client.on(st2_id + ":away", function (event) {
+                event.user.getNick().should.equal('me');
+                event.message.should.equal('auto away');
+                tests++;
+                if(tests >= 2) {
+                    done();
+                }
+            });
+
+            st1.write(':irc.local 301 you me :auto away\r\n');
+            st2.write(':irc.local 301 me you :not here\r\n');
+        });
+    });
 });
