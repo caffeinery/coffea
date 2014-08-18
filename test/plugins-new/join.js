@@ -11,11 +11,11 @@ describe('join.js', function() {
 
             client.once("join", function (event) {
                 event.user.getNick().should.equal('foo');
-                event.channel.should.equal('#baz');
+                event.channel.getName().should.equal('#baz');
                 done();
             });
 
-            st1.write(':foo!bar@baz.com JOIN #baz\r\n');
+            st1.write(':foo!bar@baz.com JOIN :#baz\r\n');
         });
 
         it('should emit "join" [multi-network]', function (done) {
@@ -30,16 +30,16 @@ describe('join.js', function() {
             client.once("join", function (event) {
                 if (event.network === st1_id) {
                     event.user.getNick().should.equal('ChanServ');
-                    event.channel.should.equal('#servies');
+                    event.channel.getName().should.equal('#services');
                 } else {
                     event.user.getNick().should.equal('foo');
-                    event.channel.should.equal('#baz');
+                    event.channel.getName().should.equal('#baz');
                 }
                 done();
             });
 
-            st1.write(':ChanServ!ChanServ@services.in JOIN #services\r\n');
-            st1.write(':foo!bar@baz.com JOIN #baz\r\n');
+            st1.write(':ChanServ!ChanServ@services.in JOIN :#services\r\n');
+            st1.write(':foo!bar@baz.com JOIN :#baz\r\n');
         });
 
         it('should emit "{network}:join" [multi-network]', function (done) {
@@ -54,7 +54,7 @@ describe('join.js', function() {
             var tests = 0;
             client.once(st1_id + ":join", function (event) {
                 event.user.getNick().should.equal('ChanServ');
-                event.channel.should.equal('#servies');
+                event.channel.getName().should.equal('#services');
                 tests++;
                 if(tests >= 2) {
                     done();
@@ -63,15 +63,15 @@ describe('join.js', function() {
 
             client.once(st2_id + ":join", function (event) {
                 event.user.getNick().should.equal('foo');
-                event.channel.should.equal('#baz');
+                event.channel.getName().should.equal('#baz');
                 tests++;
                 if(tests >= 2) {
                     done();
                 }
             });
 
-            st1.write(':ChanServ!ChanServ@services.in JOIN #services\r\n');
-            st1.write(':foo!bar@baz.com JOIN #baz\r\n');
+            st1.write(':ChanServ!ChanServ@services.in JOIN :#services\r\n');
+            st2.write(':foo!bar@baz.com JOIN :#baz\r\n');
         });
     });
 });
