@@ -27,6 +27,7 @@ function Client(info) {
 
     this.streams = {};
     this.me = null;
+    this.capabilities = [];
 
     this._loadPlugins();
 
@@ -154,6 +155,7 @@ Client.prototype.add = function (info) {
             }
             stream_id = _this._useStream(stream, network.name);
             if (network.pass) { _this.pass(network.pass); }
+            _this.sendCapabilities(stream_id);
             _this.nick(network.nick, stream_id);
             _this.user(network.username, network.realname, stream_id);
             if (network.nickserv && network.nickserv.username && network.nickserv.password) {
@@ -174,6 +176,7 @@ Client.prototype.add = function (info) {
         }
         stream_id = this._useStream(stream, info.name);
         if(info.pass) { this.pass(info.pass); }
+        this.sendCapabilities(stream_id);
         this.nick(info.nick, stream_id);
         this.user(info.username, info.realname, stream_id);
         if(info.nickserv && info.nickserv.username && info.nickserv.password) {
