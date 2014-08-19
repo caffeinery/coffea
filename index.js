@@ -28,6 +28,25 @@ function Client(info) {
     this.streams = {};
     this.me = null;
     this.capabilities = [];
+    this.sendq = []; // Send Queue
+
+    var _this = this;
+    setInterval(function() {
+        var item = _this.sendq.shift();
+
+        if (item === undefined) { return; }
+
+        if (item.network && _this.streams.hasOwnProperty(item.network)) {
+            _this.streams[item.network].write(item.message + '\r\n', item.fn);
+        } else {
+            for (var id in _this.streams) {
+                if (_this.streams.hasOwnProperty(id)) {
+                    _this.streams[id].write(item.message + '\r\n');
+                }
+            }
+            if (item.fn) { item.fn(); }
+        }
+    }, 750);
 
     this._loadPlugins();
 
@@ -59,7 +78,7 @@ Client.prototype._loadPlugins = function() {
     });
 };
 
-/**
+    /**
  * Internal function that does a sanity check
  * on the network information, adding defaults
  * 
@@ -246,16 +265,8 @@ Client.prototype.write = function (str, network, fn) {
         network = network.coffea_id;
     }
 
-    if (network && this.streams.hasOwnProperty(network)) {
-        this.streams[network].write(str + '\r\n', fn);
-    } else {
-        for (var id in this.streams) {
-            if (this.streams.hasOwnProperty(id)) {
-                this.streams[id].write(str + '\r\n');
-            }
-        }
-        if (fn) { fn(); }
-    }
+    var queue_item = {'network': network, 'message': str, 'fn': fn};
+    this.sendq.push(queue_item);
 };
 
 /**
