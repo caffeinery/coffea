@@ -267,7 +267,6 @@ Client.prototype.write = function (str, network, fn) {
 
     var queue_item = {'network': network, 'message': str, 'fn': fn};
     this.sendq.push(queue_item);
-    console.log(this.sendq);
 };
 
 /**
