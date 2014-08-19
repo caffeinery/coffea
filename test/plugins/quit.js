@@ -25,14 +25,13 @@ describe('quit.js', function () {
             var stream = new Stream(),
                 client = irc(stream);
             client.nick('foo');
-            client.user('baz', 'bar');
 
             client.on('quit', function (event) {
                 event.user.getNick().should.equal('foo');
                 event.message.should.eql('POOF');
                 done();
             });
-            client.quit('POOF');
+            setTimeout(function() {client.quit('POOF');}, 750);
         });
     });
 });

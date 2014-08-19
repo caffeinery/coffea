@@ -21,7 +21,7 @@ describe('nick.js', function () {
                 });
             });
 
-            stream.write(':foo!bar@baz.com NICK bar\r\n');
+            setTimeout(function() {stream.write(':foo!bar@baz.com NICK bar\r\n');},750);
         });
     });
     describe('on err_nicknameinuse', function () {
