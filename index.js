@@ -83,6 +83,9 @@ Client.prototype._check = function(network) {
     ret.realname = network.realname === undefined ? ret.nick : network.realname;
     ret.pass = network.pass;
 
+    ret.sasl = network.sasl === undefined? null : network.sasl;
+    ret.nickserv = network.nickserv === undefined? null : network.nickserv;
+
     return ret;
 };
 
