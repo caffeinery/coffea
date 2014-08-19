@@ -154,7 +154,10 @@ Client.prototype.add = function (info) {
                 stream = tls.connect({host: network.host, port: network.port});
             }
             stream_id = _this._useStream(stream, network.name);
-            if (network.pass) { _this.pass(network.pass); }          
+            if (network.pass) { _this.pass(network.pass); }
+            _this.capReq(['account-notify', 'away-notify', 'extended-join', 'sasl'], stream_id);          
+            _this.nick(network.nick, stream_id);
+            _this.user(network.username, network.realname, stream_id);
             if (network.sasl && network.sasl.method && network.sasl.account && network.sasl.password) {
                 _this.sasl.mechanism('PLAIN', stream_id);
                 _this.sasl.login(network.sasl.account, network.sasl.password, stream_id);
@@ -168,9 +171,6 @@ Client.prototype.add = function (info) {
                 _this.sasl.mechanism('PLAIN', stream_id);
                 _this.sasl.login(null, null, stream_id);
             }
-            _this.sendCapabilities(stream_id);
-            _this.nick(network.nick, stream_id);
-            _this.user(network.username, network.realname, stream_id);
             if (network.nickserv && network.nickserv.username && network.nickserv.password) {
                 _this.identify(network.nickserv.username, network.nickserv.password);
             } else if (network.nickserv && network.nickserv.password) {
@@ -189,22 +189,22 @@ Client.prototype.add = function (info) {
         }
         stream_id = this._useStream(stream, info.name);
         if(info.pass) { this.pass(info.pass); }
-        if (info.sasl && info.sasl.method && info.sasl.account && info.sasl.password) {
-                this.sasl.mechanism('PLAIN', stream_id);
-                this.sasl.login(info.sasl.account, info.sasl.password, stream_id);
-            } else if (info.sasl && info.sasl.account && info.sasl.password) {
-                this.sasl.mechanism('PLAIN', stream_id);
-                this.sasl.login(info.sasl.account, info.sasl.password, stream_id);
-            } else if (info.sasl && info.sasl.password) {
-                this.sasl.mechanism('PLAIN', stream_id);
-                this.sasl.login(info.username, info.sasl.password, stream_id);
-            } else {
-                this.sasl.mechanism('PLAIN', stream_id);
-                this.sasl.login(null, null, stream_id);
-            }
-        this.sendCapabilities(stream_id);
+        this.capReq(['account-notify', 'away-notify', 'extended-join', 'sasl']);
         this.nick(info.nick, stream_id);
         this.user(info.username, info.realname, stream_id);
+        if (info.sasl && info.sasl.method && info.sasl.account && info.sasl.password) {
+            this.sasl.mechanism('PLAIN', stream_id);
+            this.sasl.login(info.sasl.account, info.sasl.password, stream_id);
+        } else if (info.sasl && info.sasl.account && info.sasl.password) {
+            this.sasl.mechanism('PLAIN', stream_id);
+            this.sasl.login(info.sasl.account, info.sasl.password, stream_id);
+        } else if (info.sasl && info.sasl.password) {
+            this.sasl.mechanism('PLAIN', stream_id);
+            this.sasl.login(info.username, info.sasl.password, stream_id);
+        } else {
+            this.sasl.mechanism('PLAIN', stream_id);
+            this.sasl.login(null, null, stream_id);
+        }
         if(info.nickserv && info.nickserv.username && info.nickserv.password) {
             this.identify(info.nickserv.username, info.nickserv.password);
         } else if (info.nickserv && info.nickserv.password) {
