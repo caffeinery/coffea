@@ -46,8 +46,6 @@ function Client(info) {
             }
             if (item.fn) { item.fn(); }
         }
-
-        console.log("<< " + item.message);
     }, 750);
 
     this._loadPlugins();
