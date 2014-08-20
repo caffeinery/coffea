@@ -12,14 +12,14 @@ describe('nick.js', function () {
                 client = irc(stream, false);
             client.nick('foo');
 
-            client.once('nick', function () {
-                client.once('nick', function (event) {
+            //client.once('nick', function () {
+                client.on('nick', function (event) {
                     event.user.getNick().should.equal('bar');
                     event.oldNick.should.equal('foo');
                     client.me.getNick().should.equal('bar');
                     done();
                 });
-            });
+            //});
 
             stream.write(':foo!bar@baz.com NICK bar\r\n');
         });
