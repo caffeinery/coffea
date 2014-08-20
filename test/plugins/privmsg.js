@@ -9,7 +9,7 @@ describe('privmsg.js', function () {
     describe('on PRIVMSG', function () {
         it('should emit "message"', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
             client.nick('bar');
 
             client.on('message', function (event) {
@@ -23,7 +23,7 @@ describe('privmsg.js', function () {
         });
         it('should emit "message" as action', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
             client.nick('bar');
 
             client.on('message', function (event) {
@@ -37,7 +37,7 @@ describe('privmsg.js', function () {
         });
         it('should emit "privatemessage"', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
             client.nick('bar');
 
             client.on('privatemessage', function (event) {
@@ -50,7 +50,7 @@ describe('privmsg.js', function () {
         });
         it('should emit "privatemessage" as action', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
             client.nick('bar');
 
             client.on('privatemessage', function (event) {

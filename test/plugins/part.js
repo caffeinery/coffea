@@ -9,7 +9,7 @@ describe('part.js', function () {
     describe('on PART', function () {
         it('should emit "part"', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
             client.nick('foo');
 
             client.on('part', function (event) {

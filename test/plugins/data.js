@@ -9,7 +9,7 @@ describe('data.js', function () {
     describe('on DATA', function () {
         it('should emit "data"', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.on('data', function (parsed) {
                 parsed.prefix.should.equal('hitchcock.freenode.net');

@@ -9,7 +9,7 @@ describe('names.js', function () {
     describe('client.names(chan, fn)', function () {
         it('should respond with user names', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
             client.nick('coffea');
 
             client.names('#foo', function (names) {
@@ -48,7 +48,7 @@ describe('names.js', function () {
 
     it('should emit "names"', function (done) {
         var stream = new Stream(),
-            client = irc(stream);
+            client = irc(stream, false);
         client.nick('foo');
 
         client.on('names', function (event) {

@@ -9,7 +9,7 @@ describe('nick.js', function () {
     describe('on NICK', function () {
         it('should emit "nick"', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
             client.nick('foo');
 
             client.once('nick', function () {
@@ -21,13 +21,13 @@ describe('nick.js', function () {
                 });
             });
 
-            setTimeout(function() {stream.write(':foo!bar@baz.com NICK bar\r\n');},750);
+            stream.write(':foo!bar@baz.com NICK bar\r\n');
         });
     });
     describe('on err_nicknameinuse', function () {
         it('should add _ to nick', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
             client.nick('foo');
             stream.write(':irc.local 433 * foo :Nickname is already in use.\r\n');
             process.nextTick(function () {

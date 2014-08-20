@@ -10,7 +10,7 @@ describe('whois.js', function () {
 
         it('should parse user information', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.whois('nick', function (err, data) {
                 if (err) {
@@ -29,7 +29,7 @@ describe('whois.js', function () {
 
         it('should parse channels (with modes)', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.whois('nick', function (err, data) {
                 if (err) {
@@ -57,7 +57,7 @@ describe('whois.js', function () {
 
         it('should parse server information', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.whois('nick', function (err, data) {
                 if (err) {
@@ -74,7 +74,7 @@ describe('whois.js', function () {
 
         it('should parse operator', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.whois('nick', function (err, data) {
                 if (err) {
@@ -90,7 +90,7 @@ describe('whois.js', function () {
 
         it('should parse account', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.whois('nick', function (err, data) {
                 if (err) {
@@ -106,7 +106,7 @@ describe('whois.js', function () {
 
         it('should parse registered', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.whois('nick', function (err, data) {
                 if (err) {
@@ -122,7 +122,7 @@ describe('whois.js', function () {
 
         it('should parse secure connection', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.whois('nick', function (err, data) {
                 if (err) {
@@ -138,7 +138,7 @@ describe('whois.js', function () {
 
         it('should parse secure connection', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.whois('nick', function (err, data) {
                 if (err) {
@@ -156,7 +156,7 @@ describe('whois.js', function () {
 
         it('should err with No such nick/channel', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
             client.whois('unusednickorchannel');
             client.on('whois', function (event, err) {
                 err.should.be.an.instanceof(Error);
@@ -169,7 +169,7 @@ describe('whois.js', function () {
 
         it('should err with No such server', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
             client.whois('not.a.valid.server', function (err) {
                 err.should.equal('No such server');
                 done();
@@ -179,7 +179,7 @@ describe('whois.js', function () {
 
         it('should err with Not enough parameters', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
             client.on('whois', function (event, err) {
                 err.should.be.an.instanceof(Error);
                 err.message.should.equal('Not enough parameters');
