@@ -2,7 +2,7 @@
 "use strict";
 
 var Emitter = require('events').EventEmitter;
-var Parser = require('slate-irc-parser');
+var Parser = require('./lib/parser');
 var net = require('net');
 var tls = require('tls');
 var fs = require('fs');
