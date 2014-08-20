@@ -10,6 +10,7 @@ describe('quit.js', function () {
         it('should emit "quit"', function (done) {
             var stream = new Stream(),
                 client = irc(stream, false);
+            client.nick('foo');
 
             client.on('quit', function (event) {
                 event.user.getNick().should.equal('foo');
@@ -31,7 +32,9 @@ describe('quit.js', function () {
                 event.message.should.eql('POOF');
                 done();
             });
+
             client.quit('POOF');
+            stream.write(':foo!bar@baz.com QUIT :POOF\r\n');
         });
     });
 });
