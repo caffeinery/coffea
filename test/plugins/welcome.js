@@ -9,7 +9,7 @@ describe('welcome.js', function () {
     describe('on RPL_WELCOME', function () {
         it('should set client.me to the users object', function () {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
             client.nick('foo');
 
             stream.write(':vulcanus.kerat.net 001 foo :Welcome to the KeratNet IRC Network foo!bar@baz.com\r\n');
@@ -20,7 +20,7 @@ describe('welcome.js', function () {
 
         it('should emit "welcome"', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
             client.nick('foo');
 
             client.on('welcome', function (event) {

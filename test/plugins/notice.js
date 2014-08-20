@@ -9,7 +9,7 @@ describe('notice.js', function () {
     describe('on NOTICE', function () {
         it('should emit "notice"', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.on('notice', function (event) {
                 event.from.getNick().should.equal('NickServ');

@@ -9,7 +9,7 @@ describe('away.js', function () {
     describe('on RPL_AWAY', function () {
         it('should emit "away"', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.on('away', function (event) {
                 event.user.getNick().should.equal('targetnick');

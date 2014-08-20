@@ -9,7 +9,7 @@ describe('channel.js', function () {
     describe('getChannel()', function () {
         it('should return Channel object', function (done) {
             var stream = new Stream(),
-                client = irc(stream),
+                client = irc(stream, false),
                 channel = client.getChannel('#foo');
 
             channel.getName().should.equal('#foo');
@@ -19,7 +19,7 @@ describe('channel.js', function () {
     describe('isChannel()', function () {
         it('should return true', function (done) {
             var stream = new Stream(),
-                client = irc(stream),
+                client = irc(stream, false),
                 channel = client.getChannel('#foo');
 
             client.isChannel(channel).should.equal(true);
@@ -36,7 +36,7 @@ describe('channel.js', function () {
     describe('getChannellist()', function () {
         it('should return List of channels that we are in', function (done) {
             var stream = new Stream(),
-                client = irc(stream),
+                client = irc(stream, false),
                 chanlist;
             client.nick('foo');
 

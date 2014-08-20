@@ -9,7 +9,7 @@ describe('join.js', function () {
     describe('on JOIN', function () {
         it('should emit "join"', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
             client.nick('foo');
 
             client.on('join', function (event) {

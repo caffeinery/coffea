@@ -9,7 +9,7 @@ describe('mode.js', function () {
     describe('on MODE', function () {
         it('should parse usermode', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.on('mode', function (event) {
                 event.by.getNick().should.equal('foo');
@@ -21,7 +21,7 @@ describe('mode.js', function () {
         });
         it('should parse usermode aswell', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.once('mode', function (event) {
                 event.by.should.equal('foo');
@@ -39,7 +39,7 @@ describe('mode.js', function () {
         });
         it('should parse channelmode', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.once('mode', function (event) {
                 event.channel.getName().should.equal('#foo');

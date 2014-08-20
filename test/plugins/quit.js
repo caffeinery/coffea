@@ -9,7 +9,7 @@ describe('quit.js', function () {
     describe('on QUIT', function () {
         it('should emit "quit"', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.on('quit', function (event) {
                 event.user.getNick().should.equal('foo');
@@ -23,7 +23,7 @@ describe('quit.js', function () {
     describe('client.quit()', function () {
         it('should emit "quit" aswell', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
             client.nick('foo');
 
             client.on('quit', function (event) {
@@ -31,7 +31,7 @@ describe('quit.js', function () {
                 event.message.should.eql('POOF');
                 done();
             });
-            setTimeout(function() {client.quit('POOF');}, 750);
+            client.quit('POOF');
         });
     });
 });

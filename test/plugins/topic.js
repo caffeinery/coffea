@@ -9,7 +9,7 @@ describe('topic.js', function () {
     describe('on TOPIC', function () {
         it('should emit "topic"', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.on('topic', function (event) {
                 event.channel.getName().should.equal('#foo');
@@ -27,7 +27,7 @@ describe('topic.js', function () {
 
         it('should emit "topic" changed', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.on('topic', function (event) {
                 event.channel.getName().should.equal('#foo');

@@ -9,7 +9,7 @@ describe('invite.js', function () {
     describe('on JOIN', function () {
         it('should emit "motd"', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.on('invite', function (event) {
                 event.user.getNick().should.equal('foo');

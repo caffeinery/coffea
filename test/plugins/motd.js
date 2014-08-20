@@ -9,7 +9,7 @@ describe('motd.js', function () {
     describe('on JOIN', function () {
         it('should emit "motd"', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.on('motd', function (event) {
                 event.motd[0].should.equal('irc.local message of the day');

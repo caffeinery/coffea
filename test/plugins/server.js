@@ -9,7 +9,7 @@ describe('server.js', function () {
     describe('getServerInfo()', function () {
         it('should parse RPL_YOURHOST', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             stream.write(':irc.local 002 foo :Your host is irc.local, running version InspIRCd-2.0\r\n');
             process.nextTick(function () {
@@ -21,7 +21,7 @@ describe('server.js', function () {
         });
         it('should parse RPL_CREATED', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             stream.write(':irc.local 003 foo :This server was created 16:48:26 Jan 20 2014\r\n');
             process.nextTick(function () {
@@ -33,7 +33,7 @@ describe('server.js', function () {
         });
         it('should parse RPL_ISUPPORT', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             stream.write(':irc.local 005 foo AWAYLEN=200 CALLERID=g CASEMAPPING=rfc1459 CHANMODES=beg,k,FJLfjl,ABMRScimnprstz CHANNELLEN=64 CHANTYPES=# CHARSET=ascii ELIST=MU EXCEPTS=e EXTBAN=,ABRSUcpz FNC KICKLEN=255 MAP :are supported by this server\r\n');
             stream.write(':irc.local 005 foo MAXBANS=60 MAXCHANNELS=20 MAXPARA=32 MAXTARGETS=20 MODES=20 NAMESX NETWORK=LocalIRC NICKLEN=31 OPERLOG PREFIX=(Yqaohv)!~&@%+ SSL=[2a03:4000:2:109::4:36]:6697 STARTTLS STATUSMSG=!~&@%+ :are supported by this server\r\n');
