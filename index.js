@@ -21,7 +21,7 @@ var utils = require('./lib/utils');
  * 
  * @param {object} info
  */
-function Client(info) {
+function Client(info, throttling) {
     if (!(this instanceof Client)) { return new Client(info); }
     this.setMaxListeners(100);
 
@@ -30,25 +30,30 @@ function Client(info) {
     this.capabilities = [];
     this.sendq = []; // Send Queue
 
-    var _this = this;
-    setInterval(function() {
-        var item = _this.sendq.shift();
-
-        if (item === undefined) { return; }
-
-        if (item.network && _this.streams.hasOwnProperty(item.network)) {
-            _this.streams[item.network].write(item.message + '\r\n', item.fn);
-        } else {
-            for (var id in _this.streams) {
-                if (_this.streams.hasOwnProperty(id)) {
-                    _this.streams[id].write(item.message + '\r\n');
-                }
-            }
-            if (item.fn) { item.fn(); }
-        }
-    }, 750);
-
     this._loadPlugins();
+
+    // throttling is on by default.
+    throttling = throttling === undefined ? true : false;
+
+    if (!throttling) {
+        var _this = this;
+        setInterval(function() {
+            var item = _this.sendq.shift();
+
+            if (item === undefined) { return; }
+
+            if (item.network && _this.streams.hasOwnProperty(item.network)) {
+                _this.streams[item.network].write(item.message + '\r\n', item.fn);
+            } else {
+                for (var id in _this.streams) {
+                    if (_this.streams.hasOwnProperty(id)) {
+                        _this.streams[id].write(item.message + '\r\n');
+                    }
+                }
+                if (item.fn) { item.fn(); }
+            }
+        }, 750);
+    }
 
     if (info) {
         this.add(info);
