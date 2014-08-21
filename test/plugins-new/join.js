@@ -24,8 +24,8 @@ describe('join.js', function() {
             var st2 = new Stream();
             var st1_id = client.add(st1);
             var st2_id = client.add(st2);
-            client.nick('ChanServ', st1_id);
-            client.nick('foo', st2_id);
+            client.nick('foo', st1_id);
+            client.nick('ChanServ', st2_id);
 
             client.once("join", function (event) {
                 if (event.network === st1_id) {
@@ -48,7 +48,7 @@ describe('join.js', function() {
             var st2 = new Stream();
             var st1_id = client.add(st1);
             var st2_id = client.add(st2);
-            client.nick('ChanServ', st1_id);
+            client.nick('foo', st1_id);
             client.nick('foo', st2_id);
 
             var tests = 0;

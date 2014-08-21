@@ -9,14 +9,14 @@ describe('nick.js', function() {
             client.nick('troll'); // initialize user
 
             // first event is sent from initializing the user to 'troll'
-            client.once('nick', function () {
+            //client.once('nick', function () {
                 // second event is triggered by the parsed message
-                client.once('nick', function (event) {
+                client.on('nick', function (event) {
                     event.user.getNick().should.equal('evilop');
                     event.oldNick.should.equal('troll');
                     done();
                 });
-            });
+            //});
 
             // send nick change message
             st1.write(':troll!evilop@yo.um.ad NICK evilop\r\n');
@@ -32,7 +32,7 @@ describe('nick.js', function() {
             client.nick('troll', st2_id); // initialize user on stream 2
 
             // first event is sent from initializing the user to 'troll'/'NickServ'
-            client.once("nick", function () {
+            //client.once("nick", function () {
                 // second event is triggered by the parsed messages
                 client.once('nick', function (event) {
                     if (event.network === st1_id) {
@@ -44,7 +44,7 @@ describe('nick.js', function() {
                     }
                     done(); // call done when the test is actually done (async)
                 });
-            });
+            //});
 
             st1.write(':NickServ!NickServ@services. NICK ChanServ\r\n');
             st2.write(':troll!evilop@yo.um.ad NICK evilop\r\n');
@@ -60,8 +60,8 @@ describe('nick.js', function() {
             client.nick('troll', st2_id); // initialize user on stream 2
 
             var tests = 0;
-            client.once(st1_id + ":nick", function () {
-                client.once(st1_id + ":nick", function (event) {
+            //client.once(st1_id + ":nick", function () {
+                client.on(st1_id + ":nick", function (event) {
                     event.user.getNick().should.equal('ChanServ');
                     event.oldNick.should.equal('NickServ');
                     tests++;
@@ -69,10 +69,10 @@ describe('nick.js', function() {
                         done(); // call done when the test is actually done (async)
                     }
                 });
-            });
+            //});
 
-            client.once(st2_id + ":nick", function () {
-                client.once(st2_id + ":nick", function (event) {
+            //client.once(st2_id + ":nick", function () {
+                client.on(st2_id + ":nick", function (event) {
                     event.user.getNick().should.equal('evilop');
                     event.oldNick.should.equal('troll');
                     tests++;
@@ -80,7 +80,7 @@ describe('nick.js', function() {
                         done(); // call done when the test is actually done (async)
                     }
                 });
-            });
+            //});
 
             st1.write(':NickServ!NickServ@services. NICK ChanServ\r\n');
             st2.write(':troll!evilop@yo.um.ad NICK evilop\r\n');

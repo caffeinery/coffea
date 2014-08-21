@@ -54,7 +54,7 @@ describe('user.js', function() {
             var st1_id = client.add(st1);
             client.nick('nick', st1_id);
 
-            stream.write(':irc.net 352 nick #channel username host.com server.net nick H~@ :0 realname\r\n');
+            st1.write(':irc.net 352 nick #channel username host.com server.net nick H~@ :0 realname\r\n');
             process.nextTick(function () {
                 var user = client.getUser('nick');
                 user.getUsername().should.equal('username');
