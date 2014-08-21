@@ -1,6 +1,15 @@
-node_modules
+# node modules
+node_modules/
+
+# osx finder file
+.DS_Store
+
+# (npm) log files
 *.log
+
+# sublime files
 *.sublime-project
 *.sublime-workspace
-*.txt
+
+# test file
 test.js
