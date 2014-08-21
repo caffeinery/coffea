@@ -160,7 +160,7 @@ Client.prototype.useStream = function (stream, network) {
  */
 Client.prototype.onmessage = function (msg, network) {
     msg.command = replies[msg.command] || msg.command;
-    this.emit('data', msg, network);
+    utils.emit(this, network, 'data', msg);
 };
 
 /**
