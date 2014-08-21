@@ -24,10 +24,11 @@ describe('join.js', function() {
             var st2 = new Stream();
             var st1_id = client.add(st1);
             var st2_id = client.add(st2);
-            client.nick('foo', st1_id);
-            client.nick('ChanServ', st2_id);
+            client.nick('ChanServ', st1_id);
+            client.nick('foo', st2_id);
 
-            client.once("join", function (event) {
+            var tests = 0;
+            client.on("join", function (event) {
                 if (event.network === st1_id) {
                     event.user.getNick().should.equal('ChanServ');
                     event.channel.getName().should.equal('#services');
@@ -35,7 +36,10 @@ describe('join.js', function() {
                     event.user.getNick().should.equal('foo');
                     event.channel.getName().should.equal('#baz');
                 }
-                done();
+                tests++;
+                if (tests >= 2) {
+                    done();
+                }
             });
 
             st1.write(':ChanServ!ChanServ@services.in JOIN :#services\r\n');
