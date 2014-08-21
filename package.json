@@ -25,6 +25,7 @@
     "url": "https://github.com/caffeinery/coffea/issues"
   },
   "dependencies": {
+    "eventemitter3": "^0.1.4",
     "irc-replies": "^2.0.0",
     "linewise": "0.0.3",
     "node-emoji": "^0.1.0",

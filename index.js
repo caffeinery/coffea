@@ -1,7 +1,7 @@
 /*jslint node: true*/
 "use strict";
 
-var Emitter = require('events').EventEmitter;
+var Emitter = require('eventemitter3').EventEmitter;
 var Parser = require('./lib/parser');
 var net = require('net');
 var tls = require('tls');
