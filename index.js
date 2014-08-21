@@ -31,6 +31,11 @@ function Client(info, throttling) {
 
     this._loadPlugins();
 
+    if (typeof info === 'boolean') {
+        throttling = info;
+        info = null;
+    }
+
     // throttling is on by default.
     throttling = throttling === undefined ? true : false;
 
