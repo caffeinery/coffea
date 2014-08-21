@@ -39,7 +39,7 @@ function Client(info, throttling) {
     // throttling is on by default.
     throttling = throttling === undefined ? true : false;
 
-    if (!throttling) {
+    if (throttling) {
         var _this = this;
         setInterval(function() {
             var item = _this.sendq.shift();
