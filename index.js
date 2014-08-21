@@ -23,7 +23,6 @@ var utils = require('./lib/utils');
  */
 function Client(info, throttling) {
     if (!(this instanceof Client)) { return new Client(info); }
-    this.setMaxListeners(100);
 
     this.streams = {};
     this.me = null;
