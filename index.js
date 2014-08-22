@@ -38,44 +38,11 @@ function Client(info, throttling) {
 
     // throttling is on by default.
     throttling = throttling === undefined ? true : false;
-
-    if (throttling) {
-        var _this = this;
-        setInterval(function() {
-            var item = _this.sendq.shift();
-
-            if (item === undefined) { return; }
-
-            if (item.network && _this.streams.hasOwnProperty(item.network)) {
-                _this.streams[item.network].write(item.message + '\r\n', item.fn);
-            } else {
-                for (var id in _this.streams) {
-                    if (_this.streams.hasOwnProperty(id)) {
-                        _this.streams[id].write(item.message + '\r\n');
-                    }
-                }
-                if (item.fn) { item.fn(); }
-            }
-        }, 750);
-    } else {
-        var _this = this;
-        setInterval(function() {
-            var item = _this.sendq.shift();
-
-            if (item === undefined) { return; }
-
-            if (item.network && _this.streams.hasOwnProperty(item.network)) {
-                _this.streams[item.network].write(item.message + '\r\n', item.fn);
-            } else {
-                for (var id in _this.streams) {
-                    if (_this.streams.hasOwnProperty(id)) {
-                        _this.streams[id].write(item.message + '\r\n');
-                    }
-                }
-                if (item.fn) { item.fn(); }
-            }
-        }, 1);
-    }
+    
+    var _this = this;
+    setInterval(function () {
+        _this._sendq(_this.sendq.shift());
+    }, throttling === true ? 750 : 1);
 
     if (info) {
         this.add(info);
@@ -87,6 +54,26 @@ module.exports = Client;
 
 // inherit from Emitter.prototype to make Client and EventEmitter
 utils.inherit(Client, Emitter);
+
+/**
+ * Internal function that processes the send queue.
+ *
+ * @api private
+ */
+Client.prototype._sendq = function (item) {
+    if (item === undefined) { return; }
+
+    if (item.network && this.streams.hasOwnProperty(item.network)) {
+        this.streams[item.network].write(item.message + '\r\n', item.fn);
+    } else {
+        for (var id in this.streams) {
+            if (this.streams.hasOwnProperty(id)) {
+                this.streams[id].write(item.message + '\r\n');
+            }
+        }
+        if (item.fn) { item.fn(); }
+    }
+};
 
 /**
  * Internal function that loads all plugins
