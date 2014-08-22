@@ -104,7 +104,11 @@ Client.prototype._check = function(network) {
     var ret = {};
     var randnick = "coffea"+Math.floor(Math.random() * 100000);
 
-    ret.host = network.host === undefined ? null : network.host; // Required.
+    if (typeof network === 'string') {
+        ret.host = network; // super lazy config - a host was passed as a string
+    } else {
+        ret.host = network.host === undefined ? null : network.host; // Required.
+    }
 
     ret.name = network.name;
     
@@ -208,12 +212,6 @@ Client.prototype._connect = function (stream_id, info) {
  */
 Client.prototype.add = function (info) {
     var stream, stream_id;
-
-    // super lazy config - host only
-    if (typeof info === 'string') {
-        info = {host: info};
-    }
-
     if (info instanceof Array) {
         // We've been passed multiple server information
         var _this = this;
@@ -221,9 +219,9 @@ Client.prototype.add = function (info) {
             network = _this._check(network);
             stream = network.ssl ? tls.connect({host: network.host, port: network.port}) : net.connect({host: network.host, port: network.port});
             stream_id = _this._useStream(stream, network.name);
-            this._connect(stream_id, network);
+            _this._connect(stream_id, network);
         });
-    } else if (info instanceof Object && !(info instanceof StreamReadable) && !(info instanceof StreamWritable)) {
+    } else if ((typeof info === 'string') || (info instanceof Object && !(info instanceof StreamReadable) && !(info instanceof StreamWritable))) {
         // We've been passed single server information
         info = this._check(info);
         stream = info.ssl ? tls.connect({host: info.host, port: info.port}) : net.connect({host: info.host, port: info.port});
