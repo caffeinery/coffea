@@ -256,7 +256,7 @@ describe('Core Functions', function() {
                 });
             });
 
-            client.mode('#test', '+bm', 'nick!user@host');
+            client.mode('#test', '+bm nick!user@host');
         });
 
         it('should send a mode without parameters', function (done) {
