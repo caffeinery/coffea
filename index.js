@@ -168,31 +168,32 @@ Client.prototype.onmessage = function (msg, network) {
     this.emit('data', msg, network);
 };
 
-Client.prototype.connect = function (stream_id, info) {
+Client.prototype._setupSASL = function (stream_id, info) {
+    this.on('cap_ack', function (event) {
+        if (event.capability == 'sasl') {
+            this.sasl.mechanism('PLAIN', stream_id);
+            if (info.sasl && info.sasl.account && info.sasl.password) {
+                this.sasl.login(info.sasl.account, info.sasl.password, stream_id);
+            } else if (info.sasl && info.sasl.password) {
+                this.sasl.login(info.username, info.sasl.password, stream_id);
+            } else {
+                this.sasl.login(null, null, stream_id);
+            }
+        }
+    });
+};
+
+Client.prototype._connect = function (stream_id, info) {
+    this._setupSASL(stream_id, info);
     if (info.pass) { this.pass(info.pass); }
     this.capReq(['account-notify', 'away-notify', 'extended-join', 'sasl'], stream_id); 
-    this.capEnd(stream_id);         
-    if (info.sasl && info.sasl.method && info.sasl.account && info.sasl.password) {
-        this.sasl.mechanism('PLAIN', stream_id);
-        this.sasl.login(info.sasl.account, info.sasl.password, stream_id);
-    } else if (info.sasl && info.sasl.account && info.sasl.password) {
-        this.sasl.mechanism('PLAIN', stream_id);
-        this.sasl.login(info.sasl.account, info.sasl.password, stream_id);
-    } else if (info.sasl && info.sasl.password) {
-        this.sasl.mechanism('PLAIN', stream_id);
-        this.sasl.login(info.username, info.sasl.password, stream_id);
-    } else {
-        this.sasl.mechanism('PLAIN', stream_id);
-        this.sasl.login(null, null, stream_id);
-    }
+    this.capEnd(stream_id);
     this.nick(info.nick, stream_id);
     this.user(info.username, info.realname, stream_id);
     if (info.nickserv && info.nickserv.username && info.nickserv.password) {
         this.identify(info.nickserv.username, info.nickserv.password);
     } else if (info.nickserv && info.nickserv.password) {
         this.identify(info.nickserv.password);
-    } else if (info.nickserv) {
-        this.identify(info.nickserv);
     }
 };
 
