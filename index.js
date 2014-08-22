@@ -208,6 +208,12 @@ Client.prototype._connect = function (stream_id, info) {
  */
 Client.prototype.add = function (info) {
     var stream, stream_id;
+
+    // super lazy config - host only
+    if (typeof info === 'string') {
+        info = {host: info};
+    }
+
     if (info instanceof Array) {
         // We've been passed multiple server information
         var _this = this;
