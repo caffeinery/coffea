@@ -1,7 +1,7 @@
 # Coffea [![Build Status](https://travis-ci.org/caffeinery/coffea.svg?branch=master)](https://travis-ci.org/caffeinery/coffea) [![Code Climate](https://codeclimate.com/github/caffeinery/coffea/badges/gpa.svg)](https://codeclimate.com/github/caffeinery/coffea) [![NPM version](https://badge.fury.io/js/coffea.svg)](http://badge.fury.io/js/coffea)
 _event based and extensible irc client library with multi-network support_
 
-IRC channel at ##caffeinery @ chat.freenode.net.
+For support, report an issue on github or join our IRC channel at [##caffeinery @ chat.freenode.net](http://webchat.freenode.net/?channels=%23%23caffeinery&uio=d4)
 
 ## API
 The outdated (but currently more complete) version of the API is available [in the wiki](https://github.com/caffeinery/coffea/wiki/API-(outdated)).
