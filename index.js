@@ -168,6 +168,34 @@ Client.prototype.onmessage = function (msg, network) {
     this.emit('data', msg, network);
 };
 
+Client.prototype.connect = function (stream_id, info) {
+    if (info.pass) { this.pass(info.pass); }
+    this.capReq(['account-notify', 'away-notify', 'extended-join', 'sasl'], stream_id); 
+    this.capEnd(stream_id);         
+    if (info.sasl && info.sasl.method && info.sasl.account && info.sasl.password) {
+        this.sasl.mechanism('PLAIN', stream_id);
+        this.sasl.login(info.sasl.account, info.sasl.password, stream_id);
+    } else if (info.sasl && info.sasl.account && info.sasl.password) {
+        this.sasl.mechanism('PLAIN', stream_id);
+        this.sasl.login(info.sasl.account, info.sasl.password, stream_id);
+    } else if (info.sasl && info.sasl.password) {
+        this.sasl.mechanism('PLAIN', stream_id);
+        this.sasl.login(info.username, info.sasl.password, stream_id);
+    } else {
+        this.sasl.mechanism('PLAIN', stream_id);
+        this.sasl.login(null, null, stream_id);
+    }
+    this.nick(info.nick, stream_id);
+    this.user(info.username, info.realname, stream_id);
+    if (info.nickserv && info.nickserv.username && info.nickserv.password) {
+        this.identify(info.nickserv.username, info.nickserv.password);
+    } else if (info.nickserv && info.nickserv.password) {
+        this.identify(info.nickserv.password);
+    } else if (info.nickserv) {
+        this.identify(info.nickserv);
+    }
+};
+
 /**
  * Add a network to the client, the argument can be a stream, network config object
  * or an array of network config objects (see README.md and wiki for more information)
@@ -184,72 +212,16 @@ Client.prototype.add = function (info) {
         var _this = this;
         info.forEach(function(network) {
             network = _this._check(network);
-            if (!network.ssl) {
-                stream = net.connect({host: network.host, port: network.port});
-            } else {
-                stream = tls.connect({host: network.host, port: network.port});
-            }
+            stream = network.ssl ? tls.connect({host: network.host, port: network.port}) : net.connect({host: network.host, port: network.port});
             stream_id = _this._useStream(stream, network.name);
-            if (network.pass) { _this.pass(network.pass); }
-            _this.capReq(['account-notify', 'away-notify', 'extended-join', 'sasl'], stream_id); 
-            _this.capEnd(stream_id);         
-            if (network.sasl && network.sasl.method && network.sasl.account && network.sasl.password) {
-                _this.sasl.mechanism('PLAIN', stream_id);
-                _this.sasl.login(network.sasl.account, network.sasl.password, stream_id);
-            } else if (network.sasl && network.sasl.account && network.sasl.password) {
-                _this.sasl.mechanism('PLAIN', stream_id);
-                _this.sasl.login(network.sasl.account, network.sasl.password, stream_id);
-            } else if (network.sasl && network.sasl.password) {
-                _this.sasl.mechanism('PLAIN', stream_id);
-                _this.sasl.login(network.username, network.sasl.password, stream_id);
-            } else {
-                _this.sasl.mechanism('PLAIN', stream_id);
-                _this.sasl.login(null, null, stream_id);
-            }
-            _this.nick(network.nick, stream_id);
-            _this.user(network.username, network.realname, stream_id);
-            if (network.nickserv && network.nickserv.username && network.nickserv.password) {
-                _this.identify(network.nickserv.username, network.nickserv.password);
-            } else if (network.nickserv && network.nickserv.password) {
-                _this.identify(network.nickserv.password);
-            } else if (network.nickserv) {
-                _this.identify(network.nickserv);
-            }
+            this._connect(stream_id, network);
         });
     } else if (info instanceof Object && !(info instanceof StreamReadable) && !(info instanceof StreamWritable)) {
         // We've been passed single server information
         info = this._check(info);
-        if (!info.ssl) {
-            stream = net.connect({host: info.host, port: info.port});
-        } else {
-            stream = tls.connect({host: info.host, port: info.port});
-        }
+        stream = info.ssl ? tls.connect({host: info.host, port: info.port}) : net.connect({host: info.host, port: info.port});
         stream_id = this._useStream(stream, info.name);
-        if(info.pass) { this.pass(info.pass); }
-        this.capReq(['account-notify', 'away-notify', 'extended-join', 'sasl']);
-        this.capEnd(stream_id);
-        if (info.sasl && info.sasl.method && info.sasl.account && info.sasl.password) {
-            this.sasl.mechanism('PLAIN', stream_id);
-            this.sasl.login(info.sasl.account, info.sasl.password, stream_id);
-        } else if (info.sasl && info.sasl.account && info.sasl.password) {
-            this.sasl.mechanism('PLAIN', stream_id);
-            this.sasl.login(info.sasl.account, info.sasl.password, stream_id);
-        } else if (info.sasl && info.sasl.password) {
-            this.sasl.mechanism('PLAIN', stream_id);
-            this.sasl.login(info.username, info.sasl.password, stream_id);
-        } else {
-            this.sasl.mechanism('PLAIN', stream_id);
-            this.sasl.login(null, null, stream_id);
-        }
-        this.nick(info.nick, stream_id);
-        this.user(info.username, info.realname, stream_id);
-        if(info.nickserv && info.nickserv.username && info.nickserv.password) {
-            this.identify(info.nickserv.username, info.nickserv.password);
-        } else if (info.nickserv && info.nickserv.password) {
-            this.identify(info.nickserv.password);
-        } else if (info.nickserv) {
-            this.identify(info.nickserv);
-        }
+        this._connect(stream_id, info);
     } else {
         // Assume we've been passed the legacy stream.
         stream_id = this._useStream(info);
