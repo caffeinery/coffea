@@ -170,7 +170,7 @@ Client.prototype.onmessage = function (msg, network) {
 
 Client.prototype._setupSASL = function (stream_id, info) {
     this.on('cap_ack', function (event) {
-        if (event.capability == 'sasl') {
+        if (event.capability === 'sasl') {
             this.sasl.mechanism('PLAIN', stream_id);
             if (info.sasl && info.sasl.account && info.sasl.password) {
                 this.sasl.login(info.sasl.account, info.sasl.password, stream_id);
