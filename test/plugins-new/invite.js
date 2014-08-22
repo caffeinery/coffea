@@ -2,6 +2,24 @@ var coffea = require('../..');
 var Stream = require('stream').PassThrough;
 
 describe('invite.js', function() {
+  describe('client.invite()', function () {
+      it('should send an invite', function (done) {
+          var client = coffea(false);
+          var st1 = new Stream();
+          var st1_id = client.add(st1);
+          client.nick('test');
+
+          client.once('data', function (data) {
+              client.once('data', function (data) {
+                  data.string.should.equal('INVITE #test mike');
+                  done();
+              });
+          });
+
+          client.invite('#test', 'mike');
+      });
+  });
+
 	describe('on INVITE', function() {
 		it('should emit "invite" [single-network]', function (done) {
             var client = coffea();

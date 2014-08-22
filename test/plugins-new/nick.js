@@ -2,6 +2,24 @@ var coffea = require('../..');
 var Stream = require('stream').PassThrough;
 
 describe('nick.js', function() {
+    describe('client.nick()', function () {
+        it('should send NICK', function (done) {
+            var client = coffea(false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('test');
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('NICK test2');
+                    done();
+                });
+            });
+
+            client.nick('test2');
+        });
+    });
+    
     describe('on NICK', function() {
         it('should emit "nick" [single-network]', function (done) {
             var st1 = new Stream();

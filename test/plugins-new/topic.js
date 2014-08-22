@@ -2,6 +2,40 @@ var coffea = require('../..');
 var Stream = require('stream').PassThrough;
 
 describe('topic.js', function() {
+    describe('client.topic()', function () {
+        it('should change topic', function (done) {
+            var client = coffea(false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('test');
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('TOPIC #test :this is a test channel');
+                    done();
+                });
+            });
+
+            client.topic('#test', 'this is a test channel');
+        });
+
+        it('should change topic to nothing', function (done) {
+            var client = coffea(false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('test');
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('TOPIC #test :');
+                    done();
+                });
+            });
+
+            client.topic('#test', '');
+        });
+    });
+
 	describe('on TOPIC', function() {
         it('should accept "topic" on entering channel', function (done) {
             var client = coffea();

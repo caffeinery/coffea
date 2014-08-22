@@ -2,6 +2,72 @@ var coffea = require('../..');
 var Stream = require('stream').PassThrough;
 
 describe('kick.js', function() {
+    describe('client.kick()', function () {
+        it('should kick without a kick message', function (done) {
+            var client = coffea(false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('test');
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('KICK #test mike');
+                    done();
+                });
+            });
+
+            client.kick(['#test'], 'mike');
+        });
+
+        it('should kick multiple people without a kick message', function (done) {
+            var client = coffea(false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('test');
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('KICK #test mike,dan');
+                    done();
+                });
+            });
+
+            client.kick(['#test'], ['mike', 'dan']);
+        });
+
+        it('should kick with a kick message', function (done) {
+            var client = coffea(false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('test');
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('KICK #test mike :you should know better');
+                    done();
+                });
+            });
+
+            client.kick(['#test'], 'mike', 'you should know better');
+        });
+
+        it('should kick multiple people with a kick message', function (done) {
+            var client = coffea(false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('test');
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('KICK #test mike,dan :you should know better');
+                    done();
+                });
+            });
+
+            client.kick(['#test'], ['mike', 'dan'], 'you should know better');
+        });
+    });
+
     describe('on KICK', function() {
         it('should emit "kick" [single-network]', function (done) {
             var client = coffea();

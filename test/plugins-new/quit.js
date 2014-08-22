@@ -2,6 +2,40 @@ var coffea = require('../..');
 var Stream = require('stream').PassThrough;
 
 describe('quit.js', function() {
+  describe('client.quit()', function () {
+      it('should send quit without reason', function (done) {
+          var client = coffea(false);
+          var st1 = new Stream();
+          var st1_id = client.add(st1);
+          client.nick('test');
+
+          client.once('data', function (data) {
+              client.once('data', function (data) {
+                  data.string.should.equal('QUIT');
+                  done();
+              });
+          });
+
+          client.quit();
+      });
+
+      it('should send quit with reason', function (done) {
+          var client = coffea(false);
+          var st1 = new Stream();
+          var st1_id = client.add(st1);
+          client.nick('test');
+
+          client.once('data', function (data) {
+              client.once('data', function (data) {
+                  data.string.should.equal('QUIT :See ya soon!');
+                  done();
+              });
+          });
+
+          client.quit("See ya soon!");
+      });
+  });
+
 	describe('on QUIT', function() {
 		it('should emit "quit" [single-network]', function (done) {
 			var st1 = new Stream();

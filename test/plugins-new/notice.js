@@ -2,6 +2,72 @@ var coffea = require('../..');
 var Stream = require('stream').PassThrough;
 
 describe('notice.js', function() {
+  describe('client.notice()', function () {
+      it('should send notice to user', function (done) {
+          var client = coffea(false);
+          var st1 = new Stream();
+          var st1_id = client.add(st1);
+          client.nick('test');
+
+          client.once('data', function (data) {
+              client.once('data', function (data) {
+                  data.string.should.equal('NOTICE mike :Hi');
+                  done();
+              });
+          });
+
+          client.notice('mike', 'Hi');
+      });
+
+      it('should send notice to channel', function (done) {
+          var client = coffea(false);
+          var st1 = new Stream();
+          var st1_id = client.add(st1);
+          client.nick('test');
+
+          client.once('data', function (data) {
+              client.once('data', function (data) {
+                  data.string.should.equal('NOTICE #test :Hi');
+                  done();
+              });
+          });
+
+          client.notice('#test', 'Hi');
+      });
+
+      it('should send notice to multiple targets', function (done) {
+          var client = coffea(false);
+          var st1 = new Stream();
+          var st1_id = client.add(st1);
+          client.nick('test');
+
+          client.once('data', function (data) {
+              client.once('data', function (data) {
+                  data.string.should.equal('NOTICE #test,mike :Hi');
+                  done();
+              });
+          });
+
+          client.notice(['#test', 'mike'], 'Hi');
+      });
+
+      it('should send a mass notice [oper-only]', function (done) {
+          var client = coffea(false);
+          var st1 = new Stream();
+          var st1_id = client.add(st1);
+          client.nick('test');
+
+          client.once('data', function (data) {
+              client.once('data', function (data) {
+                  data.string.should.equal('NOTICE $$*.freenode.net :[Network Notice] Hi everyone!');
+                  done();
+              });
+          });
+
+          client.notice('$$*.freenode.net', '[Network Notice] Hi everyone!');
+      });
+  });
+
 	describe('on NOTICE', function() {
 		it('should emit "notice" [single-network]', function (done) {
             var client = coffea();

@@ -2,6 +2,40 @@ var coffea = require('../..');
 var Stream = require('stream').PassThrough;
 
 describe('mode.js', function () {
+    describe('client.mode()', function () {
+        it('should send a mode with parameters', function (done) {
+            var client = coffea(false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('test');
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('MODE #test +bm nick!user@host');
+                    done();
+                });
+            });
+
+            client.mode('#test', '+bm nick!user@host');
+        });
+
+        it('should send a mode without parameters', function (done) {
+            var client = coffea(false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('test');
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('MODE #test +i');
+                    done();
+                });
+            });
+
+            client.mode('#test', '+i');
+        });
+    });
+
     describe('on MODE', function () {
         it('should parse usermode', function (done) {
             var client = coffea();

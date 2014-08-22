@@ -2,6 +2,40 @@ var coffea = require('../..');
 var Stream = require('stream').PassThrough;
 
 describe('privmsg.js', function() {
+    describe('client.send()', function () {
+        it('should send a message to a channel', function (done) {
+            var client = coffea(false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('test');
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('PRIVMSG #test :Hello World!');
+                    done();
+                });
+            });
+
+            client.send('#test', 'Hello World!');
+        });
+
+        it('should send a message to a person', function (done) {
+            var client = coffea(false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('test');
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('PRIVMSG mike :Hello World!');
+                    done();
+                });
+            });
+
+            client.send('mike', 'Hello World!');
+        });
+    });
+    
 	describe('on NOTICE', function() {
 		it('should emit "message" [single-network]', function (done) {
             var client = coffea();

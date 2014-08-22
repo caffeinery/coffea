@@ -2,6 +2,40 @@ var coffea = require('../..');
 var Stream = require('stream').PassThrough;
 
 describe('join.js', function() {
+    describe('client.join()', function () {
+        it('should join channels without a password', function (done) {
+            var client = coffea(false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('test');
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('JOIN #test');
+                    done();
+                });
+            });
+
+            client.join('#test');
+        });
+
+        it('should join channels with a password', function (done) {
+            var client = coffea(false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('test');
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('JOIN #test test123');
+                    done();
+                });
+            });
+
+            client.join(['#test'], ['test123']);
+        });
+    });
+
     describe('on JOIN', function() {
         it('should emit "join" [single-network]', function (done) {
             var client = coffea();

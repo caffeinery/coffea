@@ -2,6 +2,40 @@ var coffea = require('../..');
 var Stream = require('stream').PassThrough;
 
 describe('part.js', function() {
+    describe('client.part()', function () {
+        it('should part a channel without a message', function (done) {
+            var client = coffea(false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('test');
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('PART #test');
+                    done();
+                });
+            });
+
+            client.part(['#test']);
+        });
+
+        it('should part a channel with a message', function (done) {
+            var client = coffea(false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('test');
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('PART #test :This channel is boring!');
+                    done();
+                });
+            });
+
+            client.part(['#test'], 'This channel is boring!');
+        });
+    });
+
     describe('on PART', function() {
         it('should emit "part" [single-network]', function (done) {
             var client = coffea();
