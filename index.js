@@ -57,6 +57,24 @@ function Client(info, throttling) {
                 if (item.fn) { item.fn(); }
             }
         }, 750);
+    } else {
+        var _this = this;
+        setInterval(function() {
+            var item = _this.sendq.shift();
+
+            if (item === undefined) { return; }
+
+            if (item.network && _this.streams.hasOwnProperty(item.network)) {
+                _this.streams[item.network].write(item.message + '\r\n', item.fn);
+            } else {
+                for (var id in _this.streams) {
+                    if (_this.streams.hasOwnProperty(id)) {
+                        _this.streams[id].write(item.message + '\r\n');
+                    }
+                }
+                if (item.fn) { item.fn(); }
+            }
+        }, 1);
     }
 
     if (info) {
