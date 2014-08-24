@@ -92,7 +92,7 @@ Client.prototype._loadPlugins = function() {
     });
 };
 
-    /**
+/**
  * Internal function that does a sanity check
  * on the network information, adding defaults
  * 
