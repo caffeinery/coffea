@@ -211,11 +211,10 @@ Client.prototype._connect = function (stream_id, info) {
  * @api public
  */
 Client.prototype.add = function (info) {
-    var stream, stream_id, streams;
+    var stream, stream_id, streams = [];
     if (info instanceof Array) {
         // We've been passed multiple server information
         var _this = this;
-        streams = [];
         info.forEach(function(network) {
             network = _this._check(network);
             stream = network.ssl ? tls.connect({host: network.host, port: network.port}) : net.connect({host: network.host, port: network.port});
