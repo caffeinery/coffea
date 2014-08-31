@@ -147,6 +147,9 @@ Client.prototype._useStream = function (stream, network) {
     parser.on('message', function (msg) {
         _this.onmessage(msg, stream.coffea_id);
     });
+    parser.on('end', function() {
+        utils.emit(this, stream.coffea_id, 'disconnect', {});
+    });
     stream.pipe(parser);
 
     // add stream to client
