@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('kick.js', function() {
     describe('client.kick()', function () {
         it('should kick without a kick message', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -20,7 +20,7 @@ describe('kick.js', function() {
         });
 
         it('should kick multiple people without a kick message', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -36,7 +36,7 @@ describe('kick.js', function() {
         });
 
         it('should kick with a kick message', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -52,7 +52,7 @@ describe('kick.js', function() {
         });
 
         it('should kick multiple people with a kick message', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -70,7 +70,7 @@ describe('kick.js', function() {
 
     describe('on KICK', function() {
         it('should emit "kick" [single-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -87,7 +87,7 @@ describe('kick.js', function() {
         });
 
         it('should emit "kick" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);
@@ -115,7 +115,7 @@ describe('kick.js', function() {
         });
 
         it('should emit "{network}:kick" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);

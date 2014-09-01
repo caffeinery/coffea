@@ -5,7 +5,7 @@ var should = require('should');
 describe('cap-account-notify.js', function() {
     describe('on ACCOUNT', function() {
         it('should emit "account-login"', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -21,7 +21,7 @@ describe('cap-account-notify.js', function() {
         });
 
         it('should shouldnt define account if logged out', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);

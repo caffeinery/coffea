@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('names.js', function() {
 	describe('on NAMES', function() {
 		it('should emit "names" [single-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -24,7 +24,7 @@ describe('names.js', function() {
 		});
 
 		it('should emit "names" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);
@@ -57,7 +57,7 @@ describe('names.js', function() {
 		});
 
 		it('should emit "{network}:names" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);

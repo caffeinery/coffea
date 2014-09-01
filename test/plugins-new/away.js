@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('away.js', function() {
     describe('on RPL_AWAY', function() {
         it('should emit "away" [single-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);
@@ -20,7 +20,7 @@ describe('away.js', function() {
         });
 
         it('should emit "away" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);
@@ -44,7 +44,7 @@ describe('away.js', function() {
         });
 
         it('should emit "{network}:away" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);

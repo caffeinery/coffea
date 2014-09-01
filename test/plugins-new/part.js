@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('part.js', function() {
     describe('client.part()', function () {
         it('should part a channel without a message', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -20,7 +20,7 @@ describe('part.js', function() {
         });
 
         it('should part a channel with a message', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -38,7 +38,7 @@ describe('part.js', function() {
 
     describe('on PART', function() {
         it('should emit "part" [single-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -55,7 +55,7 @@ describe('part.js', function() {
         });
 
         it('should emit "part" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);
@@ -82,7 +82,7 @@ describe('part.js', function() {
         });
 
         it('should emit "{network}:part" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);

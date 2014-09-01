@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('join.js', function() {
     describe('client.join()', function () {
         it('should join channels without a password', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -20,7 +20,7 @@ describe('join.js', function() {
         });
 
         it('should join channels with a password', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -38,7 +38,7 @@ describe('join.js', function() {
 
     describe('on JOIN', function() {
         it('should emit "join" [single-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -53,7 +53,7 @@ describe('join.js', function() {
         });
 
         it('should emit "join" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);
@@ -81,7 +81,7 @@ describe('join.js', function() {
         });
 
         it('should emit "{network}:join" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);

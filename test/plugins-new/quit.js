@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('quit.js', function() {
   describe('client.quit()', function () {
       it('should send quit without reason', function (done) {
-          var client = coffea(false);
+          var client = coffea(null, false);
           var st1 = new Stream();
           var st1_id = client.add(st1);
           client.nick('test');
@@ -20,7 +20,7 @@ describe('quit.js', function() {
       });
 
       it('should send quit with reason', function (done) {
-          var client = coffea(false);
+          var client = coffea(null, false);
           var st1 = new Stream();
           var st1_id = client.add(st1);
           client.nick('test');
@@ -39,7 +39,7 @@ describe('quit.js', function() {
 	describe('on QUIT', function() {
 		it('should emit "quit" [single-network]', function (done) {
 			var st1 = new Stream();
-			var client = coffea(st1);
+			var client = coffea(st1, false);
 
 			client.once("quit", function (event) {
 				event.user.getNick().should.equal('foo');
@@ -51,7 +51,7 @@ describe('quit.js', function() {
 		});
 
 		it('should emit "quit" [multi-network]', function (done) {
-			var client = coffea();
+			var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);
@@ -75,7 +75,7 @@ describe('quit.js', function() {
 		});
 
 		it('should emit "{network}:quit" [multi-network]', function (done) {
-			var client = coffea();
+			var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);

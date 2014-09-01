@@ -10,6 +10,7 @@ var replies = require('irc-replies');
 var StreamReadable = require('stream').Readable;
 var StreamWritable = require('stream').Writable;
 var utils = require('./lib/utils');
+var RateLimiter = require('limiter').RateLimiter;
 
 /**
  * Client constructor
@@ -22,13 +23,12 @@ var utils = require('./lib/utils');
  * @param {object} info
  */
 function Client(info, throttling) {
-    if (!(this instanceof Client)) { return new Client(info); }
+    if (!(this instanceof Client)) { return new Client(info, throttling); }
 
     this.streams = {};
     this.me = null;
     this.capabilities = [];
-    this.sendq = []; // Send Queue
-
+    
     this._loadPlugins();
 
     if (typeof info === 'boolean') {
@@ -36,15 +36,10 @@ function Client(info, throttling) {
         info = null;
     }
 
-    // throttling is on by default.
-    throttling = throttling === undefined ? true : false;
-    
-    var _this = this;
-    setInterval(function () {
-        _this._sendq(_this.sendq.shift());
-    }, throttling === true ? 750 : 1);
+    if (throttling !== undefined) this.throttling = throttling;
 
     if (info) {
+        // compatibility
         this.add(info);
     }
 }
@@ -54,26 +49,6 @@ module.exports = Client;
 
 // inherit from Emitter.prototype to make Client and EventEmitter
 utils.inherit(Client, Emitter);
-
-/**
- * Internal function that processes the send queue.
- *
- * @api private
- */
-Client.prototype._sendq = function (item) {
-    if (item === undefined) { return; }
-
-    if (item.network && this.streams.hasOwnProperty(item.network)) {
-        this.streams[item.network].write(item.message + '\r\n', item.fn);
-    } else {
-        for (var id in this.streams) {
-            if (this.streams.hasOwnProperty(id)) {
-                this.streams[id].write(item.message + '\r\n');
-            }
-        }
-        if (item.fn) { item.fn(); }
-    }
-};
 
 /**
  * Internal function that loads all plugins
@@ -120,6 +95,8 @@ Client.prototype._check = function(network) {
     ret.realname = network.realname === undefined ? ret.nick : network.realname;
     ret.pass = network.pass;
 
+    ret.throttling = network.throttling;
+
     ret.sasl = network.sasl === undefined? null : network.sasl;
     ret.nickserv = network.nickserv === undefined? null : network.nickserv;
 
@@ -135,11 +112,15 @@ Client.prototype._check = function(network) {
  * @return {string} stream_id
  * @api private
  */
-Client.prototype._useStream = function (stream, network) {
+Client.prototype._useStream = function (stream, network, throttling) {
     if (network) { stream.coffea_id = network; } // user-defined stream id
     else { stream.coffea_id = Object.keys(this.streams).length.toString(); } // assign unique id to stream
 
     stream.setEncoding('utf8'); // set stream encoding
+    throttling = ((throttling === undefined) ? this.throttling : throttling);
+
+    // rate limiting/throttling
+    stream.limiter = new RateLimiter(1, (typeof throttling === 'number') ? throttling : 250, (throttling === false));
 
     // set up parser
     var parser = new Parser();
@@ -221,7 +202,7 @@ Client.prototype.add = function (info) {
         info.forEach(function(network) {
             network = _this._check(network);
             stream = network.ssl ? tls.connect({host: network.host, port: network.port}) : net.connect({host: network.host, port: network.port});
-            stream_id = _this._useStream(stream, network.name);
+            stream_id = _this._useStream(stream, network.name, network.throttling);
             _this._connect(stream_id, network);
             streams.push(stream_id);
         });
@@ -229,11 +210,11 @@ Client.prototype.add = function (info) {
         // We've been passed single server information
         info = this._check(info);
         stream = info.ssl ? tls.connect({host: info.host, port: info.port}) : net.connect({host: info.host, port: info.port});
-        stream_id = this._useStream(stream, info.name);
+        stream_id = this._useStream(stream, info.name, info.throttling);
         this._connect(stream_id, info);
     } else {
         // Assume we've been passed the legacy stream.
-        stream_id = this._useStream(info);
+        stream_id = this._useStream(info, null, info.throttling);
     }
 
     if(streams.length === 0) {
@@ -263,8 +244,24 @@ Client.prototype.write = function (str, network, fn) {
         network = network.coffea_id;
     }
 
-    var queue_item = {'network': network, 'message': str, 'fn': fn};
-    this.sendq.push(queue_item);
+    var _this = this;
+    if (network && this.streams.hasOwnProperty(network)) {
+        // send to specified network
+        // this.streams[network].limiter.removeTokens(1, function() {
+            _this.streams[network].write(str + '\r\n', fn);
+        // });
+    } else {
+        // send to all networks
+        for (var id in this.streams) {
+            if (this.streams.hasOwnProperty(id)) {
+                this.write(str, id);
+            }
+        }
+        if (fn) {
+            fn();
+        }
+    } 
+    
 };
 
 /**

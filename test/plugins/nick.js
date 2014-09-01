@@ -10,16 +10,17 @@ describe('nick.js', function () {
         it('should emit "nick"', function (done) {
             var stream = new Stream(),
                 client = irc(stream, false);
-            client.nick('foo');
 
-            //client.once('nick', function () {
-                client.on('nick', function (event) {
+            client.once('nick', function () {
+                client.once('nick', function (event) {
                     event.user.getNick().should.equal('bar');
                     event.oldNick.should.equal('foo');
                     client.me.getNick().should.equal('bar');
                     done();
                 });
-            //});
+            });
+            
+            client.nick('foo');
 
             stream.write(':foo!bar@baz.com NICK bar\r\n');
         });

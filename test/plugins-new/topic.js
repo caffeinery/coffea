@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('topic.js', function() {
     describe('client.topic()', function () {
         it('should change topic', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -20,7 +20,7 @@ describe('topic.js', function() {
         });
 
         it('should change topic to nothing', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -38,7 +38,7 @@ describe('topic.js', function() {
 
 	describe('on TOPIC', function() {
         it('should accept "topic" on entering channel', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -58,7 +58,7 @@ describe('topic.js', function() {
         });
 
 		it('should emit "topic" [single-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -77,7 +77,7 @@ describe('topic.js', function() {
 		});
 
 		it('should emit "topic" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);
@@ -109,7 +109,7 @@ describe('topic.js', function() {
 		});
 
 		it('should emit "{network}:topic" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);

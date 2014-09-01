@@ -5,7 +5,7 @@ var should = require('should');
 describe('cap.js', function() {
     describe('on JOIN', function() {
         it('should populate account and realname data', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -23,7 +23,7 @@ describe('cap.js', function() {
         });
 
         it('should not define account when not logged in', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);

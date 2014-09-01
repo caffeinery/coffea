@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('channel.js', function() {
     describe('getChannel()', function() {
         it('should return Channel object', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -16,7 +16,7 @@ describe('channel.js', function() {
     });
     describe('isChannel()', function() {
         it('should return true if channel', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -26,7 +26,7 @@ describe('channel.js', function() {
             done();
         });
         it('should return false', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -37,7 +37,7 @@ describe('channel.js', function() {
     });
     describe('getChannelList()', function () {
         it('should return list of all channels we\'re in', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);

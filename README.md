@@ -21,7 +21,8 @@ var client = require('coffea')({
     // nickserv: {
     //     username: 'test',
     //     password: 'l33tp455w0rD'
-    // }
+    // },
+    // throttling: 250 // default value: 250ms, 1 message every 250ms, disable by setting to false
 });
 // or simpler: var client = require('coffea')('chat.freenode.net');
 
@@ -50,7 +51,8 @@ var client = require('coffea')([
         // nickserv: {
         //     username: 'test',
         //     password: 'l33tp455w0rD'
-        // }
+        // },
+        // throttling: 250 // default value: 250ms, 1 message every 250ms, disable by setting to false
     },
     {
         host: 'irc.oftc.net',
@@ -63,7 +65,8 @@ var client = require('coffea')([
         // nickserv: {
         //     username: 'test',
         //     password: 'l33tp455w0rD'
-        // }
+        // },
+        // throttling: 250 // default value: 250ms, 1 message every 250ms, disable by setting to false
     }
 ]);
 // or simpler: var client = require('coffea')(['chat.freenode.net', 'irc.oftc.net']);
@@ -94,7 +97,8 @@ var client = require('coffea')({
     // nickserv: {
     //     username: 'test',
     //     password: 'l33tp455w0rD'
-    // }
+    // },
+    // throttling: 250 // default value: 250ms, 1 message every 250ms, disable by setting to false
 });
 
 client.on('motd', function (motd) {

@@ -27,7 +27,7 @@ describe('channel.js', function () {
         });
         it('should return false', function (done) {
             var stream = new Stream(),
-                client = irc(stream);
+                client = irc(stream, false);
 
             client.isChannel(undefined).should.equal(false);
             done();

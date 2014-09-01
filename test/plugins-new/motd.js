@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('motd.js', function() {
 	describe('on NOTICE', function() {
 		it('should emit "motd" [single-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -22,7 +22,7 @@ describe('motd.js', function() {
 		});
 
 		it('should emit "motd" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);
@@ -56,7 +56,7 @@ describe('motd.js', function() {
 		});
 
 		it('should emit "{network}:motd" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);

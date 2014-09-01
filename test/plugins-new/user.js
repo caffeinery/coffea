@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('user.js', function() {
     describe('getUser()', function() {
         it('should return Channel object', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -16,7 +16,7 @@ describe('user.js', function() {
     });
     describe('isUser()', function() {
         it('should return true if user', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -26,7 +26,7 @@ describe('user.js', function() {
             done();
         });
         it('should return false', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -37,7 +37,7 @@ describe('user.js', function() {
     });
     describe('on DATA', function () {
         it('should set hostname', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('nick', st1_id);
@@ -49,7 +49,7 @@ describe('user.js', function() {
             });
         });
         it('should parse RPL_WHOREPLY', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('nick', st1_id);

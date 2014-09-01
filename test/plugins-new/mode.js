@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('mode.js', function () {
     describe('client.mode()', function () {
         it('should send a mode with parameters', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -20,7 +20,7 @@ describe('mode.js', function () {
         });
 
         it('should send a mode without parameters', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -38,7 +38,7 @@ describe('mode.js', function () {
 
     describe('on MODE', function () {
         it('should parse usermode', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -53,7 +53,7 @@ describe('mode.js', function () {
             st1.write(':foo!bar@baz.com MODE foo +x\r\n');
         });
         it('should parse usermode aswell', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -74,7 +74,7 @@ describe('mode.js', function () {
             st1.write(':irc.local MODE foo :+Zi\r\n');
         });
         it('should parse channelmode [single-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -101,7 +101,7 @@ describe('mode.js', function () {
         });
 
         it('should parse channelmode [multi-network 1]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);
@@ -142,7 +142,7 @@ describe('mode.js', function () {
         });
 
         it('should parse channelmode [multi-network 2]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);

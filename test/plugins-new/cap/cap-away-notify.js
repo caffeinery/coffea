@@ -5,7 +5,7 @@ var should = require('should');
 describe('cap-away-notify.js', function() {
     describe('on AWAY', function() {
         it('should emit "away-notify"', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);

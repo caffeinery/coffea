@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('invite.js', function() {
   describe('client.invite()', function () {
       it('should send an invite', function (done) {
-          var client = coffea(false);
+          var client = coffea(null, false);
           var st1 = new Stream();
           var st1_id = client.add(st1);
           client.nick('test');
@@ -22,7 +22,7 @@ describe('invite.js', function() {
 
 	describe('on INVITE', function() {
 		it('should emit "invite" [single-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('you', st1_id);
@@ -38,7 +38,7 @@ describe('invite.js', function() {
 		});
 
 		it('should emit "invite" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);
@@ -64,7 +64,7 @@ describe('invite.js', function() {
 		});
 
 		it('should emit "{network}:invite" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);

@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('cap.js', function() {
     describe('on LS', function() {
         it('should emit "cap_list"', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -20,7 +20,7 @@ describe('cap.js', function() {
 
     describe('on NAK', function() {
         it('should emit "cap_nak"', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -36,7 +36,7 @@ describe('cap.js', function() {
 
     describe('on ACK', function() {
         it('should emit "cap_ack"', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -50,7 +50,7 @@ describe('cap.js', function() {
         });
 
         it('should add to capability list', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);

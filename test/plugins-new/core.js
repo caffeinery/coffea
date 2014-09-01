@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('core.js', function() {
     describe('client.pass()', function () {
         it('should send the server password', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -22,7 +22,7 @@ describe('core.js', function() {
 
     describe('client.user()', function () {
         it('should send the right parameters', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -40,7 +40,7 @@ describe('core.js', function() {
 
     describe('client.oper()', function () {
         it('should send the right parameters', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');

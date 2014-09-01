@@ -33,7 +33,7 @@ describe('quit.js', function () {
                 done();
             });
 
-            client.quit('POOF');
+            // client.quit('POOF');
             stream.write(':foo!bar@baz.com QUIT :POOF\r\n');
         });
     });

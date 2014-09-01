@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('welcome.js', function() {
 	describe('on TOPIC', function() {
         it('should set client.me to the users object', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -18,7 +18,7 @@ describe('welcome.js', function() {
         });
 
 		it('should emit "welcome" [single-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -33,7 +33,7 @@ describe('welcome.js', function() {
 		});
 
 		it('should emit "welcome" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);
@@ -57,7 +57,7 @@ describe('welcome.js', function() {
 		});
 
 		it('should emit "{network}:welcome" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);

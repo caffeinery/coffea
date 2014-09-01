@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('Formatting', function() {
     describe('Colours:', function () {
         it('01 : Black', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -20,7 +20,7 @@ describe('Formatting', function() {
         });
 
         it('02 : Navy', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -36,7 +36,7 @@ describe('Formatting', function() {
         });
 
         it('03 : Green', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -52,7 +52,7 @@ describe('Formatting', function() {
         });
 
         it('04 : Red', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -68,7 +68,7 @@ describe('Formatting', function() {
         });
 
         it('05 : Brown', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -84,7 +84,7 @@ describe('Formatting', function() {
         });
 
         it('06 : Purple', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -100,7 +100,7 @@ describe('Formatting', function() {
         });
 
         it('07 : Olive', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -116,7 +116,7 @@ describe('Formatting', function() {
         });
 
         it('08 : Yellow', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -132,7 +132,7 @@ describe('Formatting', function() {
         });
 
         it('09 : Lime', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -148,7 +148,7 @@ describe('Formatting', function() {
         });
 
         it('10 : teal', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -164,7 +164,7 @@ describe('Formatting', function() {
         });
 
         it('11 : Aqua', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -180,7 +180,7 @@ describe('Formatting', function() {
         });
 
         it('12 : Blue', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -196,7 +196,7 @@ describe('Formatting', function() {
         });
 
         it('13 : Pink', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -212,7 +212,7 @@ describe('Formatting', function() {
         });
 
         it('14 : Dark Gray', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -228,7 +228,7 @@ describe('Formatting', function() {
         });
 
         it('15 : Light Gray', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -244,7 +244,7 @@ describe('Formatting', function() {
         });
 
         it('16 : White', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -261,7 +261,7 @@ describe('Formatting', function() {
     });
     describe('Formatters:', function () {
         it('Bold', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -277,7 +277,7 @@ describe('Formatting', function() {
         });
 
         it('Normal', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -293,7 +293,7 @@ describe('Formatting', function() {
         });
 
         it('Italics', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -309,7 +309,7 @@ describe('Formatting', function() {
         });
 
         it('Underline', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -325,7 +325,7 @@ describe('Formatting', function() {
         });
 
         it('Reset Formatting/Colour', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');

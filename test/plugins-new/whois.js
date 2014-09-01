@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('whois.js', function () {
 	describe('client.whois (target, network, fn)', function () {
 		it('should parse basic infomation', function (done) {
-			var client = coffea();
+			var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -24,7 +24,7 @@ describe('whois.js', function () {
 		});
 
 		it('should parse channels and modes', function (done) {
-			var client = coffea();
+			var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -45,7 +45,7 @@ describe('whois.js', function () {
 		});
 
 		it('should parse server information', function (done) {
-			var client = coffea();
+			var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -63,7 +63,7 @@ describe('whois.js', function () {
 		});
 
 		it('should parse oper', function (done) {
-			var client = coffea();
+			var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -80,7 +80,7 @@ describe('whois.js', function () {
 		});
 
 		it('should parse account', function (done) {
-			var client = coffea();
+			var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -97,7 +97,7 @@ describe('whois.js', function () {
 		});
 
 		it('should parse registered', function (done) {
-			var client = coffea();
+			var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -114,7 +114,7 @@ describe('whois.js', function () {
 		});
 
 		it('should parse secure connection', function (done) {
-			var client = coffea();
+			var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -131,7 +131,7 @@ describe('whois.js', function () {
 		});
 
 		it('should parse idle time', function (done) {
-			var client = coffea();
+			var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -150,7 +150,7 @@ describe('whois.js', function () {
 		});
 
 		it('should error on No such nick/channel', function (done) {
-			var client = coffea();
+			var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -167,7 +167,7 @@ describe('whois.js', function () {
 		});
 
 		it('should error on No such server', function (done) {
-			var client = coffea();
+			var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -181,7 +181,7 @@ describe('whois.js', function () {
 		});
 
 		it('should error on Not enough parameters', function (done) {
-			var client = coffea();
+			var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);

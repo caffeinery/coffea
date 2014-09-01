@@ -8,7 +8,7 @@ var Stream = require('stream').PassThrough;
 describe('server.js', function () {
     describe('getServerInfo()', function () {
         it('should parse RPL_YOURHOST', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -22,7 +22,7 @@ describe('server.js', function () {
             });
         });
         it('should parse RPL_CREATED', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
@@ -36,7 +36,7 @@ describe('server.js', function () {
             });
         });
         it('should parse RPL_ISUPPORT', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);

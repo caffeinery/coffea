@@ -4,7 +4,7 @@ var Stream = require('stream').PassThrough;
 describe('privmsg.js', function() {
     describe('client.send()', function () {
         it('should send a message to a channel', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -20,7 +20,7 @@ describe('privmsg.js', function() {
         });
 
         it('should send a message to a person', function (done) {
-            var client = coffea(false);
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('test');
@@ -38,7 +38,7 @@ describe('privmsg.js', function() {
     
 	describe('on NOTICE', function() {
 		it('should emit "message" [single-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
             client.nick('baz', st1_id);
@@ -55,7 +55,7 @@ describe('privmsg.js', function() {
 		});
 
 		it('should emit "message" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);
@@ -84,7 +84,7 @@ describe('privmsg.js', function() {
 		});
 
 		it('should emit "{network}:message" [multi-network]', function (done) {
-            var client = coffea();
+            var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);

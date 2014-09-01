@@ -5,7 +5,7 @@ describe('ping.js', function() {
 	describe('on NOTICE', function() {
 		it('should emit "ping" [single-network]', function (done) {
 			var st1 = new Stream();
-			var client = coffea(st1);
+			var client = coffea(st1, false);
 
 			client.on("ping", function (event) {
 				done();
@@ -15,7 +15,7 @@ describe('ping.js', function() {
 		});
 
 		it('should emit "ping" [multi-network]', function (done) {
-			var client = coffea();
+			var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);
@@ -32,7 +32,7 @@ describe('ping.js', function() {
 		});
 
 		it('should emit "{network}:ping" [multi-network]', function (done) {
-			var client = coffea();
+			var client = coffea(null, false);
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);
