@@ -7,7 +7,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -16,6 +15,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.black);
         });
 
@@ -23,7 +23,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -32,6 +31,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.navy);
         });
 
@@ -39,7 +39,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -48,6 +47,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.green);
         });
 
@@ -55,7 +55,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -64,6 +63,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.red);
         });
 
@@ -71,7 +71,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -80,6 +79,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.brown);
         });
 
@@ -87,7 +87,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -96,6 +95,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.purple);
         });
 
@@ -103,7 +103,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -112,6 +111,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.olive);
         });
 
@@ -119,7 +119,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -128,6 +127,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.yellow);
         });
 
@@ -135,7 +135,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -144,6 +143,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.lime);
         });
 
@@ -151,7 +151,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -160,6 +159,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.teal);
         });
 
@@ -167,7 +167,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -176,6 +175,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.aqua);
         });
 
@@ -183,7 +183,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -192,6 +191,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.blue);
         });
 
@@ -199,7 +199,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -208,6 +207,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.pink);
         });
 
@@ -215,7 +215,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -224,6 +223,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.dgray);
         });
 
@@ -231,7 +231,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -240,6 +239,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.lgray);
         });
 
@@ -247,7 +247,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -256,6 +255,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.white);
         });
     });
@@ -264,7 +264,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -273,6 +272,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.bold);
         });
 
@@ -280,7 +280,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -289,6 +288,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.normal);
         });
 
@@ -296,7 +296,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -305,6 +304,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.italic);
         });
 
@@ -312,7 +312,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -321,6 +320,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.underline);
         });
 
@@ -328,7 +328,6 @@ describe('Formatting', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -337,6 +336,7 @@ describe('Formatting', function() {
                 });
             });
 
+            client.nick('test');
             client.send('#test', client.format.reset);
         });
     });

@@ -37,7 +37,7 @@
     "should": ">=4.0.4 <4.1.0-0"
   },
   "scripts": {
-    "test": "mocha --require should --bail --reporter spec test/*"
+    "test": "mocha --require should --reporter spec test/*"
   },
   "license": "BSD"
 }

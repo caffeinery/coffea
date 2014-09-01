@@ -7,7 +7,6 @@ describe('part.js', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -16,6 +15,7 @@ describe('part.js', function() {
                 });
             });
 
+            client.nick('test');
             client.part(['#test']);
         });
 
@@ -23,7 +23,6 @@ describe('part.js', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -32,6 +31,7 @@ describe('part.js', function() {
                 });
             });
 
+            client.nick('test');
             client.part(['#test'], 'This channel is boring!');
         });
     });

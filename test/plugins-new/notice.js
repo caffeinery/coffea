@@ -7,7 +7,6 @@ describe('notice.js', function() {
           var client = coffea(null, false);
           var st1 = new Stream();
           var st1_id = client.add(st1);
-          client.nick('test');
 
           client.once('data', function (data) {
               client.once('data', function (data) {
@@ -16,6 +15,7 @@ describe('notice.js', function() {
               });
           });
 
+          client.nick('test');
           client.notice('mike', 'Hi');
       });
 
@@ -23,7 +23,6 @@ describe('notice.js', function() {
           var client = coffea(null, false);
           var st1 = new Stream();
           var st1_id = client.add(st1);
-          client.nick('test');
 
           client.once('data', function (data) {
               client.once('data', function (data) {
@@ -32,6 +31,7 @@ describe('notice.js', function() {
               });
           });
 
+          client.nick('test');
           client.notice('#test', 'Hi');
       });
 
@@ -39,7 +39,6 @@ describe('notice.js', function() {
           var client = coffea(null, false);
           var st1 = new Stream();
           var st1_id = client.add(st1);
-          client.nick('test');
 
           client.once('data', function (data) {
               client.once('data', function (data) {
@@ -48,6 +47,7 @@ describe('notice.js', function() {
               });
           });
 
+          client.nick('test');
           client.notice(['#test', 'mike'], 'Hi');
       });
 
@@ -55,7 +55,6 @@ describe('notice.js', function() {
           var client = coffea(null, false);
           var st1 = new Stream();
           var st1_id = client.add(st1);
-          client.nick('test');
 
           client.once('data', function (data) {
               client.once('data', function (data) {
@@ -64,6 +63,7 @@ describe('notice.js', function() {
               });
           });
 
+          client.nick('test');
           client.notice('$$*.freenode.net', '[Network Notice] Hi everyone!');
       });
   });

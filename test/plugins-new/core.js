@@ -7,7 +7,6 @@ describe('core.js', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -16,6 +15,7 @@ describe('core.js', function() {
                 });
             });
 
+            client.nick('test');
             client.pass('test');
         });
     });
@@ -25,7 +25,6 @@ describe('core.js', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -34,6 +33,7 @@ describe('core.js', function() {
                 });
             });
 
+            client.nick('test');
             client.user('test2', 'Testing Client');
         });
     });
@@ -43,7 +43,6 @@ describe('core.js', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -52,6 +51,7 @@ describe('core.js', function() {
                 });
             });
 
+            client.nick('test');
             client.oper('test', 'password');
         });
     });

@@ -7,7 +7,6 @@ describe('join.js', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -16,6 +15,7 @@ describe('join.js', function() {
                 });
             });
 
+            client.nick('test');
             client.join('#test');
         });
 
@@ -23,7 +23,6 @@ describe('join.js', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -32,6 +31,7 @@ describe('join.js', function() {
                 });
             });
 
+            client.nick('test');
             client.join(['#test'], ['test123']);
         });
     });
@@ -41,7 +41,6 @@ describe('join.js', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('foo', st1_id);
 
             client.once("join", function (event) {
                 event.user.getNick().should.equal('foo');
@@ -49,6 +48,7 @@ describe('join.js', function() {
                 done();
             });
 
+            client.nick('foo', st1_id);
             st1.write(':foo!bar@baz.com JOIN :#baz\r\n');
         });
 

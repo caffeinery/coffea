@@ -7,7 +7,6 @@ describe('kick.js', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -16,6 +15,7 @@ describe('kick.js', function() {
                 });
             });
 
+            client.nick('test');
             client.kick(['#test'], 'mike');
         });
 
@@ -23,7 +23,6 @@ describe('kick.js', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -32,6 +31,7 @@ describe('kick.js', function() {
                 });
             });
 
+            client.nick('test');
             client.kick(['#test'], ['mike', 'dan']);
         });
 
@@ -39,7 +39,6 @@ describe('kick.js', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -48,6 +47,7 @@ describe('kick.js', function() {
                 });
             });
 
+            client.nick('test');
             client.kick(['#test'], 'mike', 'you should know better');
         });
 
@@ -55,7 +55,6 @@ describe('kick.js', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('test');
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
@@ -64,6 +63,7 @@ describe('kick.js', function() {
                 });
             });
 
+            client.nick('test');
             client.kick(['#test'], ['mike', 'dan'], 'you should know better');
         });
     });
@@ -73,7 +73,6 @@ describe('kick.js', function() {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('foo', st1_id);
 
             client.once("kick", function (event) {
                 event.channel.getName().should.equal('#foo');
@@ -83,6 +82,7 @@ describe('kick.js', function() {
                 done();
             });
 
+            client.nick('foo', st1_id);
             st1.write(':foo!bar@baz.com KICK #foo bar :Your behaviour is not conductive to the desired environment.\r\n');
         });
 
