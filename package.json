@@ -25,15 +25,15 @@
     "url": "https://github.com/caffeinery/coffea/issues"
   },
   "dependencies": {
-    "eventemitter3": "*",
-    "irc-replies": "*",
-    "linewise": "*",
-    "node-emoji": "*",
-    "underscore": "*"
+    "eventemitter3": ">=0.1.5 <0.2.0-0",
+    "irc-replies": ">=2.0.0 <2.1.0-0",
+    "linewise": "0.0.3",
+    "node-emoji": ">=0.1.0 <0.2.0-0",
+    "underscore": ">=1.7.0 <1.8.0-0"
   },
   "devDependencies": {
-    "mocha": "*",
-    "should": "*"
+    "mocha": ">=1.21.4 <1.22.0-0",
+    "should": ">=4.0.4 <4.1.0-0"
   },
   "scripts": {
     "test": "mocha --require should --bail --reporter spec test/*"
