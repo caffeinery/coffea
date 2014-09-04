@@ -26,6 +26,7 @@ function Client(info, throttling) {
     if (!(this instanceof Client)) { return new Client(info, throttling); }
 
     this.streams = {};
+    this.stinfo = {};
     this.me = null;
     this.capabilities = [];
     
@@ -135,6 +136,7 @@ Client.prototype._useStream = function (stream, network, throttling) {
 
     // add stream to client
     this.streams[stream.coffea_id] = stream;
+    this.stinfo[stream.coffea_id] = network;
 
     // return stream id
     return stream.coffea_id;
@@ -144,6 +146,18 @@ Client.prototype._useStream = function (stream, network, throttling) {
 Client.prototype.useStream = function (stream, network) {
     this._useStream(stream, network);
 };
+
+/**
+ * Reconnects the socket that is assigned to the current stream_id.
+ * 
+ * @params {string} stream_id
+ */
+Client.prototype.reconnect = function (stream_id) {
+    var network = this.stinfo[stream.coffea_id];
+    var stream = network.ssl ? tls.connect({host: network.host, port: network.port}) : net.connect({host: network.host, port: network.port});
+    this._useStream(stream, stream_id, network.throttling);
+    this._connect(stream_id, network);
+}
 
 /**
  * Internal function to handle incoming messages from the streams
