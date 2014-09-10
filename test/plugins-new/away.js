@@ -75,4 +75,23 @@ describe('away.js', function() {
             st2.write(':irc.local 301 me you :not here\r\n');
         });
     });
+
+    describe('client.away()', function () {
+        it('should send a valid AWAY command', function (done) {
+            var client = coffea(null, false);
+            var st1 = new Stream();
+            var st2 = new Stream();
+            var st1_id = client.add(st1);
+            client.nick('me', st1_id);
+
+            client.once('data', function () {
+                client.once('data', function (data) {
+                    data.string.should.equal('AWAY :not here')
+                    done();
+                });
+            });
+
+            client.away('not here', st1_id);
+        })
+    });
 });
