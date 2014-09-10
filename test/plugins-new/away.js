@@ -82,7 +82,6 @@ describe('away.js', function() {
             var st1 = new Stream();
             var st2 = new Stream();
             var st1_id = client.add(st1);
-            client.nick('me', st1_id);
 
             client.once('data', function () {
                 client.once('data', function (data) {
@@ -90,7 +89,8 @@ describe('away.js', function() {
                     done();
                 });
             });
-
+            
+            client.nick('me', st1_id);
             client.away('not here', st1_id);
         })
     });
