@@ -19,8 +19,12 @@ var RateLimiter = require('limiter').RateLimiter;
  * initializes stream buffer and other variables.
  * Then loads plugins and parses the network info passed.
  * Check Client.add for more information about the network info.
- * 
- * @param {object} info
+ *
+ * @class
+ * @param {object} info network configuration object
+ * @param {bool} throttling enable/disable throttling
+ * @property {string} version coffea version
+ * @property {object} me client irc user
  */
 function Client(info, throttling) {
     if (!(this instanceof Client)) { return new Client(info, throttling); }
