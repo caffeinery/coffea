@@ -25,6 +25,11 @@ var RateLimiter = require('limiter').RateLimiter;
 function Client(info, throttling) {
     if (!(this instanceof Client)) { return new Client(info, throttling); }
 
+    try {
+        var pkg = require('./package.json');
+        this.version = pkg.version;
+    } catch (err) { }
+
     this.streams = {};
     this.stinfo = {};
     this.me = null;
