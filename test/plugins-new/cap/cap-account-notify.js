@@ -1,3 +1,8 @@
+/*jslint node: true*/
+/*jslint expr: true*/
+/*global describe, it*/
+"use strict";
+
 var coffea = require('../../..');
 var Stream = require('stream').PassThrough;
 var should = require('should');

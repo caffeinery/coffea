@@ -1,4 +1,5 @@
 /*jslint node: true*/
+/*jslint expr: true*/
 /*global describe, it*/
 "use strict";
 
