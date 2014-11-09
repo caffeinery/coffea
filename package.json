@@ -29,7 +29,6 @@
     "irc-replies": ">=2.0.0 <2.1.0-0",
     "limiter": ">=1.0.5 <1.1.0-0",
     "linewise": "0.0.3",
-    "node-emoji": ">=0.1.0 <0.2.0-0",
     "underscore": ">=1.7.0 <1.8.0-0"
   },
   "devDependencies": {
