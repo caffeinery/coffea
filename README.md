@@ -93,6 +93,7 @@ client.on('message', function (event) {
 var client = require('coffea')({
     host: 'chat.freenode.net',
     ssl: true,
+    // ssl_allow_invalid: true, // allow invalid/self-signed/expired SSL certs - default value: false
     // port: 6697, // will default to 6697 on ssl
     // nick: 'test', // default value: 'coffea' with random number
     // username: 'test', // default value: username = nick
