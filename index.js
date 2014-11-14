@@ -101,6 +101,7 @@ Client.prototype._check = function(network) {
     var port = network.ssl === true ? 6697 : 6667;
     ret.port = network.port === undefined ? port : network.port;
     ret.ssl = network.ssl === undefined ? false : network.ssl;
+    ret.ssl_allow_invalid = network.ssl_allow_invalid === undefined ? false : network.ssl_allow_invalid;
     ret.username = network.username === undefined ? ret.nick : network.username;
     ret.realname = network.realname === undefined ? ret.nick : network.realname;
     ret.pass = network.pass;
@@ -166,7 +167,7 @@ Client.prototype.reconnect = function (stream_id) {
     var stream = network.ssl ? tls.connect({host: network.host, port: network.port}) : net.connect({host: network.host, port: network.port});
     this._useStream(stream, stream_id, network.throttling);
     this._connect(stream_id, network);
-}
+};
 
 /**
  * Internal function to handle incoming messages from the streams
@@ -219,22 +220,47 @@ Client.prototype._connect = function (stream_id, info) {
  */
 Client.prototype.add = function (info) {
     var stream, stream_id, streams = [];
+    var _this = this;
     if (info instanceof Array) {
         // We've been passed multiple server information
-        var _this = this;
         info.forEach(function(network) {
             network = _this._check(network);
-            stream = network.ssl ? tls.connect({host: network.host, port: network.port}) : net.connect({host: network.host, port: network.port});
-            stream_id = _this._useStream(stream, network.name, network.throttling);
-            _this._connect(stream_id, network);
-            streams.push(stream_id);
+            if (network.ssl) {
+                stream = tls.connect({
+                    host: network.host,
+                    port: network.port,
+                    rejectUnauthorized: !network.ssl_allow_invalid
+                }, function() {
+                    stream_id = _this._useStream(stream, network.name, network.throttling);
+                    utils.emit(_this, stream_id, 'ssl-error', new utils.SSLError(stream.authorizationError));
+                    _this._connect(stream_id, network);
+                    streams.push(stream_id);
+                });
+            } else {
+                stream = net.connect({host: network.host, port: network.port});
+                stream_id = _this._useStream(stream, network.name, network.throttling);
+                _this._connect(stream_id, network);
+                streams.push(stream_id);
+            }
         });
     } else if ((typeof info === 'string') || (info instanceof Object && !(info instanceof StreamReadable) && !(info instanceof StreamWritable))) {
         // We've been passed single server information
-        info = this._check(info);
-        stream = info.ssl ? tls.connect({host: info.host, port: info.port}) : net.connect({host: info.host, port: info.port});
-        stream_id = this._useStream(stream, info.name, info.throttling);
-        this._connect(stream_id, info);
+        info = _this._check(info);
+        if (info.ssl) {
+            stream = tls.connect({
+                host: info.host,
+                port: info.port,
+                rejectUnauthorized: !info.ssl_allow_invalid
+            }, function() {
+                stream_id = _this._useStream(stream, info.name, info.throttling);
+                utils.emit(_this, stream_id, 'ssl-error', new utils.SSLError(stream.authorizationError));
+                _this._connect(stream_id, info);
+            });
+        } else {
+            stream = net.connect({host: info.host, port: info.port});
+            stream_id = _this._useStream(stream, info.name, info.throttling);
+            _this._connect(stream_id, info);
+        }
     } else {
         // Assume we've been passed the legacy stream.
         stream_id = this._useStream(info, null, info.throttling);
