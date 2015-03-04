@@ -4,9 +4,10 @@ _event based and extensible irc client library with multi-network support_
 For support, report an issue on github or join our IRC channel at [##caffeinery @ chat.freenode.net](http://webchat.freenode.net/?channels=%23%23caffeinery&uio=d4)
 
 ## API
-The outdated (but currently more complete) version of the API is available [in the wiki](https://github.com/caffeinery/coffea/wiki/API-(outdated)).
 
-We are working on an up-to-date version on [coffea.readthedocs.org](http://coffea.readthedocs.org/en/latest/).
+Documentation is available at [coffea.caffeinery.org](http://coffea.caffeinery.org/en/latest/).
+
+The outdated version of the API is still available [in the wiki](https://github.com/caffeinery/coffea/wiki/API-(outdated)).
 
 ## Examples
 ### Normal Connection (Single network)
