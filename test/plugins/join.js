@@ -13,7 +13,7 @@ describe('join.js', function () {
                 client = irc(stream, false);
             client.nick('foo');
 
-            client.on('join', function (event) {
+            client.on('join', function (err, event) {
                 event.user.getNick().should.equal('foo');
                 event.channel.getName().should.equal('#foo');
                 done();

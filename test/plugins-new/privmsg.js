@@ -48,7 +48,7 @@ describe('privmsg.js', function() {
             var st1_id = client.add(st1);
             client.nick('baz', st1_id);
 
-			client.once("message", function (event) {
+			client.once("message", function (err, event) {
 				event.channel.getName().should.equal('#foo');
                 event.user.getNick().should.equal('foo');
                 event.message.should.equal('Hello World');
@@ -68,7 +68,7 @@ describe('privmsg.js', function() {
             client.nick('baz', st1_id);
             client.nick('foo', st2_id);
 
-			client.once("message", function (event) {
+			client.once("message", function (err, event) {
 				if (event.network === st1_id) {
 					event.channel.getName().should.equal('#foo');
                     event.user.getNick().should.equal('foo');
@@ -98,7 +98,7 @@ describe('privmsg.js', function() {
             client.nick('foo', st2_id);
 
             var tests = 0;
-			client.once(st1_id + ":message", function (event) {
+			client.once(st1_id + ":message", function (err, event) {
 				event.channel.getName().should.equal('#foo');
                 event.user.getNick().should.equal('foo');
                 event.message.should.equal('Hello World');
@@ -109,7 +109,7 @@ describe('privmsg.js', function() {
                 }
 			});
 
-			client.once(st2_id + ":message", function (event) {
+			client.once(st2_id + ":message", function (err, event) {
 				event.channel.getName().should.equal('#foo');
                 event.user.getNick().should.equal('foo');
                 event.message.should.equal('waves');

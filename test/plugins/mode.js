@@ -12,7 +12,7 @@ describe('mode.js', function () {
             var stream = new Stream(),
                 client = irc(stream, false);
 
-            client.on('mode', function (event) {
+            client.on('mode', function (err, event) {
                 event.by.getNick().should.equal('foo');
                 event.adding.should.equal(true);
                 event.mode.should.equal('x');
@@ -24,12 +24,12 @@ describe('mode.js', function () {
             var stream = new Stream(),
                 client = irc(stream, false);
 
-            client.once('mode', function (event) {
+            client.once('mode', function (err, event) {
                 event.by.should.equal('foo');
                 event.adding.should.equal(true);
                 event.mode.should.equal('Z');
 
-                client.once('mode', function (event) {
+                client.once('mode', function (err, event) {
                     event.by.should.equal('foo');
                     event.adding.should.equal(true);
                     event.mode.should.equal('i');
@@ -42,21 +42,21 @@ describe('mode.js', function () {
             var stream = new Stream(),
                 client = irc(stream, false);
 
-            client.once('mode', function (event) {
+            client.once('mode', function (err, event) {
                 event.channel.getName().should.equal('#foo');
                 event.by.getNick().should.equal('foo');
                 event.argument.should.equal('bar');
                 event.adding.should.equal(false);
                 event.mode.should.equal('o');
 
-                client.once('mode', function (event) {
+                client.once('mode', function (err, event) {
                     event.channel.getName().should.equal('#foo');
                     event.by.getNick().should.equal('foo');
                     event.argument.should.equal('baz');
                     event.adding.should.equal(true);
                     event.mode.should.equal('v');
 
-                    client.once('mode', function (event) {
+                    client.once('mode', function (err, event) {
                         event.channel.getName().should.equal('#foo');
                         event.by.getNick().should.equal('op');
                         event.argument.should.equal('badguy');

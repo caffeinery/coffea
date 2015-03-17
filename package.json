@@ -1,6 +1,6 @@
 {
   "name": "coffea",
-  "version": "0.3.12",
+  "version": "0.4.0",
   "description": "event based and extensible irc client library with multi-network support",
   "author": "Caffeinery Developers <daniel.bugl@touchlay.com>",
   "repository": {
@@ -29,11 +29,11 @@
     "irc-replies": ">=2.0.0 <2.1.0-0",
     "limiter": ">=1.0.5 <1.1.0-0",
     "linewise": "0.0.3",
-    "underscore": ">=1.7.0 <1.8.0-0"
+    "underscore": ">=1.8.0 <1.9.0-0"
   },
   "devDependencies": {
-    "mocha": ">=1.21.4 <1.22.0-0",
-    "should": ">=4.0.4 <4.1.0-0"
+    "mocha": ">=2.2.1 <2.3.0-0",
+    "should": ">=5.2.0 <5.3.0-0"
   },
   "scripts": {
     "test": "mocha --require should --reporter spec test/*"

@@ -32,7 +32,7 @@ describe('invite.js', function() {
             var st1_id = client.add(st1);
             client.nick('you', st1_id);
 
-			client.once("invite", function (event) {
+			client.once("invite", function (err, event) {
 				event.user.getNick().should.equal('you');
 				event.target.getNick().should.equal('me');
 				event.channel.name.should.equal('#test');
@@ -51,7 +51,7 @@ describe('invite.js', function() {
             client.nick('you', st1_id);
             client.nick('xddjshali', st2_id);
 
-			client.once("invite", function (event) {
+			client.once("invite", function (err, event) {
 				if (event.network === st1_id) {
 					event.user.getNick().should.equal('you');
 					event.target.getNick().should.equal('me');
@@ -78,7 +78,7 @@ describe('invite.js', function() {
             client.nick('xddjshali', st2_id);
 
             var tests = 0;
-			client.once(st1_id + ":invite", function (event) {
+			client.once(st1_id + ":invite", function (err, event) {
 				event.user.getNick().should.equal('you');
 				event.target.getNick().should.equal('me');
 				event.channel.name.should.equal('#test');
@@ -88,7 +88,7 @@ describe('invite.js', function() {
                 }
 			});
 
-			client.once(st2_id + ":invite", function (event) {
+			client.once(st2_id + ":invite", function (err, event) {
 				event.user.getNick().should.equal('xddjshali');
 				event.target.getNick().should.equal('you');
 				event.channel.name.should.equal('#random');

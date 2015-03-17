@@ -48,7 +48,7 @@ describe('topic.js', function() {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-            client.once("topic", function (event) {
+            client.once("topic", function (err, event) {
                 event.channel.getName().should.equal('#foo');
                 event.topic.should.equal('HOT TOPIC');
                 event.user.getNick().should.equal('foo');
@@ -68,7 +68,7 @@ describe('topic.js', function() {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-			client.once("topic", function (event) {
+			client.once("topic", function (err, event) {
 				event.channel.getName().should.equal('#foo');
                 event.topic.should.equal('HOT TOPIC');
                 event.user.getNick().should.equal('foo');
@@ -90,7 +90,7 @@ describe('topic.js', function() {
             client.nick('foo', st1_id);
             client.nick('bar', st2_id);
 
-			client.once("topic", function (event) {
+			client.once("topic", function (err, event) {
 				if (event.network === st1_id) {
 					event.channel.getName().should.equal('#foo');
                     event.topic.should.equal('HOT TOPIC');
@@ -123,7 +123,7 @@ describe('topic.js', function() {
             client.nick('bar', st2_id);
 
             var tests = 0;
-			client.once(st1_id + ":topic", function (event) {
+			client.once(st1_id + ":topic", function (err, event) {
 				event.channel.getName().should.equal('#foo');
                 event.topic.should.equal('HOT TOPIC');
                 event.user.getNick().should.equal('foo');
@@ -136,7 +136,7 @@ describe('topic.js', function() {
                 }
 			});
 
-			client.once(st2_id + ":topic", function (event) {
+			client.once(st2_id + ":topic", function (err, event) {
 				event.channel.getName().should.equal('#foo');
                 event.topic.should.equal('~~~the topic changes~~~');
                 event.user.getNick().should.equal('bar');

@@ -12,7 +12,7 @@ describe('ping.js', function() {
 			var st1 = new Stream();
 			var client = coffea(st1, false);
 
-			client.on("ping", function (event) {
+			client.on("ping", function (err, event) {
 				done();
 			});
 
@@ -28,7 +28,7 @@ describe('ping.js', function() {
             client.nick('foo', st1_id);
             client.nick('bar', st2_id);
 
-			client.once("ping", function (event) {
+			client.once("ping", function (err, event) {
 				done();
 			});
 
@@ -46,14 +46,14 @@ describe('ping.js', function() {
             client.nick('bar', st2_id);
 
 			var test = 0;
-			client.on(st1_id + ":ping", function (event) {
+			client.on(st1_id + ":ping", function (err, event) {
 				test++;
 				if(test >= 2) {
 					done();
 				}
 			});
 
-			client.on(st2_id + ":ping", function (event) {
+			client.on(st2_id + ":ping", function (err, event) {
 				test++;
 				if(test >= 2) {
 					done();

@@ -12,7 +12,7 @@ describe('notice.js', function () {
             var stream = new Stream(),
                 client = irc(stream, false);
 
-            client.on('notice', function (event) {
+            client.on('notice', function (err, event) {
                 event.from.getNick().should.equal('NickServ');
                 event.to.should.equal('foo');
                 event.message.should.equal('This nickname is registered. Please choose a different nickname, or identify via /msg NickServ identify <password>.');

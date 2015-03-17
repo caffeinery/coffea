@@ -12,7 +12,7 @@ describe('invite.js', function () {
             var stream = new Stream(),
                 client = irc(stream, false);
 
-            client.on('invite', function (event) {
+            client.on('invite', function (err, event) {
                 event.user.getNick().should.equal('foo');
                 event.target.getNick().should.equal('bar');
                 event.channel.getName().should.equal('#foo');

@@ -15,7 +15,7 @@ describe('cap.js', function() {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-            client.once('join', function (event) {
+            client.once('join', function (err, event) {
                 event.user.getNick().should.equal('mike');
                 event.channel.getName().should.equal('#test');
                 event.account.should.equal('hyperdrive');
@@ -33,7 +33,7 @@ describe('cap.js', function() {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-            client.once('join', function (event) {
+            client.once('join', function (err, event) {
                 event.user.getNick().should.equal('mike');
                 event.channel.getName().should.equal('#test');
                 should.not.exist(event.account);

@@ -15,7 +15,7 @@ describe('away.js', function() {
             var st1_id = client.add(st1);
             client.nick('me', st1_id);
 
-            client.once("away", function (event) {
+            client.once("away", function (err, event) {
                 event.user.getNick().should.equal('you');
                 event.message.should.equal('not here');
                 done();
@@ -33,7 +33,7 @@ describe('away.js', function() {
             client.nick('you', st1_id);
             client.nick('me', st2_id);
 
-            client.once("away", function (event) {
+            client.once("away", function (err, event) {
                 if (event.network === st1_id) {
                     event.user.getNick().should.equal('me');
                     event.message.should.equal('auto away');
@@ -58,7 +58,7 @@ describe('away.js', function() {
             client.nick('me', st2_id);
 
             var tests = 0;
-            client.once(st1_id + ":away", function (event) {
+            client.once(st1_id + ":away", function (err, event) {
                 event.user.getNick().should.equal('me');
                 event.message.should.equal('auto away');
                 tests++;
@@ -67,7 +67,7 @@ describe('away.js', function() {
                 }
             });
 
-            client.once(st2_id + ":away", function (event) {
+            client.once(st2_id + ":away", function (err, event) {
                 event.user.getNick().should.equal('you');
                 event.message.should.equal('not here');
                 tests++;

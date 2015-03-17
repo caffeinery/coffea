@@ -12,7 +12,7 @@ describe('motd.js', function () {
             var stream = new Stream(),
                 client = irc(stream, false);
 
-            client.on('motd', function (event) {
+            client.on('motd', function (err, event) {
                 event.motd[0].should.equal('irc.local message of the day');
                 event.motd[1].should.equal('- THE CAKE IS A LIE');
                 event.motd[2].should.equal('End of message of the day.');

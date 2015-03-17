@@ -14,7 +14,7 @@ describe('cap.js', function() {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-            client.once("cap_list", function (event) {
+            client.once("cap_list", function (err, event) {
                 event.capabilities.should.eql(['away-notify', 'account-notify', 'sasl']);
                 done();
             });
@@ -30,7 +30,7 @@ describe('cap.js', function() {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-            client.once("cap_nak", function (event) {
+            client.once("cap_nak", function (err, event) {
                 event.capabilities.should.equal('fjefje');
                 done();
             });
@@ -46,7 +46,7 @@ describe('cap.js', function() {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-            client.once("cap_ack", function (event) {
+            client.once("cap_ack", function (err, event) {
                 event.capabilities.should.equal('sasl');
                 done();
             });

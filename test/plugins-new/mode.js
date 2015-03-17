@@ -48,7 +48,7 @@ describe('mode.js', function () {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-            client.on('mode', function (event) {
+            client.on('mode', function (err, event) {
                 event.by.getNick().should.equal('foo');
                 event.adding.should.equal(true);
                 event.mode.should.equal('x');
@@ -63,12 +63,12 @@ describe('mode.js', function () {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-            client.once('mode', function (event) {
+            client.once('mode', function (err, event) {
                 event.by.should.equal('irc.local');
                 event.adding.should.equal(true);
                 event.mode.should.equal('Z');
 
-                client.once('mode', function (event) {
+                client.once('mode', function (err, event) {
                     event.by.should.equal('irc.local');
                     event.adding.should.equal(true);
                     event.mode.should.equal('i');
@@ -84,14 +84,14 @@ describe('mode.js', function () {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-            client.once('mode', function (event) {
+            client.once('mode', function (err, event) {
                 event.channel.getName().should.equal('#foo');
                 event.by.getNick().should.equal('foo');
                 event.argument.should.equal('bar');
                 event.adding.should.equal(false);
                 event.mode.should.equal('o');
 
-                client.once('mode', function (event) {
+                client.once('mode', function (err, event) {
                     event.channel.getName().should.equal('#foo');
                     event.by.getNick().should.equal('foo');
                     event.argument.should.equal('baz');
@@ -114,7 +114,7 @@ describe('mode.js', function () {
             client.nick('foo', st1_id);
             client.nick('bar', st2_id);
 
-            client.once('mode', function (event) {
+            client.once('mode', function (err, event) {
                 event.channel.getName().should.equal('#foo');
                 event.by.getNick().should.equal('foo');
                 event.argument.should.equal('bar');
@@ -122,7 +122,7 @@ describe('mode.js', function () {
                 event.mode.should.equal('o');
                 event.network.should.equal(st1_id);
 
-                client.once('mode', function (event) {
+                client.once('mode', function (err, event) {
                     event.channel.getName().should.equal('#foo');
                     event.by.getNick().should.equal('foo');
                     event.argument.should.equal('baz');
@@ -130,7 +130,7 @@ describe('mode.js', function () {
                     event.mode.should.equal('v');
                     event.network.should.equal(st1_id);
                 
-                    client.once('mode', function (event) {
+                    client.once('mode', function (err, event) {
                         event.channel.getName().should.equal('#foo');
                         event.by.getNick().should.equal('op');
                         event.argument.should.equal('badguy');
@@ -156,14 +156,14 @@ describe('mode.js', function () {
             client.nick('bar', st2_id);
 
             var tests = 0;
-            client.once(st1_id + ':mode', function (event) {
+            client.once(st1_id + ':mode', function (err, event) {
                 event.channel.getName().should.equal('#foo');
                 event.by.getNick().should.equal('foo');
                 event.argument.should.equal('bar');
                 event.adding.should.equal(false);
                 event.mode.should.equal('o');
 
-                client.once(st1_id + ':mode', function (event) {
+                client.once(st1_id + ':mode', function (err, event) {
                     event.channel.getName().should.equal('#foo');
                     event.by.getNick().should.equal('foo');
                     event.argument.should.equal('baz');
@@ -177,7 +177,7 @@ describe('mode.js', function () {
                 });
             });
 
-            client.once(st2_id + ':mode', function (event) {
+            client.once(st2_id + ':mode', function (err, event) {
                 event.channel.getName().should.equal('#foo');
                 event.by.getNick().should.equal('op');
                 event.argument.should.equal('badguy');

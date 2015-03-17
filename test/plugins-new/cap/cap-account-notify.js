@@ -15,7 +15,7 @@ describe('cap-account-notify.js', function() {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-            client.once('account-login', function (event) {
+            client.once('account-login', function (err, event) {
                 event.user.getNick().should.equal('mike');
                 event.account.should.equal('hyperdrive');
                 done();
@@ -31,7 +31,7 @@ describe('cap-account-notify.js', function() {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-            client.once('account-login', function (event) {
+            client.once('account-login', function (err, event) {
                 event.user.getNick().should.equal('mike');
                 should.not.exist(event.account);
                 done();

@@ -24,7 +24,7 @@ describe('welcome.js', function () {
                 client = irc(stream, false);
             client.nick('foo');
 
-            client.on('welcome', function (event) {
+            client.on('welcome', function (err, event) {
                 event.nick.should.equal('foo');
                 event.message.should.equal('Welcome to the KeratNet IRC Network foo!bar@baz.com');
                 done();

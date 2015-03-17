@@ -13,7 +13,7 @@ describe('quit.js', function () {
                 client = irc(stream, false);
             client.nick('foo');
 
-            client.on('quit', function (event) {
+            client.on('quit', function (err, event) {
                 event.user.getNick().should.equal('foo');
                 event.message.should.eql('Remote host closed the connection');
                 done();
@@ -28,7 +28,7 @@ describe('quit.js', function () {
                 client = irc(stream, false);
             client.nick('foo');
 
-            client.on('quit', function (event) {
+            client.on('quit', function (err, event) {
                 event.user.getNick().should.equal('foo');
                 event.message.should.eql('POOF');
                 done();

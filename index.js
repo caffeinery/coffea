@@ -15,7 +15,7 @@ var RateLimiter = require('limiter').RateLimiter;
 /**
  * Client constructor
  *
- * Initializes the client object, sets max listeners, 
+ * Initializes the client object, sets max listeners,
  * initializes stream buffer and other variables.
  * Then loads plugins and parses the network info passed.
  * Check Client.add for more information about the network info.
@@ -38,7 +38,7 @@ function Client(info, throttling) {
     this.stinfo = {};
     this.me = null;
     this.capabilities = [];
-    
+
     this._loadPlugins();
 
     if (typeof info === 'boolean') {
@@ -46,7 +46,9 @@ function Client(info, throttling) {
         info = null;
     }
 
-    if (throttling !== undefined) this.throttling = throttling;
+    if (throttling !== undefined) {
+        this.throttling = throttling;
+    }
 
     if (info) {
         // compatibility
@@ -80,7 +82,7 @@ Client.prototype._loadPlugins = function() {
 /**
  * Internal function that does a sanity check
  * on the network information, adding defaults
- * 
+ *
  * @params {Object} network
  * @return {Object} network
  * @api private
@@ -96,7 +98,7 @@ Client.prototype._check = function(network) {
     }
 
     ret.name = network.name;
-    
+
     ret.nick = network.nick === undefined ? randnick : network.nick;
     var port = network.ssl === true ? 6697 : 6667;
     ret.port = network.port === undefined ? port : network.port;
@@ -117,7 +119,7 @@ Client.prototype._check = function(network) {
 /**
  * Internal function that loads a stream into the client
  * Returns specified network name or generated stream id
- * 
+ *
  * @params {Object} stream      Must be an instanceof StreamReadable and StreamWritable
  * @params {string} network     Specify a network name/stream id
  * @return {string} stream_id
@@ -140,7 +142,7 @@ Client.prototype._useStream = function (stream, network, throttling) {
         _this.onmessage(msg, stream.coffea_id);
     });
     parser.on('end', function() {
-        utils.emit(this, stream.coffea_id, 'disconnect', {});
+        utils.emit(_this, stream.coffea_id, 'disconnect', {});
     });
     stream.pipe(parser);
 
@@ -159,11 +161,11 @@ Client.prototype.useStream = function (stream, network) {
 
 /**
  * Reconnects the socket that is assigned to the current stream_id.
- * 
+ *
  * @params {string} stream_id
  */
 Client.prototype.reconnect = function (stream_id) {
-    var network = this.stinfo[stream.coffea_id];
+    var network = this.stinfo[stream_id];
     var stream = network.ssl ? tls.connect({host: network.host, port: network.port}) : net.connect({host: network.host, port: network.port});
     this._useStream(stream, stream_id, network.throttling);
     this._connect(stream_id, network);
@@ -171,17 +173,17 @@ Client.prototype.reconnect = function (stream_id) {
 
 /**
  * Internal function to handle incoming messages from the streams
- * 
+ *
  * @params {string} msg
  * @api private
  */
 Client.prototype.onmessage = function (msg, network) {
     msg.command = replies[msg.command] || msg.command;
-    this.emit('data', msg, network);
+    utils.emit(this, network, 'data', msg);
 };
 
 Client.prototype._setupSASL = function (stream_id, info) {
-    this.on('cap_ack', function (event) {
+    this.on('cap_ack', function (err, event) {
         if (event.capability === 'sasl') {
             this.sasl.mechanism('PLAIN', stream_id);
             if (info.sasl && info.sasl.account && info.sasl.password) {
@@ -198,7 +200,7 @@ Client.prototype._setupSASL = function (stream_id, info) {
 Client.prototype._connect = function (stream_id, info) {
     this._setupSASL(stream_id, info);
     if (info.pass) { this.pass(info.pass); }
-    this.capReq(['account-notify', 'away-notify', 'extended-join', 'sasl'], stream_id); 
+    this.capReq(['account-notify', 'away-notify', 'extended-join', 'sasl'], stream_id);
     this.capEnd(stream_id);
     this.nick(info.nick, stream_id);
     this.user(info.username, info.realname, stream_id);
@@ -213,7 +215,7 @@ Client.prototype._connect = function (stream_id, info) {
  * Add a network to the client, the argument can be a stream, network config object
  * or an array of network config objects (see README.md and wiki for more information)
  * Returns specified network name or generated stream id
- * 
+ *
  * @params {Object} info
  * @return {string} stream_id
  * @api public
@@ -275,7 +277,7 @@ Client.prototype.add = function (info) {
 
 /**
  * Write data to a specific network (stream)
- * 
+ *
  * @params {string} str
  * @params {string} network
  * @params {Function} fn
@@ -309,13 +311,13 @@ Client.prototype.write = function (str, network, fn) {
         if (fn) {
             fn();
         }
-    } 
-    
+    }
+
 };
 
 /**
  * Load a plugin into the client
- * 
+ *
  * @params {Function} fn
  * @return {Object} this
  * @api public
@@ -323,4 +325,38 @@ Client.prototype.write = function (str, network, fn) {
 Client.prototype.use = function (fn) {
     fn(this);
     return this;
+};
+
+/**
+ * fallback for `function(event)` callbacks
+ *
+ * @api private
+ */
+Client.prototype.fallbackCallback = function fallbackCallback(extend, event, fn, context) {
+    var params = utils.getParamNames(fn);
+    var func = fn;
+    if (params.length == 1) {
+        func = function(err, event) {
+            fn(event, err);
+        };
+    }
+    extend.call(this, event, func, context);
+};
+
+/**
+ * apply fallback to `client.on()` events
+ *
+ * @api private
+ */
+Client.prototype.on = function on(event, fn, context) {
+    this.fallbackCallback(this.parent.on, event, fn, context);
+};
+
+/**
+ * apply fallback to `client.once()` events
+ *
+ * @api private
+ */
+Client.prototype.once = function once(event, fn, context) {
+    this.fallbackCallback(this.parent.once, event, fn, context);
 };

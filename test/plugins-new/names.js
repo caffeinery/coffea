@@ -14,7 +14,7 @@ describe('names.js', function() {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-			client.once("names", function (event) {
+			client.once("names", function (err, event) {
 				event.names.should.eql({
                     "dan": ['@'],
                     "mike": ['@'],
@@ -37,7 +37,7 @@ describe('names.js', function() {
             client.nick('baz', st1_id);
             client.nick('foo', st2_id);
 
-			client.once("names", function (event) {
+			client.once("names", function (err, event) {
 				if (event.network === st1_id) {
 					event.names.should.eql({
                         "dan": ['@'],
@@ -71,7 +71,7 @@ describe('names.js', function() {
             client.nick('foo', st2_id);
 
             var tests = 0;
-			client.once(st1_id + ":names", function (event) {
+			client.once(st1_id + ":names", function (err, event) {
 				event.names.should.eql({
                     "dan": ['@'],
                     "mike": ['@'],
@@ -84,7 +84,7 @@ describe('names.js', function() {
                 }
 			});
 
-			client.once(st2_id + ":names", function (event) {
+			client.once(st2_id + ":names", function (err, event) {
 				event.names.should.eql({
                     "foo": ['@']
                 });

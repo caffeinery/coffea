@@ -12,7 +12,7 @@ describe('data.js', function () {
             var stream = new Stream(),
                 client = irc(stream, false);
 
-            client.on('data', function (parsed) {
+            client.on('data', function (err, parsed) {
                 parsed.prefix.should.equal('hitchcock.freenode.net');
                 parsed.command.should.equal('NOTICE');
                 parsed.params.should.equal('*');

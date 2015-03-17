@@ -161,7 +161,7 @@ describe('whois.js', function () {
             client.nick('foo', st1_id);
 
             client.whois('foo');
-            client.on('whois', function (event, err) {
+            client.on('whois', function (err, event) {
                 err.should.be.an.instanceof(Error);
                 err.message.should.equal('No such nick/channel');
                 done();
@@ -191,7 +191,7 @@ describe('whois.js', function () {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-            client.on('whois', function (event, err) {
+            client.on('whois', function (err, event) {
                 err.should.be.an.instanceof(Error);
                 err.message.should.equal('Not enough parameters');
                 done();

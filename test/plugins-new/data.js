@@ -15,7 +15,7 @@ describe('data.js', function() {
             var st1_id = client.add(st1);
 
             client.once("data", function() { // nick event
-                client.once("data", function (event) {
+                client.once("data", function (err, event) {
                     event.prefix.should.equal('hitchcock.freenode.net');
                     event.command.should.equal('NOTICE');
                     event.params.should.equal('*');

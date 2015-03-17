@@ -13,7 +13,7 @@ describe('away.js', function () {
                 client = irc(stream, false);
             client.nick('mynick');
 
-            client.on('away', function (event) {
+            client.on('away', function (err, event) {
                 event.user.getNick().should.equal('targetnick');
                 event.message.should.equal('nope');
                 done();

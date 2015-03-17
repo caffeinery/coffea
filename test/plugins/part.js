@@ -13,7 +13,7 @@ describe('part.js', function () {
                 client = irc(stream, false);
             client.nick('foo');
 
-            client.on('part', function (event) {
+            client.on('part', function (err, event) {
                 event.user.getNick().should.equal('foo');
                 event.channels[0].getName().should.eql('#foo');
                 event.channels[1].getName().should.eql('#bar');

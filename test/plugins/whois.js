@@ -159,7 +159,7 @@ describe('whois.js', function () {
             var stream = new Stream(),
                 client = irc(stream, false);
             client.whois('unusednickorchannel');
-            client.on('whois', function (event, err) {
+            client.on('whois', function (err, event) {
                 err.should.be.an.instanceof(Error);
                 err.message.should.equal('No such nick/channel');
                 done();
@@ -181,7 +181,7 @@ describe('whois.js', function () {
         it('should err with Not enough parameters', function (done) {
             var stream = new Stream(),
                 client = irc(stream, false);
-            client.on('whois', function (event, err) {
+            client.on('whois', function (err, event) {
                 err.should.be.an.instanceof(Error);
                 err.message.should.equal('Not enough parameters');
                 done();

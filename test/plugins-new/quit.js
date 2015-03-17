@@ -46,7 +46,7 @@ describe('quit.js', function() {
 			var st1 = new Stream();
 			var client = coffea(st1, false);
 
-			client.once("quit", function (event) {
+			client.once("quit", function (err, event) {
 				event.user.getNick().should.equal('foo');
                 event.message.should.equal('Client Quit');
 				done();
@@ -64,7 +64,7 @@ describe('quit.js', function() {
             client.nick('foo', st1_id);
             client.nick('ChanServ', st2_id);
 
-			client.once("quit", function (event) {
+			client.once("quit", function (err, event) {
 				if (event.network == 0) {
 					event.user.getNick().should.equal('foo');
 	                event.message.should.equal('Client Quit');
@@ -88,12 +88,12 @@ describe('quit.js', function() {
             client.nick('foo', st1_id);
             client.nick('ChanServ', st2_id);
 
-			client.once(st1_id + ":quit", function (event) {
+			client.once(st1_id + ":quit", function (err, event) {
 				event.user.getNick().should.equal('foo');
 	            event.message.should.equal('Client Quit');
 			});
 
-			client.once(st2_id + ":quit", function (event) {
+			client.once(st2_id + ":quit", function (err, event) {
 				event.user.getNick().should.equal('ChanServ');
                 event.message.should.equal('shutting down');
 			});

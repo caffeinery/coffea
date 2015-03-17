@@ -13,7 +13,7 @@ describe('nick.js', function () {
                 client = irc(stream, false);
 
             client.once('nick', function () {
-                client.once('nick', function (event) {
+                client.once('nick', function (err, event) {
                     event.user.getNick().should.equal('bar');
                     event.oldNick.should.equal('foo');
                     client.me.getNick().should.equal('bar');

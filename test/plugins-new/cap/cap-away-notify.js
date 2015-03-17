@@ -15,7 +15,7 @@ describe('cap-away-notify.js', function() {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-            client.once('away-notify', function (event) {
+            client.once('away-notify', function (err, event) {
                 event.user.getNick().should.equal('mike');
                 event.message.should.equal('not here');
                 done();

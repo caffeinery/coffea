@@ -14,7 +14,7 @@ describe('motd.js', function() {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-			client.once("motd", function (event) {
+			client.once("motd", function (err, event) {
 				event.motd[0].should.equal('irc.local message of the day');
                 event.motd[1].should.equal('- THE CAKE IS A LIE');
                 event.motd[2].should.equal('End of message of the day.');
@@ -35,7 +35,7 @@ describe('motd.js', function() {
             client.nick('baz', st1_id);
             client.nick('foo', st2_id);
 
-			client.once("motd", function (event) {
+			client.once("motd", function (err, event) {
 				if (event.network === st1_id) {
 					event.motd[0].should.equal('irc.local message of the day');
                     event.motd[1].should.equal('- THE CAKE IS A LIE');
@@ -70,7 +70,7 @@ describe('motd.js', function() {
             client.nick('foo', st2_id);
 
             var tests = 0;
-			client.once(st1_id + ":motd", function (event) {
+			client.once(st1_id + ":motd", function (err, event) {
 				event.motd[0].should.equal('irc.local message of the day');
                 event.motd[1].should.equal('- THE CAKE IS A LIE');
                 event.motd[2].should.equal('End of message of the day.');
@@ -80,7 +80,7 @@ describe('motd.js', function() {
                 }
 			});
 
-			client.once(st2_id + ":motd", function (event) {
+			client.once(st2_id + ":motd", function (err, event) {
 				event.motd[0].should.equal('irc.local message of the day');
                 event.motd[1].should.equal('- This the charybdis default MOTD.');
                 event.motd[2].should.equal('- You might want to change this or your friends will laugh at you.');

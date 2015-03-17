@@ -13,7 +13,7 @@ describe('nickserv.js', function() {
             var st1 = new Stream();
             var st1_id = client.add(st1);
             
-            client.on('data', function (event) {
+            client.on('data', function (err, event) {
                 if (event.command == "PRIVMSG") {
                     event.string.should.equal("PRIVMSG NickServ :IDENTIFY test password");
                     done();

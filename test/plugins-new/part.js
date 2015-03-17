@@ -48,7 +48,7 @@ describe('part.js', function() {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-            client.once("part", function (event) {
+            client.once("part", function (err, event) {
                 event.user.getNick().should.equal('foo');
                 event.channels[0].getName().should.equal('#baz');
                 event.channels[1].getName().should.equal('#bar');
@@ -68,7 +68,7 @@ describe('part.js', function() {
             client.nick('ChanServ', st1_id);
             client.nick('foo', st2_id);
 
-            client.once("part", function (event) {
+            client.once("part", function (err, event) {
                 if (event.network === st1_id) {
                     event.user.getNick().should.equal('ChanServ');
                     event.channels[0].getName().should.equal('#services');
@@ -96,7 +96,7 @@ describe('part.js', function() {
             client.nick('foo', st2_id);
 
             var tests = 0;
-            client.once(st1_id + ":part", function (event) {
+            client.once(st1_id + ":part", function (err, event) {
                 event.user.getNick().should.equal('ChanServ');
                 event.channels[0].getName().should.equal('#services');
                 event.message.should.equal('');
@@ -106,7 +106,7 @@ describe('part.js', function() {
                 }
             });
 
-            client.once(st2_id + ":part", function (event) {
+            client.once(st2_id + ":part", function (err, event) {
                 event.user.getNick().should.equal('foo');
                 event.channels[0].getName().should.equal('#baz');
                 event.channels[1].getName().should.equal('#bar');

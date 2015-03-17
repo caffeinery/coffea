@@ -47,7 +47,7 @@ describe('join.js', function() {
             var st1 = new Stream();
             var st1_id = client.add(st1);
 
-            client.once("join", function (event) {
+            client.once("join", function (err, event) {
                 event.user.getNick().should.equal('foo');
                 event.channel.getName().should.equal('#baz');
                 done();
@@ -67,7 +67,7 @@ describe('join.js', function() {
             client.nick('foo', st2_id);
 
             var tests = 0;
-            client.on("join", function (event) {
+            client.on("join", function (err, event) {
                 if (event.network === st1_id) {
                     event.user.getNick().should.equal('ChanServ');
                     event.channel.getName().should.equal('#services');
@@ -95,7 +95,7 @@ describe('join.js', function() {
             client.nick('foo', st2_id);
 
             var tests = 0;
-            client.once(st1_id + ":join", function (event) {
+            client.once(st1_id + ":join", function (err, event) {
                 event.user.getNick().should.equal('ChanServ');
                 event.channel.getName().should.equal('#services');
                 tests++;
@@ -104,7 +104,7 @@ describe('join.js', function() {
                 }
             });
 
-            client.once(st2_id + ":join", function (event) {
+            client.once(st2_id + ":join", function (err, event) {
                 event.user.getNick().should.equal('foo');
                 event.channel.getName().should.equal('#baz');
                 tests++;

@@ -79,7 +79,7 @@ describe('kick.js', function() {
             var st1 = new Stream();
             var st1_id = client.add(st1);
 
-            client.once("kick", function (event) {
+            client.once("kick", function (err, event) {
                 event.channel.getName().should.equal('#foo');
                 event.user.getNick().should.equal('bar');
                 event.by.getNick().should.equal('foo');
@@ -100,7 +100,7 @@ describe('kick.js', function() {
             client.nick('foo', st1_id);
             client.nick('evilop', st2_id);
 
-            client.once("kick", function (event) {
+            client.once("kick", function (err, event) {
                 if (event.network === st1_id) {
                     event.channel.getName().should.equal('#foo');
                     event.user.getNick().should.equal('bar');
@@ -129,7 +129,7 @@ describe('kick.js', function() {
             client.nick('evilop', st2_id);
 
             var tests = 0;
-            client.once(st1_id + ":kick", function (event) {
+            client.once(st1_id + ":kick", function (err, event) {
                 event.channel.getName().should.equal('#foo');
                 event.user.getNick().should.equal('bar');
                 event.by.getNick().should.equal('foo');
@@ -140,7 +140,7 @@ describe('kick.js', function() {
                 }
             });
 
-            client.once(st2_id + ":kick", function (event) {
+            client.once(st2_id + ":kick", function (err, event) {
                 event.channel.getName().should.equal('#foo');
                 event.user.getNick().should.equal('foo');
                 event.by.getNick().should.equal('evilop');

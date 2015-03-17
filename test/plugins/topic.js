@@ -12,7 +12,7 @@ describe('topic.js', function () {
             var stream = new Stream(),
                 client = irc(stream, false);
 
-            client.on('topic', function (event) {
+            client.on('topic', function (err, event) {
                 event.channel.getName().should.equal('#foo');
                 event.topic.should.equal('HOT TOPIC');
                 event.user.getNick().should.equal('foo');
@@ -30,7 +30,7 @@ describe('topic.js', function () {
             var stream = new Stream(),
                 client = irc(stream, false);
 
-            client.on('topic', function (event) {
+            client.on('topic', function (err, event) {
                 event.channel.getName().should.equal('#foo');
                 event.topic.should.equal('HOT TOPIC');
                 event.user.getNick().should.equal('foo');

@@ -1,13 +1,11 @@
-# Coffea [![Documentation Status](https://readthedocs.org/projects/coffea/badge/?style=flat&version=latest)](https://readthedocs.org/projects/coffea/?badge=latest) [![Build Status](http://img.shields.io/travis/caffeinery/coffea/master.svg?style=flat)](https://travis-ci.org/caffeinery/coffea) [![Code Climate](http://img.shields.io/codeclimate/github/caffeinery/coffea.svg?style=flat)](https://codeclimate.com/github/caffeinery/coffea) [![NPM version](http://img.shields.io/npm/v/coffea.svg?style=flat)](http://badge.fury.io/js/coffea)
+# Coffea [![NPM version (>=0.4)](http://img.shields.io/npm/v/coffea.svg?style=flat-square)](http://browsenpm.org/package/coffea) [![Build Status](http://img.shields.io/travis/caffeinery/coffea/master.svg?style=flat-square)](https://travis-ci.org/caffeinery/coffea) [![Dependencies](https://img.shields.io/david/caffeinery/coffea.svg?style=flat-square)](https://david-dm.org/caffeinery/coffea) [![Documentation Status](https://readthedocs.org/projects/coffea/badge/?style=flat-square&version=latest)](https://readthedocs.org/projects/coffea/?badge=latest) [![Code Climate](http://img.shields.io/codeclimate/github/caffeinery/coffea.svg?style=flat-square)](https://codeclimate.com/github/caffeinery/coffea)
 _event based and extensible irc client library with multi-network support_
 
-For support, report an issue on github or join our IRC channel at [##caffeinery @ chat.freenode.net](http://webchat.freenode.net/?channels=%23%23caffeinery&uio=d4)
+For support, report an issue on github or join our IRC channel at [![##caffeinery @ chat.freenode.net](https://img.shields.io/badge/IRC-irc.freenode.net%23%23caffeinery-00a8ff.svg?style=flat-square)](https://webchat.freenode.net/?channels=%23%23caffeinery&uio=d4)
 
 ## API
 
 Documentation is available at [coffea.caffeinery.org](http://coffea.caffeinery.org/en/latest/).
-
-The outdated version of the API is still available [in the wiki](https://github.com/caffeinery/coffea/wiki/API-(outdated)).
 
 ## Examples
 ### Normal Connection (Single network)
@@ -29,11 +27,11 @@ var client = require('coffea')({
 });
 */
 
-client.on('motd', function (motd) {
+client.on('motd', function (err, event) {
     client.join(['#foo', '#bar', '#baz']);
 });
 
-client.on('message', function (event) {
+client.on('message', function (err, event) {
     console.log('[' + event.channel.getName() + '] ' + event.user.getNick() + ': ' + event.message);
     //[#foo] nick: message
     event.reply(event.message); // I'm a parrot
@@ -78,11 +76,11 @@ var client = require('coffea')([
 
 // note how we are passing the network here, by default it'll just send to all networks
 // by using network you can join specific channels on specific networks
-client.on('motd', function (motd, network) {
-    client.join(['#foo', '#bar', '#baz'], network);
+client.on('motd', function (err, event) {
+    client.join(['#foo', '#bar', '#baz'], event.network);
 });
 
-client.on('message', function (event) {
+client.on('message', function (err, event) {
     console.log('[' + event.network + '][' + event.channel.getName() + '] ' + event.user.getNick() + ': ' + event.message);
     //[freenode][#foo] nick: message
     event.reply(event.message); // I'm a parrot
@@ -107,11 +105,11 @@ var client = require('coffea')({
     // throttling: 250 // default value: 250ms, 1 message every 250ms, disable by setting to false
 });
 
-client.on('motd', function (motd) {
+client.on('motd', function (err, event) {
     client.join(['#foo', '#bar', '#baz']);
 });
 
-client.on('message', function (event) {
+client.on('message', function (err, event) {
     console.log('[' + event.channel.getName() + '] ' + event.user.getNick() + ': ' + event.message);
     //[#foo] nick: message
     event.reply(event.message); // I'm a parrot

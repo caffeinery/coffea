@@ -31,7 +31,7 @@ describe('nick.js', function() {
             var client = coffea(st1, false);
             
             client.once('nick', function () {
-                client.once('nick', function (event) {
+                client.once('nick', function (err, event) {
                     event.user.getNick().should.equal('evilop');
                     event.oldNick.should.equal('troll');
                     done();
@@ -52,7 +52,7 @@ describe('nick.js', function() {
             var st2_id = client.add(st2); // add stream to client
 
             var tests = 0;
-            client.on('nick', function (event) {
+            client.on('nick', function (err, event) {
                 tests++;
                 if ((tests == 2) && (tests == 4)) {
                     if (event.network === st1_id) {
@@ -84,7 +84,7 @@ describe('nick.js', function() {
 
             var tests = 0;
             client.once(st1_id + ":nick", function() {
-                client.once(st1_id + ":nick", function (event) {
+                client.once(st1_id + ":nick", function (err, event) {
                     event.user.getNick().should.equal('ChanServ');
                     event.oldNick.should.equal('NickServ');
                     tests++;
@@ -95,7 +95,7 @@ describe('nick.js', function() {
             });
 
             client.once(st2_id + ":nick", function() {
-                client.once(st2_id + ":nick", function (event) {
+                client.once(st2_id + ":nick", function (err, event) {
                     event.user.getNick().should.equal('evilop');
                     event.oldNick.should.equal('troll');
                     tests++;

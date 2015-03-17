@@ -52,7 +52,7 @@ describe('names.js', function () {
             client = irc(stream, false);
         client.nick('foo');
 
-        client.on('names', function (event) {
+        client.on('names', function (err, event) {
             event.channel.getName().should.equal('#foo');
             event.names.should.eql({
                 "Ditti": [],

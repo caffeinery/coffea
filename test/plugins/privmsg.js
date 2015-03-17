@@ -13,7 +13,7 @@ describe('privmsg.js', function () {
                 client = irc(stream, false);
             client.nick('bar');
 
-            client.on('message', function (event) {
+            client.on('message', function (err, event) {
                 event.channel.getName().should.equal('#foo');
                 event.user.getNick().should.equal('foo');
                 event.message.should.equal('Hello World');
@@ -27,7 +27,7 @@ describe('privmsg.js', function () {
                 client = irc(stream, false);
             client.nick('bar');
 
-            client.on('message', function (event) {
+            client.on('message', function (err, event) {
                 event.channel.getName().should.equal('#foo');
                 event.user.getNick().should.equal('foo');
                 event.message.should.equal('Hello World');
@@ -41,7 +41,7 @@ describe('privmsg.js', function () {
                 client = irc(stream, false);
             client.nick('bar');
 
-            client.on('privatemessage', function (event) {
+            client.on('privatemessage', function (err, event) {
                 event.user.getNick().should.equal('foo');
                 event.message.should.equal('Hello World');
                 event.isAction.should.equal(false);
@@ -54,7 +54,7 @@ describe('privmsg.js', function () {
                 client = irc(stream, false);
             client.nick('bar');
 
-            client.on('privatemessage', function (event) {
+            client.on('privatemessage', function (err, event) {
                 event.user.getNick().should.equal('foo');
                 event.message.should.equal('Hello World');
                 event.isAction.should.equal(true);

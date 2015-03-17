@@ -28,7 +28,7 @@ describe('welcome.js', function() {
             var st1_id = client.add(st1);
             client.nick('foo', st1_id);
 
-			client.once("welcome", function (event) {
+			client.once("welcome", function (err, event) {
 				event.nick.should.equal('foo');
                 event.message.should.equal('Welcome to the KeratNet IRC Network foo!bar@baz.com');
                 done();
@@ -46,7 +46,7 @@ describe('welcome.js', function() {
             client.nick('foo', st1_id);
             client.nick('bar', st2_id);
 
-			client.once("welcome", function (event) {
+			client.once("welcome", function (err, event) {
 				if (event.network === st1_id) {
 					event.nick.should.equal('foo');
                     event.message.should.equal('Welcome to the KeratNet IRC Network foo!bar@baz.com');
@@ -71,7 +71,7 @@ describe('welcome.js', function() {
             client.nick('bar', st2_id);
 
             var tests = 0;
-			client.once(st1_id + ":welcome", function (event) {
+			client.once(st1_id + ":welcome", function (err, event) {
 				event.nick.should.equal('foo');
                 event.message.should.equal('Welcome to the KeratNet IRC Network foo!bar@baz.com');
 				tests++;
@@ -80,7 +80,7 @@ describe('welcome.js', function() {
                 }
 			});
 
-			client.once(st2_id + ":welcome", function (event) {
+			client.once(st2_id + ":welcome", function (err, event) {
 				event.nick.should.equal('bar');
                 event.message.should.equal('Welcome to the freenode IRC Network bar!foo@baz.com');
 				tests++;

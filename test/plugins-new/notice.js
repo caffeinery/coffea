@@ -80,7 +80,7 @@ describe('notice.js', function() {
             var st1_id = client.add(st1);
             client.nick('troll', st1_id);
 
-			client.once("notice", function (event) {
+			client.once("notice", function (err, event) {
 				event.from.getNick().should.equal('troll');
                 event.to.should.equal('#test');
                 event.message.should.equal('This pings a lot of clients. You mad? \\:D/');
@@ -99,7 +99,7 @@ describe('notice.js', function() {
             client.nick('N', st1_id);
             client.nick('troll', st2_id);
 
-			client.once("notice", function (event) {
+			client.once("notice", function (err, event) {
 				if (event.network === st1_id) {
 					event.from.getNick().should.equal('NickServ');
                 	event.to.should.equal('foo');
@@ -126,13 +126,13 @@ describe('notice.js', function() {
             client.nick('NickServ', st1_id);
             client.nick('troll', st2_id);
 
-			client.once(st1_id + ":notice", function (event) {
+			client.once(st1_id + ":notice", function (err, event) {
 				event.from.getNick().should.equal('NickServ');
                 event.to.should.equal('foo');
                 event.message.should.equal('This nickname is registered. Please choose a different nickname, or identify via /msg NickServ identify <password>.');
 			});
 
-			client.once(st2_id + ":notice", function (event) {
+			client.once(st2_id + ":notice", function (err, event) {
 				event.from.getNick().should.equal('troll');
                 event.to.should.equal('#test');
                 event.message.should.equal('This pings a lot of clients. You mad? \\:D/');

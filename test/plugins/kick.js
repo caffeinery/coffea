@@ -13,7 +13,7 @@ describe('kick.js', function () {
                 client = irc(stream, false);
             client.nick('foo');
 
-            client.on('kick', function (event) {
+            client.on('kick', function (err, event) {
                 event.channel.getName().should.equal('#foo');
                 event.user.getNick().should.equal('targetnick');
                 event.by.getNick().should.equal('foo');
