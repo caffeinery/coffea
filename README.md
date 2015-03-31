@@ -1,4 +1,4 @@
-# Coffea [![NPM version (>=0.4)](http://img.shields.io/npm/v/coffea.svg?style=flat-square)](http://browsenpm.org/package/coffea) [![Build Status](http://img.shields.io/travis/caffeinery/coffea/master.svg?style=flat-square)](https://travis-ci.org/caffeinery/coffea) [![Dependencies](https://img.shields.io/david/caffeinery/coffea.svg?style=flat-square)](https://david-dm.org/caffeinery/coffea) [![Documentation Status](https://readthedocs.org/projects/coffea/badge/?style=flat-square&version=latest)](https://readthedocs.org/projects/coffea/?badge=latest) [![Code Climate](http://img.shields.io/codeclimate/github/caffeinery/coffea.svg?style=flat-square)](https://codeclimate.com/github/caffeinery/coffea)
+# Coffea [![NPM version (>=0.4)](https://img.shields.io/npm/v/coffea.svg?style=flat-square)](https://browsenpm.org/package/coffea) [![Build Status](https://img.shields.io/travis/caffeinery/coffea/master.svg?style=flat-square)](https://travis-ci.org/caffeinery/coffea) [![Dependencies](https://img.shields.io/david/caffeinery/coffea.svg?style=flat-square)](https://david-dm.org/caffeinery/coffea) [![Documentation Status](https://readthedocs.org/projects/coffea/badge/?style=flat-square&version=latest)](https://readthedocs.org/projects/coffea/?badge=latest) [![Code Climate](https://img.shields.io/codeclimate/github/caffeinery/coffea.svg?style=flat-square)](https://codeclimate.com/github/caffeinery/coffea)
 _event based and extensible irc client library with multi-network support_
 
 For support, report an issue on github or join our IRC channel at [![##caffeinery @ chat.freenode.net](https://img.shields.io/badge/IRC-irc.freenode.net%23%23caffeinery-00a8ff.svg?style=flat-square)](https://webchat.freenode.net/?channels=%23%23caffeinery&uio=d4)
@@ -7,7 +7,7 @@ If you want to support coffea, please consider donating: [![https://gratipay.com
 
 ## API
 
-Documentation is available at [coffea.caffeinery.org](http://coffea.caffeinery.org/en/latest/).
+Documentation is available at [coffea.caffeinery.org](https://coffea.caffeinery.org/en/latest/).
 
 ## Examples
 ### Normal Connection (Single network)
