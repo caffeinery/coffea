@@ -15,13 +15,12 @@ describe('part.js', function () {
 
             client.on('part', function (err, event) {
                 event.user.getNick().should.equal('foo');
-                event.channels[0].getName().should.eql('#foo');
-                event.channels[1].getName().should.eql('#bar');
+                event.channel.getName().should.eql('#foo');
                 event.message.should.equal('So long!');
                 done();
             });
 
-            stream.write(':foo!bar@baz.com PART #foo,#bar :So long!\r\n');
+            stream.write(':foo!bar@baz.com PART #foo :So long!\r\n');
         });
     });
 });
