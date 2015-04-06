@@ -50,13 +50,12 @@ describe('part.js', function() {
 
             client.once("part", function (err, event) {
                 event.user.getNick().should.equal('foo');
-                event.channels[0].getName().should.equal('#baz');
-                event.channels[1].getName().should.equal('#bar');
+                event.channel.getName().should.equal('#baz');
                 event.message.should.equal('Part');
                 done();
             });
 
-            st1.write(':foo!bar@baz.com PART #baz,#bar :Part\r\n');
+            st1.write(':foo!bar@baz.com PART #baz :Part\r\n');
         });
 
         it('should emit "part" [multi-network]', function (done) {
@@ -71,19 +70,18 @@ describe('part.js', function() {
             client.once("part", function (err, event) {
                 if (event.network === st1_id) {
                     event.user.getNick().should.equal('ChanServ');
-                    event.channels[0].getName().should.equal('#services');
+                    event.channel.getName().should.equal('#services');
                     event.message.should.equal('');
                 } else {
                     event.user.getNick().should.equal('foo');
-                    event.channels[0].getName().should.equal('#baz');
-                    event.channels[1].getName().should.equal('#bar');
+                    event.channel.getName().should.equal('#baz');
                     event.message.should.equal('Part');
                 }
                 done();
             });
 
             st1.write(':ChanServ!ChanServ@services.in PART #services\r\n');
-            st2.write(':foo!bar@baz.com PART #baz,#bar :Part\r\n');
+            st2.write(':foo!bar@baz.com PART #baz :Part\r\n');
         });
 
         it('should emit "{network}:part" [multi-network]', function (done) {
@@ -98,7 +96,7 @@ describe('part.js', function() {
             var tests = 0;
             client.once(st1_id + ":part", function (err, event) {
                 event.user.getNick().should.equal('ChanServ');
-                event.channels[0].getName().should.equal('#services');
+                event.channel.getName().should.equal('#services');
                 event.message.should.equal('');
                 tests++;
                 if (tests >= 2) {
@@ -108,8 +106,7 @@ describe('part.js', function() {
 
             client.once(st2_id + ":part", function (err, event) {
                 event.user.getNick().should.equal('foo');
-                event.channels[0].getName().should.equal('#baz');
-                event.channels[1].getName().should.equal('#bar');
+                event.channel.getName().should.equal('#baz');
                 event.message.should.equal('Part');
                 tests++;
                 if (tests >= 2) {
@@ -118,7 +115,7 @@ describe('part.js', function() {
             });
 
             st1.write(':ChanServ!ChanServ@services.in PART #services\r\n');
-            st2.write(':foo!bar@baz.com PART #baz,#bar :Part\r\n');
+            st2.write(':foo!bar@baz.com PART #baz :Part\r\n');
         });
     });
 });
