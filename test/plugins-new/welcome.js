@@ -15,9 +15,9 @@ describe('welcome.js', function() {
             client.nick('foo', st1_id);
 
             st1.write(':vulcanus.kerat.net 001 foo :Welcome to the KeratNet IRC Network foo!bar@baz.com\r\n');
-           
+
             process.nextTick(function () {
-                client.me.getNick().should.equal('foo');
+                client.networked_me[st1_id].getNick().should.equal('foo');
                 done();
             });
         });

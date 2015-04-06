@@ -49,7 +49,7 @@ describe('user.js', function() {
 
             st1.write(':irc.net 396 nick host.com :is now your displayed host\r\n');
             process.nextTick(function() {
-                client.me.getHostname().should.equal('host.com');
+                client.networked_me[st1_id].getHostname().should.equal('host.com');
                 done();
             });
         });

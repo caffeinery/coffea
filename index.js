@@ -36,7 +36,7 @@ function Client(info, throttling) {
 
     this.streams = {};
     this.stinfo = {};
-    this.me = null;
+    this.networked_me = {};
     this.capabilities = [];
 
     this._loadPlugins();

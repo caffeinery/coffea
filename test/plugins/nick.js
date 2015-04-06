@@ -20,7 +20,7 @@ describe('nick.js', function () {
                     done();
                 });
             });
-            
+
             client.nick('foo');
 
             stream.write(':foo!bar@baz.com NICK bar\r\n');
