@@ -9,6 +9,12 @@ If you want to support coffea, please consider donating: [![https://gratipay.com
 
 Documentation is available at [coffea.caffeinery.org](https://coffea.caffeinery.org/en/latest/).
 
+
+## Installation
+
+To install coffea, run: `npm install --save coffea@0.4.4` in your project directory.
+
+
 ## Examples
 ### Normal Connection (Single network)
 ```javascript
