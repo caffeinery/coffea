@@ -336,7 +336,7 @@ describe('Formatting', function() {
 
             client.once('data', function (data) {
                 client.once('data', function (data) {
-                    data.string.should.equal('PRIVMSG #test :\u000300\u000f');
+                    data.string.should.equal('PRIVMSG #test :\u000f');
                     done();
                 });
             });
