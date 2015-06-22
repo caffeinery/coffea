@@ -14,12 +14,10 @@ describe('IRCv3 Parser', function() {
             var st1_id = client.add(st1);
             client.nick('test', st1_id);
 
-            client.once("data", function (err, event) {
-                client.once("data", function (err, event) {
-                    event.tags.length.should.equal(1);
-                    event.tags[0].key.should.equal('aaa');
-                    done();
-                });
+            client.on("message", function (err, event) {
+                event.tags.length.should.equal(1);
+                event.tags[0].key.should.equal('aaa');
+                done();
             });
 
             st1.write('@aaa :test!foo@bar.com PRIVMSG #test :hello world\r\n');
@@ -31,13 +29,11 @@ describe('IRCv3 Parser', function() {
             var st1_id = client.add(st1);
             client.nick('test', st1_id);
 
-            client.once("data", function (err, event) {
-                client.once("data", function (err, event) {
-                    event.tags.length.should.equal(2);
-                    event.tags[0].key.should.equal('aaa');
-                    event.tags[1].key.should.equal('bbb');
-                    done();
-                });
+            client.once("message", function (err, event) {
+                event.tags.length.should.equal(2);
+                event.tags[0].key.should.equal('aaa');
+                event.tags[1].key.should.equal('bbb');
+                done();
             });
 
             st1.write('@aaa;bbb :test!foo@bar.com PRIVMSG #test :hello world\r\n');
@@ -49,13 +45,11 @@ describe('IRCv3 Parser', function() {
             var st1_id = client.add(st1);
             client.nick('test', st1_id);
 
-            client.once("data", function (err, event) {
-                client.once("data", function (err, event) {
-                    event.tags.length.should.equal(1);
-                    event.tags[0].key.should.equal('aaa');
-                    event.tags[0].value.should.equal('bbb');
-                    done();
-                });
+            client.once("message", function (err, event) {
+                event.tags.length.should.equal(1);
+                event.tags[0].key.should.equal('aaa');
+                event.tags[0].value.should.equal('bbb');
+                done();
             });
 
             st1.write('@aaa=bbb :test!foo@bar.com PRIVMSG #test :hello world\r\n');
@@ -67,15 +61,13 @@ describe('IRCv3 Parser', function() {
             var st1_id = client.add(st1);
             client.nick('test', st1_id);
 
-            client.once("data", function (err, event) {
-                client.once("data", function (err, event) {
-                    event.tags.length.should.equal(2);
-                    event.tags[0].key.should.equal('aaa');
-                    event.tags[0].value.should.equal('bbb');
-                    event.tags[1].key.should.equal('ccc');
-                    event.tags[1].value.should.equal('ddd');
-                    done();
-                });
+            client.once("message", function (err, event) {
+                event.tags.length.should.equal(2);
+                event.tags[0].key.should.equal('aaa');
+                event.tags[0].value.should.equal('bbb');
+                event.tags[1].key.should.equal('ccc');
+                event.tags[1].value.should.equal('ddd');
+                done();
             });
 
             st1.write('@aaa=bbb;ccc=ddd :test!foo@bar.com PRIVMSG #test :hello world\r\n');
@@ -87,16 +79,14 @@ describe('IRCv3 Parser', function() {
             var st1_id = client.add(st1);
             client.nick('test', st1_id);
 
-            client.once("data", function (err, event) {
-                client.once("data", function (err, event) {
-                    event.tags.length.should.equal(3);
-                    event.tags[0].key.should.equal('aaa');
-                    event.tags[0].value.should.equal('bbb');
-                    event.tags[1].key.should.equal('ccc');
-                    event.tags[2].key.should.equal('znc.in/server-time');
-                    event.tags[2].value.should.equal('1434975029');
-                    done();
-                });
+            client.once("message", function (err, event) {
+                event.tags.length.should.equal(3);
+                event.tags[0].key.should.equal('aaa');
+                event.tags[0].value.should.equal('bbb');
+                event.tags[1].key.should.equal('ccc');
+                event.tags[2].key.should.equal('znc.in/server-time');
+                event.tags[2].value.should.equal('1434975029');
+                done();
             });
 
             st1.write('@aaa=bbb;ccc;znc.in/server-time=1434975029 :test!foo@bar.com PRIVMSG #test :hello world\r\n');
