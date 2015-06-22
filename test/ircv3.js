@@ -14,8 +14,8 @@ describe('IRCv3 Parser', function() {
             var st1_id = client.add(st1);
             client.nick('test', st1_id);
 
-            client.on("data", function (err, event) {
-                client.on("data", function (err, event) {
+            client.once("data", function (err, event) {
+                client.once("data", function (err, event) {
                     event.tags.length.should.equal(1);
                     event.tags[0].key.should.equal('aaa');
                     done();
@@ -31,8 +31,8 @@ describe('IRCv3 Parser', function() {
             var st1_id = client.add(st1);
             client.nick('test', st1_id);
 
-            client.on("data", function (err, event) {
-                client.on("data", function (err, event) {
+            client.once("data", function (err, event) {
+                client.once("data", function (err, event) {
                     event.tags.length.should.equal(2);
                     event.tags[0].key.should.equal('aaa');
                     event.tags[1].key.should.equal('bbb');
@@ -49,8 +49,8 @@ describe('IRCv3 Parser', function() {
             var st1_id = client.add(st1);
             client.nick('test', st1_id);
 
-            client.on("data", function (err, event) {
-                client.on("data", function (err, event) {
+            client.once("data", function (err, event) {
+                client.once("data", function (err, event) {
                     event.tags.length.should.equal(1);
                     event.tags[0].key.should.equal('aaa');
                     event.tags[0].value.should.equal('bbb');
@@ -67,8 +67,8 @@ describe('IRCv3 Parser', function() {
             var st1_id = client.add(st1);
             client.nick('test', st1_id);
 
-            client.on("data", function (err, event) {
-                client.on("data", function (err, event) {
+            client.once("data", function (err, event) {
+                client.once("data", function (err, event) {
                     event.tags.length.should.equal(2);
                     event.tags[0].key.should.equal('aaa');
                     event.tags[0].value.should.equal('bbb');
@@ -87,8 +87,8 @@ describe('IRCv3 Parser', function() {
             var st1_id = client.add(st1);
             client.nick('test', st1_id);
 
-            client.on("data", function (err, event) {
-                client.on("data", function (err, event) {
+            client.once("data", function (err, event) {
+                client.once("data", function (err, event) {
                     event.tags.length.should.equal(3);
                     event.tags[0].key.should.equal('aaa');
                     event.tags[0].value.should.equal('bbb');
