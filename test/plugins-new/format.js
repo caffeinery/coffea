@@ -152,7 +152,7 @@ describe('Formatting', function() {
             client.send('#test', client.format.lime);
         });
 
-        it('10 : teal', function (done) {
+        it('10 : Teal', function (done) {
             var client = coffea(null, false);
             var st1 = new Stream();
             var st1_id = client.add(st1);
@@ -343,6 +343,38 @@ describe('Formatting', function() {
 
             client.nick('test');
             client.send('#test', client.format.reset);
+        });
+
+        it('Zero Width Space', function (done) {
+            var client = coffea(null, false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('PRIVMSG #test :\u200b');
+                    done();
+                });
+            });
+
+            client.nick('test');
+            client.send('#test', client.format.zwsp);
+        });
+
+        it('Replaces parts of message with Zero Width Spaces', function (done) {
+            var client = coffea(null, false);
+            var st1 = new Stream();
+            var st1_id = client.add(st1);
+
+            client.once('data', function (data) {
+                client.once('data', function (data) {
+                    data.string.should.equal('PRIVMSG #test :t\u200be\u200bs\u200bt: Hey there!');
+                    done();
+                });
+            });
+
+            client.nick('test');
+            client.send('#test', client.format.unhighlight('test') + ": Hey there!");
         });
     });
 });
