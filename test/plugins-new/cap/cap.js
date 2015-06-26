@@ -63,7 +63,7 @@ describe('cap.js', function() {
             st1.write(':irc.server CAP * ACK :sasl\r\n');
 
             process.nextTick(function () {
-                client.capabilities.should.eql(['sasl']);
+                client.capabilities.should.equal(['sasl']);
                 done();
             });
         });
