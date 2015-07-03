@@ -1,6 +1,6 @@
 {
   "name": "coffea",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "event based and extensible irc client library with multi-network support",
   "author": "Caffeinery Developers <daniel.bugl@touchlay.com>",
   "repository": {
@@ -25,21 +25,23 @@
     "url": "https://github.com/caffeinery/coffea/issues"
   },
   "dependencies": {
-    "eventemitter3": ">=0.1.5 <0.2.0-0",
-    "irc-replies": ">=2.0.0 <2.1.0-0",
-    "limiter": ">=1.0.5 <1.1.0-0",
+    "eventemitter3": "1.1.x",
+    "fusing": "1.0.x",
+    "irc-replies": "2.0.x",
+    "limiter": "1.0.x",
     "linewise": "0.0.3",
-    "underscore": ">=1.8.0 <1.9.0-0"
+    "underscore": "1.8.x"
   },
   "devDependencies": {
-    "mocha": ">=2.2.1 <2.3.0-0",
-    "should": ">=5.2.0 <5.3.0-0",
-    "istanbul": "~0.3.15",
-    "coveralls": "~2.11.2"
+    "mocha": "2.2.x",
+    "should": "7.0.x",
+    "istanbul": "0.3.x",
+    "coveralls": "2.11.x"
   },
+  "engine": "node >= 0.10.0",
   "scripts": {
     "test": "mocha --require should --reporter spec test/*",
     "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec test/* && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
-  "license": "BSD"
+  "license": "BSD-2-Clause"
 }

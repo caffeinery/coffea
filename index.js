@@ -1,7 +1,7 @@
 /*jslint node: true*/
 "use strict";
 
-var Emitter = require('eventemitter3').EventEmitter;
+var EventEmitter = require('eventemitter3');
 var Parser = require('./lib/parser');
 var net = require('net');
 var tls = require('tls');
@@ -60,7 +60,7 @@ function Client(info, throttling) {
 module.exports = Client;
 
 // inherit from Emitter.prototype to make Client and EventEmitter
-utils.inherit(Client, Emitter);
+utils.inherit(Client, EventEmitter);
 
 /**
  * Internal function that loads all plugins
