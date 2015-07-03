@@ -12,7 +12,7 @@ Documentation is available at [coffea.caffeinery.org](https://coffea.caffeinery.
 
 ## Installation
 
-To install coffea, run: `npm install --save coffea@0.4.4` in your project directory.
+To install coffea, run: `npm install --save coffea` in your project directory.
 
 
 ## Examples
