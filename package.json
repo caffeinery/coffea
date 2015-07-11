@@ -8,7 +8,12 @@
     "url": "https://github.com/caffeinery/coffea.git"
   },
   "keywords": [
+    "node-irc",
+    "nodejs irc",
     "irc",
+    "irc3",
+    "ircv3",
+    "simple",
     "library",
     "client",
     "chat",
