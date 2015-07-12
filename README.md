@@ -4,7 +4,7 @@
 
 _event based and extensible nodejs irc client library with multi-network support_
 
-For support, report an issue on github or join our IRC channel at [![#caffeinery @ chat.freenode.net](https://img.shields.io/badge/IRC-irc.freenode.net%23caffeinery-00a8ff.svg?style=flat-square)](https://webchat.freenode.net/?channels=%23caffeinery&uio=d4)
+For support, report an issue on github, join our IRC channel at [![#caffeinery @ chat.freenode.net](https://img.shields.io/badge/IRC-irc.freenode.net%23caffeinery-00a8ff.svg?style=flat-square)](https://webchat.freenode.net/?channels=%23caffeinery&uio=d4) or if you prefer that, write an email to our mailing list: caffeinery@googlegroups.com
 
 If you want to support coffea development, please consider donating (it helps me keeping the project active and alive!): [![https://gratipay.com/omnidan/](https://img.shields.io/gratipay/omnidan.svg?style=flat-square)](https://gratipay.com/omnidan/)
 
