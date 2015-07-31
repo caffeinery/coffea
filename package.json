@@ -30,7 +30,6 @@
   },
   "dependencies": {
     "eventemitter3": "1.1.x",
-    "fusing": "1.0.x",
     "irc-replies": "2.0.x",
     "limiter": "1.0.x",
     "linewise": "0.0.3",
