@@ -108,6 +108,8 @@ Client.prototype._check = function(network) {
     ret.realname = network.realname === undefined ? ret.nick : network.realname;
     ret.pass = network.pass;
 
+    ret.channels = network.channels === undefined ? ret.channels : network.channels;
+
     ret.throttling = network.throttling;
 
     ret.sasl = network.sasl === undefined? null : network.sasl;
@@ -205,9 +207,12 @@ Client.prototype._connect = function (stream_id, info) {
     this.nick(info.nick, stream_id);
     this.user(info.username, info.realname, stream_id);
     if (info.nickserv && info.nickserv.username && info.nickserv.password) {
-        this.identify(info.nickserv.username, info.nickserv.password);
+        this.identify(info.nickserv.username, info.nickserv.password, stream_id);
     } else if (info.nickserv && info.nickserv.password) {
-        this.identify(info.nickserv.password);
+        this.identify(info.nickserv.password, stream_id);
+    }
+    if (info.channels) {
+        this.join(info.channels, stream_id);
     }
 };
 
