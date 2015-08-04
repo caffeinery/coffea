@@ -212,7 +212,9 @@ Client.prototype._connect = function (stream_id, info) {
         this.identify(info.nickserv.password, stream_id);
     }
     if (info.channels) {
-        this.join(info.channels, stream_id);
+        this.on('motd', function defaultOnMotd(err, event) {
+            this.join(info.channels, stream_id);
+        });
     }
 };
 
