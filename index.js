@@ -101,8 +101,8 @@ Client.prototype._check = function(network) {
 
     ret.nick = network.nick === undefined ? randnick : network.nick;
     var port = network.ssl === true ? 6697 : 6667;
-    ret.port = network.port === undefined ? port : network.port;
-    ret.ssl = network.ssl === undefined ? false : network.ssl;
+    ret.port = parseInt(network.port === undefined ? port : network.port);
+    ret.ssl = network.ssl === undefined ? (ret.port === 6697) : network.ssl;
     ret.ssl_allow_invalid = network.ssl_allow_invalid === undefined ? false : network.ssl_allow_invalid;
     ret.username = network.username === undefined ? ret.nick : network.username;
     ret.realname = network.realname === undefined ? ret.nick : network.realname;
