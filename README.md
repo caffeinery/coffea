@@ -26,10 +26,12 @@ var client = require('coffea')('chat.freenode.net');
 var client = require('coffea')({
     host: 'chat.freenode.net',
     port: 6667, // default value: 6667
+    ssl: false, // set to true if you want to use ssl
+    ssl_allow_invalid: false, // set to true if the server has a custom ssl certificate
     nick: 'test', // default value: 'coffea' with random number
     username: 'test', // default value: username = nick
     realname: 'test', // default value: realname = nick
-    pass: 'sup3rS3cur3P4ssw0rd' // by default no password will be sent
+    pass: 'sup3rS3cur3P4ssw0rd', // by default no password will be sent
     nickserv: {
         username: 'test',
         password: 'l33tp455w0rD'
@@ -58,10 +60,12 @@ var client = require('coffea')([
         host: 'chat.freenode.net',
         name: 'freenode', // this is not required but recommended when dealing with multiple networks, by default a numeric id will be assigned
         port: 6667, // default value: 6667
+        ssl: false, // set to true if you want to use ssl
+        ssl_allow_invalid: false, // set to true if the server has a custom ssl certificate
         nick: 'test', // default value: 'coffea' with random number
         username: 'test', // default value: username = nick
         realname: 'test', // default value: realname = nick
-        pass: 'sup3rS3cur3P4ssw0rd' // by default no password will be sent
+        pass: 'sup3rS3cur3P4ssw0rd', // by default no password will be sent
         nickserv: {
             username: 'test',
             password: 'l33tp455w0rD'
@@ -72,10 +76,12 @@ var client = require('coffea')([
         host: 'irc.oftc.net',
         name: 'oftc', // this is not required but recommended when dealing with multiple networks, by default a numeric id will be assigned
         port: 6667, // default value: 6667
+        ssl: false, // set to true if you want to use ssl
+        ssl_allow_invalid: false, // set to true if the server has a custom ssl certificate
         nick: 'test', // default value: 'coffea' with random number
         username: 'test', // default value: username = nick
         realname: 'test', // default value: realname = nick
-        pass: 'sup3rS3cur3P4ssw0rd' // by default no password will be sent
+        pass: 'sup3rS3cur3P4ssw0rd', // by default no password will be sent
         nickserv: {
             username: 'test',
             password: 'l33tp455w0rD'
@@ -102,13 +108,13 @@ client.on('message', function (err, event) {
 ```javascript
 var client = require('coffea')({
     host: 'chat.freenode.net',
-    ssl: true,
+    ssl: true, // we want to use ssl
     // ssl_allow_invalid: true, // allow invalid/self-signed/expired SSL certs - default value: false
     // port: 6697, // will default to 6697 on ssl
     // nick: 'test', // default value: 'coffea' with random number
     // username: 'test', // default value: username = nick
     // realname: 'test', // default value: realname = nick
-    // pass: 'sup3rS3cur3P4ssw0rd' // by default no password will be sent
+    // pass: 'sup3rS3cur3P4ssw0rd', // by default no password will be sent
     // nickserv: {
     //     username: 'test',
     //     password: 'l33tp455w0rD'
