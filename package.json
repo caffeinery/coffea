@@ -1,6 +1,6 @@
 {
   "name": "coffea",
-  "version": "0.4.11",
+  "version": "0.4.12",
   "description": "event based and extensible nodejs irc client library with multi-network support",
   "author": "Caffeinery Developers <daniel.bugl@touchlay.com>",
   "repository": {
@@ -29,6 +29,7 @@
     "url": "https://github.com/caffeinery/coffea/issues"
   },
   "dependencies": {
+    "debug": "^2.2.0",
     "eventemitter3": "1.1.x",
     "irc-replies": "2.0.x",
     "limiter": "1.0.x",
