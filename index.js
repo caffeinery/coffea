@@ -63,7 +63,7 @@ module.exports = Client;
 utils.inherit(Client, EventEmitter);
 
 Client.prototype.getInfo = function (network) {
-    return this.streams[network];
+    return this.stinfo[network];
 };
 
 Client.prototype.splitString = function (text) {
@@ -103,7 +103,7 @@ Client.prototype._loadPlugins = function() {
  * @return {Object} network
  * @api private
  */
-Client.prototype._check = function(network) {
+Client.prototype._check = function (network) {
     var ret = {};
     var randnick = "coffea"+Math.floor(Math.random() * 100000);
 
@@ -124,7 +124,7 @@ Client.prototype._check = function(network) {
     ret.realname = network.realname === undefined ? ret.nick : network.realname;
     ret.pass = network.pass;
 
-    ret.prefix = ret.prefix === undefined ? '!' : ret.prefix;
+    ret.prefix = network.prefix === undefined ? '!' : network.prefix;
 
     ret.channels = network.channels === undefined ? ret.channels : network.channels;
 
@@ -145,7 +145,7 @@ Client.prototype._check = function(network) {
  * @return {string} stream_id
  * @api private
  */
-Client.prototype._useStream = function (stream, network, throttling) {
+Client.prototype._useStream = function (stream, network, throttling, info) {
     if (network) { stream.coffea_id = network; } // user-defined stream id
     else { stream.coffea_id = Object.keys(this.streams).length.toString(); } // assign unique id to stream
 
@@ -168,7 +168,7 @@ Client.prototype._useStream = function (stream, network, throttling) {
 
     // add stream to client
     this.streams[stream.coffea_id] = stream;
-    this.stinfo[stream.coffea_id] = network;
+    this.stinfo[stream.coffea_id] = info;
 
     // return stream id
     return stream.coffea_id;
@@ -176,7 +176,7 @@ Client.prototype._useStream = function (stream, network, throttling) {
 
 /* Depreciated. This is here for compatibility. */
 Client.prototype.useStream = function (stream, network) {
-    this._useStream(stream, network);
+    this._useStream(stream, network, network.throttling, network);
 };
 
 /**
@@ -185,10 +185,10 @@ Client.prototype.useStream = function (stream, network) {
  * @params {string} stream_id
  */
 Client.prototype.reconnect = function (stream_id) {
-    var network = this.stinfo[stream_id];
-    var stream = network.ssl ? tls.connect({host: network.host, port: network.port}) : net.connect({host: network.host, port: network.port});
-    this._useStream(stream, stream_id, network.throttling);
-    this._connect(stream_id, network);
+    var info = this.stinfo[stream_id];
+    var stream = info.ssl ? tls.connect({host: info.host, port: info.port}) : net.connect({host: info.host, port: info.port});
+    this._useStream(stream, stream_id, info.throttling, info);
+    this._connect(stream_id, info);
 };
 
 /**
@@ -258,14 +258,14 @@ Client.prototype.add = function (info) {
                     port: network.port,
                     rejectUnauthorized: !network.ssl_allow_invalid
                 }, function() {
-                    stream_id = _this._useStream(stream, network.name, network.throttling);
+                    stream_id = _this._useStream(stream, network.name, network.throttling, network);
                     utils.emit(_this, stream_id, 'ssl-error', new utils.SSLError(stream.authorizationError));
                     _this._connect(stream_id, network);
                     streams.push(stream_id);
                 });
             } else {
                 stream = net.connect({host: network.host, port: network.port});
-                stream_id = _this._useStream(stream, network.name, network.throttling);
+                stream_id = _this._useStream(stream, network.name, network.throttling, network);
                 _this._connect(stream_id, network);
                 streams.push(stream_id);
             }
@@ -279,18 +279,18 @@ Client.prototype.add = function (info) {
                 port: info.port,
                 rejectUnauthorized: !info.ssl_allow_invalid
             }, function() {
-                stream_id = _this._useStream(stream, info.name, info.throttling);
+                stream_id = _this._useStream(stream, info.name, info.throttling, info);
                 utils.emit(_this, stream_id, 'ssl-error', new utils.SSLError(stream.authorizationError));
                 _this._connect(stream_id, info);
             });
         } else {
             stream = net.connect({host: info.host, port: info.port});
-            stream_id = _this._useStream(stream, info.name, info.throttling);
+            stream_id = _this._useStream(stream, info.name, info.throttling, info);
             _this._connect(stream_id, info);
         }
     } else {
         // Assume we've been passed the legacy stream.
-        stream_id = this._useStream(info, null, info.throttling);
+        stream_id = this._useStream(info, null, info.throttling, info);
     }
 
     if(streams.length === 0) {
