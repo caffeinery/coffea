@@ -28,6 +28,8 @@ var client = require('coffea')({
     port: 6667, // default value: 6667
     ssl: false, // set to true if you want to use ssl
     ssl_allow_invalid: false, // set to true if the server has a custom ssl certificate
+    prefix: '!', // used to parse commands and emit on('command') events, default: !
+    channels: ['#foo', '#bar'], // autojoin channels, default: []
     nick: 'test', // default value: 'coffea' with random number
     username: 'test', // default value: username = nick
     realname: 'test', // default value: realname = nick
@@ -40,14 +42,20 @@ var client = require('coffea')({
 });
 */
 
-client.on('motd', function (err, event) {
-    client.join(['#foo', '#bar', '#baz']);
+client.on('motd', function (event) {
+    client.join(['#foo', '#bar', '#baz'], event.network);
 });
 
-client.on('message', function (err, event) {
+client.on('message', function (event) {
     console.log('[' + event.channel.getName() + '] ' + event.user.getNick() + ': ' + event.message);
     //[#foo] nick: message
     event.reply(event.message); // I'm a parrot
+});
+
+client.on('command', function (event) {
+    if (event.cmd === 'ping') { // respond to `!ping SOMETHING` with `SOMETHING`, or `pong`, if SOMETHING is not specified
+        event.reply(event.args.length > 0 ? event.args.join(' ') : 'pong');
+    }
 });
 ```
 
@@ -62,6 +70,8 @@ var client = require('coffea')([
         port: 6667, // default value: 6667
         ssl: false, // set to true if you want to use ssl
         ssl_allow_invalid: false, // set to true if the server has a custom ssl certificate
+        prefix: '!', // used to parse commands and emit on('command') events, default: !
+        channels: ['#foo', '#bar'], // autojoin channels, default: []
         nick: 'test', // default value: 'coffea' with random number
         username: 'test', // default value: username = nick
         realname: 'test', // default value: realname = nick
@@ -78,6 +88,8 @@ var client = require('coffea')([
         port: 6667, // default value: 6667
         ssl: false, // set to true if you want to use ssl
         ssl_allow_invalid: false, // set to true if the server has a custom ssl certificate
+        prefix: '!', // used to parse commands and emit on('command') events, default: !
+        channels: ['#foo', '#bar'], // autojoin channels, default: []
         nick: 'test', // default value: 'coffea' with random number
         username: 'test', // default value: username = nick
         realname: 'test', // default value: realname = nick
@@ -93,22 +105,30 @@ var client = require('coffea')([
 
 // note how we are passing the network here, by default it'll just send to all networks
 // by using network you can join specific channels on specific networks
-client.on('motd', function (err, event) {
+client.on('motd', function (event) {
     client.join(['#foo', '#bar', '#baz'], event.network);
 });
 
-client.on('message', function (err, event) {
-    console.log('[' + event.network + '][' + event.channel.getName() + '] ' + event.user.getNick() + ': ' + event.message);
-    //[freenode][#foo] nick: message
+client.on('message', function (event) {
+    console.log('[' + event.channel.getName() + '] ' + event.user.getNick() + ': ' + event.message);
+    //[#foo] nick: message
     event.reply(event.message); // I'm a parrot
+});
+
+client.on('command', function (event) {
+    if (event.cmd === 'ping') { // respond to `!ping SOMETHING` with `SOMETHING`, or `pong`, if SOMETHING is not specified
+        event.reply(event.args.length > 0 ? event.args.join(' ') : 'pong');
+    }
 });
 ```
 
-### Using SSL
+### Using SSL (and other goodies)
 ```javascript
 var client = require('coffea')({
     host: 'chat.freenode.net',
     ssl: true, // we want to use ssl
+    channels: ['#foo', '#bar', '#baz'], // autojoin channels
+    // prefix: '!', // used to parse commands and emit on('command') events, default: !
     // ssl_allow_invalid: true, // allow invalid/self-signed/expired SSL certs - default value: false
     // port: 6697, // will default to 6697 on ssl
     // nick: 'test', // default value: 'coffea' with random number
@@ -122,13 +142,15 @@ var client = require('coffea')({
     // throttling: 250 // default value: 250ms, 1 message every 250ms, disable by setting to false
 });
 
-client.on('motd', function (err, event) {
-    client.join(['#foo', '#bar', '#baz']);
-});
-
-client.on('message', function (err, event) {
+client.on('message', function (event) {
     console.log('[' + event.channel.getName() + '] ' + event.user.getNick() + ': ' + event.message);
     //[#foo] nick: message
     event.reply(event.message); // I'm a parrot
+});
+
+client.on('command', function (event) {
+    if (event.cmd === 'ping') { // respond to `!ping SOMETHING` with `SOMETHING`, or `pong`, if SOMETHING is not specified
+        event.reply(event.args.length > 0 ? event.args.join(' ') : 'pong');
+    }
 });
 ```
