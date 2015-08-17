@@ -155,7 +155,26 @@ client.on('command', function (event) {
 });
 ```
 
-## Configuration file
+### Debugging
+
+Make sure to listen to `error` events to see possible errors/warnings:
+
+```javascript
+client.on('error', function (err, event) {
+    console.log(event.name, err.stack);
+});
+```
+
+You can also add the `err` parameter to any event listener (change from `function (event)` to `function (err, event)`:
+
+```javascript
+client.on('whois', function (err, event) {
+    if (err) console.log("WHOIS ERROR:", err.stack);
+    console.log("whois:", event);
+});
+```
+
+### Configuration file
 
 Using a configuration file for your bot is super easy with coffea! First, create `config.json` and paste your current configuration. (Make sure to change `key: 'something'` to `"key": "something"` as we're dealing with JSON now, e.g. `host: 'chat.freenode.net'` -> `"host": "chat.freenode.net"`)
 
@@ -165,7 +184,7 @@ Then, simply do:
 var client = require('coffea')(require('./config.json'));
 ```
 
-### `config.json` with full config:
+#### `config.json` with full config
 
 ```javascript
 {
