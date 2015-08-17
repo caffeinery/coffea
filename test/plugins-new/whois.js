@@ -163,7 +163,7 @@ describe('whois.js', function () {
             client.whois('foo');
             client.on('whois', function (err, event) {
                 err.should.be.an.instanceof(Error);
-                err.message.should.equal('No such nick/channel');
+                err.message.split(':')[0].should.equal('No such nick/channel');
                 done();
             });
 
@@ -178,7 +178,7 @@ describe('whois.js', function () {
             client.nick('foo', st1_id);
 
             client.whois('not.a.valid.server', function (err) {
-                err.should.equal('No such server');
+                err.split(':')[0].should.equal('No such server');
                 done();
             });
 

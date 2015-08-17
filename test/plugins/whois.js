@@ -161,7 +161,7 @@ describe('whois.js', function () {
             client.whois('unusednickorchannel');
             client.on('whois', function (err, event) {
                 err.should.be.an.instanceof(Error);
-                err.message.should.equal('No such nick/channel');
+                err.message.split(':')[0].should.equal('No such nick/channel');
                 done();
             });
             stream.write(':vulcanus.kerat.net 401 maggin unusednickorchannel :No such nick/channel\r\n');
@@ -172,7 +172,7 @@ describe('whois.js', function () {
             var stream = new Stream(),
                 client = irc(stream, false);
             client.whois('not.a.valid.server', function (err) {
-                err.should.equal('No such server');
+                err.split(':')[0].should.equal('No such server');
                 done();
             });
             stream.write(':vulcanus.kerat.net 402 foo not.a.valid.server :No such server\r\n');
@@ -183,7 +183,7 @@ describe('whois.js', function () {
                 client = irc(stream, false);
             client.on('whois', function (err, event) {
                 err.should.be.an.instanceof(Error);
-                err.message.should.equal('Not enough parameters');
+                err.message.split(':')[0].should.equal('Not enough parameters');
                 done();
             });
             stream.write(':vulcanus.kerat.net 461 foo WHOIS :Not enough parameters.\r\n');
