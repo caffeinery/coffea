@@ -34,7 +34,7 @@ describe('channel.js', function () {
             done();
         });
     });
-    describe('getChannellist()', function () {
+    describe('getChannelList(network)', function () {
         it('should return List of channels that we are in', function (done) {
             var stream = new Stream(),
                 client = irc(stream, false),
@@ -47,7 +47,7 @@ describe('channel.js', function () {
             stream.write(':foo!bar@baz.com JOIN :#baz\r\n');
             stream.write(':foo!bar@baz.com PART #bar :So long!\r\n');
             process.nextTick(function () {
-                chanlist = client.getChannellist();
+                chanlist = client.getChannelList('0');
                 chanlist.should.be.instanceof(Array).and.have.lengthOf(2);
                 chanlist[0].should.equal('#foo');
                 chanlist[1].should.equal('#baz');

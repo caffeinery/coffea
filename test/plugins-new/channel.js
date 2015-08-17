@@ -40,7 +40,7 @@ describe('channel.js', function() {
             done();
         });
     });
-    describe('getChannelList()', function () {
+    describe('getChannelList(network)', function () {
         it('should return list of all channels we\'re in', function (done) {
             var client = coffea(null, false);
             var st1 = new Stream();
@@ -54,7 +54,7 @@ describe('channel.js', function() {
             st1.write(':foo!bar@baz.com JOIN :#baz\r\n');
             st1.write(':foo!bar@baz.com PART #foo :This channel sucks!\r\n');
             process.nextTick(function() {
-                chanlist = client.getChannellist();
+                chanlist = client.getChannelList(st1_id);
                 chanlist.should.be.instanceof(Array).and.have.lengthOf(2);
                 chanlist[0].should.equal('#bar');
                 chanlist[1].should.equal('#baz');
