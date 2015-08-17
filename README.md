@@ -154,3 +154,35 @@ client.on('command', function (event) {
     }
 });
 ```
+
+## Configuration file
+
+Using a configuration file for your bot is super easy with coffea! First, create `config.json` and paste your current configuration. (Make sure to change `key: 'something'` to `"key": "something"` as we're dealing with JSON now, e.g. `host: 'chat.freenode.net'` -> `"host": "chat.freenode.net"`)
+
+Then, simply do:
+
+```javascript
+var client = require('coffea')(require('./config.json'));
+```
+
+### `config.json` with full config:
+
+```javascript
+{
+    "host": "chat.freenode.net",
+    "port": 6667,
+    "ssl": false,
+    "ssl_allow_invalid": false,
+    "prefix": "!",
+    "channels": ["#foo", "#bar"],
+    "nick": "test",
+    "username": "test",
+    "realname": "test",
+    "pass": "sup3rS3cur3P4ssw0rd",
+    "nickserv": {
+        "username": "test",
+        "password": "l33tp455w0rD"
+    },
+    "throttling": 250
+}
+```
