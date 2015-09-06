@@ -68,7 +68,7 @@ Client.prototype.getInfo = function (network) {
 
 Client.prototype.splitString = function (text) {
     var message = text.match(/\w+|"(?:\\"|[^"])+"/g);
-    message = message.map(function (m) {
+    message = message && message.map(function (m) {
         if ((m.charAt(0) === '"') && (m.charAt(m.length - 1) === '"')) {
             return m.substring(1, m.length - 1).split('\\').join("");
             // .split.join is actually faster than .replace on v8: http://stackoverflow.com/a/1145525/702288
