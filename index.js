@@ -35,6 +35,7 @@ function Client(info, throttling) {
     } catch (err) { }
 
     this.streams = {};
+    this.settings = {};
     this.stinfo = {};
     this.networked_me = {};
     this.capabilities = [];
@@ -168,6 +169,7 @@ Client.prototype._useStream = function (stream, network, throttling, info) {
 
     // add stream to client
     this.streams[stream.coffea_id] = stream;
+    this.settings[stream.coffea_id] = {};
     this.stinfo[stream.coffea_id] = info;
 
     // return stream id
