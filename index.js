@@ -202,6 +202,10 @@ Client.prototype.onmessage = function (msg, network) {
     utils.emit(this, network, 'data', msg);
 };
 
+Client.prototype._emitConnect = function (network) {
+    utils.emit(this, network, 'connect', null); // We don't need no data
+};
+
 Client.prototype._setupSASL = function (stream_id, info) {
     this.on('cap_ack', function (err, event) {
         if (event.capability === 'sasl') {
@@ -262,12 +266,15 @@ Client.prototype.add = function (info) {
                     utils.emit(_this, stream_id, 'ssl-error', new utils.SSLError(stream.authorizationError));
                     _this._connect(stream_id, network);
                     streams.push(stream_id);
+                    _this._emitConnect(stream_id);
                 });
             } else {
-                stream = net.connect({host: network.host, port: network.port});
-                stream_id = _this._useStream(stream, network.name, network.throttling, network);
-                _this._connect(stream_id, network);
-                streams.push(stream_id);
+                stream = net.connect({host: network.host, port: network.port}, function () {
+                    stream_id = _this._useStream(stream, network.name, network.throttling, network);
+                    _this._connect(stream_id, network);
+                    streams.push(stream_id);
+                    _this._emitConnect(stream_id);
+                });
             }
         });
     } else if ((typeof info === 'string') || (info instanceof Object && !(info instanceof StreamReadable) && !(info instanceof StreamWritable))) {
@@ -282,11 +289,14 @@ Client.prototype.add = function (info) {
                 stream_id = _this._useStream(stream, info.name, info.throttling, info);
                 utils.emit(_this, stream_id, 'ssl-error', new utils.SSLError(stream.authorizationError));
                 _this._connect(stream_id, info);
+                _this._emitConnect(stream_id)
             });
         } else {
-            stream = net.connect({host: info.host, port: info.port});
-            stream_id = _this._useStream(stream, info.name, info.throttling, info);
-            _this._connect(stream_id, info);
+            stream = net.connect({host: info.host, port: info.port}, function () {
+                stream_id = _this._useStream(stream, info.name, info.throttling, info);
+                _this._connect(stream_id, info);
+                _this._emitConnect(stream_id);
+            });
         }
     } else {
         // Assume we've been passed the legacy stream.
