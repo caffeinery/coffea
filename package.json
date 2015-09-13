@@ -34,7 +34,7 @@
     "irc-replies": "2.0.x",
     "limiter": "1.0.x",
     "linewise": "0.0.3",
-    "underscore": "1.8.x"
+    "lodash": "3.10.x"
   },
   "devDependencies": {
     "mocha": "2.2.x",
