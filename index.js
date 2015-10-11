@@ -285,6 +285,7 @@ Client.prototype.add = function (info) {
     } else if ((typeof info === 'string') || (info instanceof Object && !(info instanceof StreamReadable) && !(info instanceof StreamWritable))) {
         // We've been passed single server information
         var stream = [];
+        
         info = _this._check(info);
         if (info.ssl) {
             stream = tls.connect({
