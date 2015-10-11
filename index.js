@@ -253,11 +253,13 @@ Client.prototype._connect = function (stream_id, info) {
  * @api public
  */
 Client.prototype.add = function (info) {
-    var stream, stream_id, streams = [];
+    var stream_id, streams = [];
     var _this = this;
     if (info instanceof Array) {
         // We've been passed multiple server information
         info.forEach(function(network) {
+            var stream = [];
+            
             network = _this._check(network);
             if (network.ssl) {
                 stream = tls.connect({
@@ -282,6 +284,8 @@ Client.prototype.add = function (info) {
         });
     } else if ((typeof info === 'string') || (info instanceof Object && !(info instanceof StreamReadable) && !(info instanceof StreamWritable))) {
         // We've been passed single server information
+        var stream = [];
+        
         info = _this._check(info);
         if (info.ssl) {
             stream = tls.connect({
