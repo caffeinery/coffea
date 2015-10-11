@@ -258,6 +258,7 @@ Client.prototype.add = function (info) {
     if (info instanceof Array) {
         // We've been passed multiple server information
         info.forEach(function(network) {
+            var stream;
             network = _this._check(network);
             if (network.ssl) {
                 stream = tls.connect({
