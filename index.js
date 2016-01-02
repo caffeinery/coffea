@@ -28,6 +28,13 @@ Plugin: processes events (before and/or after protocol)
  * use `visionmedia/debug` for debugging
 
 
+## problems
+ * maybe protocols should listen for and then emit events to core which will
+   process it further and dispatch to clients
+ * how do we deal with standardization of protocols? do they just use certain
+   common names?
+
+
 ## core
 
 Logic (in pseudocode):
