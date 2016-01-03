@@ -27,12 +27,12 @@ export function connect (config) {
     return new Error(`The protocol coffea-${config.protocol} isn't installed. We can't use this protocol.`)
   }
 
-  let register = (name, callable) => {
+  const register = (name, callable) => {
     debug(`Registering the function called "${name}".`)
     methods[name] = callable
   }
 
-  let dispatch = (name, event) => {
+  const dispatch = (name, event) => {
     debug(`Dispatching event called "${name}".`)
 
     for (let callback of listeners[name]) {
@@ -53,6 +53,10 @@ export function connect (config) {
       }
     },
     call: (method, ...args) => {
+      if (methods[method] === undefined) {
+        return new Error('The method has not been defined for this protocol.')
+      }
+
       methods[method](...args)
     }
   }
