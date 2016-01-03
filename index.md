@@ -1,4 +1,3 @@
-/*
 # main coffea structure
 
 Elements:
@@ -78,4 +77,3 @@ Logic (in pseudocode):
  * new input data gets:
     * either: passed to the protocol
     * or: passed to the dispatcher (core)
-*/
