@@ -34,8 +34,9 @@
   },
   "engine": "node >= 4.0.0",
   "scripts": {
-    "build": "node node_modules/babel-cli/bin/babel.js --presets es2015 --out-file Gulpfile.js Gulpfile.babel.js",
-    "linter": "node node_modules/eslint/bin/eslint.js ."
+    "build": "./node_modules/.bin/babel --presets es2015 --out-file Gulpfile.js Gulpfile.babel.js",
+    "test": "./node_modules/.bin/mocha --compilers js:babel/register",
+    "linter": "./node_modules/.bin/eslint ."
   },
   "license": "BSD-2-Clause"
 }
