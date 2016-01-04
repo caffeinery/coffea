@@ -1,6 +1,6 @@
 import dude from 'debug-dude'
 
-const debug = dude('coffea')
+const {debug} = dude('coffea')
 
 /**
  * Create an instance of coffea which loads a protocol, uses it to connect to a
@@ -9,9 +9,9 @@ const debug = dude('coffea')
  * @param  {Object} config
  * @return {Object}
  */
-export function connect (config) {
-  if (!config.protocol || typeof config.protocol !== 'string') {
-    return new Error('Please pass a protocol to use as a string.')
+export default function connect (config) {
+  if (!config.protocol || !(typeof config.protocol === 'string' || typeof config.protocol === 'function')) {
+    return new Error('Please pass a string or function as the protocol parameter.')
   }
 
   let methods = {}
@@ -20,11 +20,15 @@ export function connect (config) {
   // Does the protocol exist?
   let protocol
 
-  try {
-    debug(`Attempting to load the protocol coffea-${config.protocol}`)
-    protocol = require('coffea-' + config.protocol)
-  } catch (e) {
-    return new Error(`The protocol coffea-${config.protocol} isn't installed. We can't use this protocol.`)
+  if (typeof config.protocol === 'function') {
+    protocol = config.protocol
+  } else {
+    try {
+      debug(`Attempting to load the protocol coffea-${config.protocol}`)
+      protocol = require('coffea-' + config.protocol)
+    } catch (e) {
+      return new Error(`The protocol coffea-${config.protocol} isn't installed. We can't use this protocol.`)
+    }
   }
 
   const register = (name, callable) => {
@@ -32,11 +36,13 @@ export function connect (config) {
     methods[name] = callable
   }
 
-  const dispatch = (name, event) => {
+  const dispatch = (name, ...params) => {
     debug(`Dispatching event called "${name}".`)
 
-    for (let callback of listeners[name]) {
-      callback(event)
+    if (listeners.hasOwnProperty(name)) {
+      for (let callback of listeners[name]) {
+        callback(...params)
+      }
     }
   }
 
