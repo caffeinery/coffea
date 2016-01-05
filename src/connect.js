@@ -11,7 +11,7 @@ const {debug} = dude('coffea')
  */
 export default function connect (config) {
   if (!config.protocol || !(typeof config.protocol === 'string' || typeof config.protocol === 'function')) {
-    return new Error('Please pass a string or function as the protocol parameter.')
+    throw new Error('Please pass a string or function as the protocol parameter.')
   }
 
   let methods = {}
@@ -27,7 +27,7 @@ export default function connect (config) {
       debug(`Attempting to load the protocol coffea-${config.protocol}`)
       protocol = require('coffea-' + config.protocol)
     } catch (e) {
-      return new Error(`The protocol coffea-${config.protocol} isn't installed. We can't use this protocol.`)
+      throw new Error(`The protocol coffea-${config.protocol} isn't installed. We can't use this protocol.`)
     }
   }
 

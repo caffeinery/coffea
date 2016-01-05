@@ -14,29 +14,19 @@ const dummyProtocol = (config, register, dispatch) => {
 describe('coffea.connect', () => {
   describe('core functionality', () => {
     it('should return an error if protocol is not defined', (done) => {
-      let c = connect({})
-
-      expect(c).to.be.instanceof(Error)
+      expect(() => { connect({}) }).to.throw
 
       done()
     })
 
     it('should return an error if the protocol is not a function or a string', (done) => {
-      let c = connect({
-        protocol: 4
-      })
-
-      expect(c).to.be.instanceof(Error)
+      expect(() => { connect({ protocol: 4 }) }).to.throw
 
       done()
     })
 
     it('should return an error if the protocol can not be found', (done) => {
-      let c = connect({
-        protocol: 'somestupidprotocolthatshouldntexist'
-      })
-
-      expect(c).to.be.instanceof(Error)
+      expect(() => { connect({ protocol: 'somestupidprotocolthatshouldntexist' }) }).to.throw
 
       done()
     })
