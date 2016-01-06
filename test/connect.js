@@ -26,7 +26,7 @@ describe('coffea.connect', () => {
     })
 
     it('should return an error if the protocol can not be found', (done) => {
-      expect(() => { connect({ protocol: 'somestupidprotocolthatshouldntexist' }) }).to.throw
+      expect(() => { connect({ protocol: 'somestupidprotocolthatshouldntexist' + Math.floor(Math.random() * 999) }) }).to.throw
 
       done()
     })
