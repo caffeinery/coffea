@@ -2,6 +2,10 @@ import {connect} from '../src/index'
 const expect = require('chai').expect
 
 const dummyProtocol = (config, register, dispatch) => {
+  register('test', () => {
+    return 'It works!'
+  })
+
   setTimeout(() => {
     if (config.multipleParams) {
       dispatch('test event', {success: true}, false)
@@ -78,6 +82,28 @@ describe('coffea.connect', () => {
 
         done()
       })
+    })
+  })
+
+  describe('register() and call()', () => {
+    it('should throw an error if there\'s no method registered', (done) => {
+      let c = connect({
+        protocol: dummyProtocol
+      })
+
+      expect(() => { c.call('bleh') }).to.throw
+
+      done()
+    })
+
+    it('should return whatever the registered function returns to the user', (done) => {
+      let c = connect({
+        protocol: dummyProtocol
+      })
+
+      expect(c.call('test')).to.eql('It works!')
+
+      done()
     })
   })
 })
