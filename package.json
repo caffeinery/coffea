@@ -44,7 +44,7 @@
   "scripts": {
     "build": "babel --presets es2015 --out-file Gulpfile.js Gulpfile.babel.js",
     "test": "mocha --compilers js:babel-register --recursive",
-    "test:cov": "isparta cover ./node_modules/mocha/bin/_mocha src --include-all-sources --report lcovonly -- --reporter spec --compilers js:babel-register --bail",
+    "test:cov": "isparta cover ./node_modules/mocha/bin/_mocha src --include-all-sources -x Gulpfile.babel.js --report lcovonly -- --reporter spec --compilers js:babel-register --bail",
     "test:cov:upload": "cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls.js",
     "linter": "eslint src"
   },
