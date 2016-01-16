@@ -6,3 +6,5 @@ node_js:
 script:
   - npm run linter
   - npm test
+  - npm run test:cov
+  - npm run test:cov:upload
