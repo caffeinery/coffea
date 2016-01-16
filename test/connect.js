@@ -18,19 +18,19 @@ const dummyProtocol = (config, register, dispatch) => {
 describe('coffea.connect', () => {
   describe('core functionality', () => {
     it('should return an error if protocol is not defined', (done) => {
-      expect(() => { connect({}) }).to.throw
+      expect(() => { connect({}) }).to.throw(Error)
 
       done()
     })
 
     it('should return an error if the protocol is not a function or a string', (done) => {
-      expect(() => { connect({ protocol: 4 }) }).to.throw
+      expect(() => { connect({ protocol: 4 }) }).to.throw(Error)
 
       done()
     })
 
     it('should return an error if the protocol can not be found', (done) => {
-      expect(() => { connect({ protocol: 'somestupidprotocolthatshouldntexist' + Math.floor(Math.random() * 999) }) }).to.throw
+      expect(() => { connect({ protocol: 'somestupidprotocolthatshouldntexist' + Math.floor(Math.random() * 999) }) }).to.throw(Error)
 
       done()
     })
@@ -91,7 +91,7 @@ describe('coffea.connect', () => {
         protocol: dummyProtocol
       })
 
-      expect(() => { c.call('bleh') }).to.throw
+      expect(() => { c.call('bleh') }).to.throw(Error)
 
       done()
     })
