@@ -196,12 +196,6 @@ networks.on('message', parrot)
 
 
 
-## Protocols
-
-TODO
-
-
-
 ## Example: Reverse bot
 
 ```js
@@ -231,4 +225,147 @@ const reverse = (msg, send) => {
 }
 
 networks.on('message', reverse)
+```
+
+
+
+## Protocols
+
+This is a guide on how to implement a new protocol with coffea.
+
+Protocols are functions that take `config`, a network configuration, and a `dispatch` function as arguments. They return a function that will handle all *calling events* sent to the protocol later.
+
+A simple protocol could look like this:
+
+```js
+export default const dummyProtocol = (config, dispatch) => {
+  // mock connect event
+  dispatch({
+    type: 'connect',
+    network: config.network
+  })
+
+  return event => {
+    switch (event.type) {
+      case 'message':
+        dispatch({
+          type: 'message',
+          text: event.text
+        })
+        break
+      default:
+        dispatch({
+          type: 'error',
+          text: 'Unknown event'
+        })
+        break
+    }
+  }
+}
+```
+
+To use this protocol, you have to pass the protocol function to `connect`:
+
+```js
+import connect, { message } from 'coffea'
+import dummyProtocol from './dummy'
+
+const networks = connect([
+  {
+    protocol: dummyProtocol,
+    network: 'test'
+  }
+])
+
+const logListener = msg => console.log(msg)
+networks.on('message', logListener)
+
+networks.send(message('hello world!'))
+```
+
+`dummyProtocol`'s event handler will then receive the following as the `event` argument:
+
+```js
+{
+  type: 'message',
+  text: 'hello world!'
+}
+```
+
+Which means it will dispatch the `message` event, which results in the `on('message', listener)` listeners getting called with the same `event` argument.
+
+Finally, the `logListener` function will get called, which results in the following output on the console:
+
+```
+{
+  type: 'message',
+  text: 'hello world!'
+}
+```
+
+### `mapEvents` helper
+
+```js
+mapEvents({
+  eventName: function,
+  ...
+})
+```
+
+You probably don't want to use `switch` statements to parse the events, which is why coffea provides a `mapEvents` helper function. It maps the events to the specific handler function and can be used like this:
+
+```js
+import { mapEvents } from 'coffea'
+
+export default const dummyProtocol = (config, dispatch) => {
+  // mock connect event
+  dispatch({
+    type: 'connect',
+    network: config.network
+  })
+
+  return mapEvents({
+    message: () => dispatch({
+        type: 'message',
+        text: event.text
+      }),
+
+    default: () => dispatch({
+        type: 'error',
+        text: 'Unknown event'
+      })
+  })
+}
+```
+
+**Note:** `default` will be called if the event doesn't match any of the other defined types.
+
+This helper also allows you to separate your event handlers from the protocol logic:
+
+```js
+import { mapEvents } from 'coffea'
+
+const messageHandler = (dispatch) => {
+  return () => dispatch({
+    type: 'message',
+    text: event.text
+  })
+}
+
+const defaultHandler = (dispatch) => {
+  return () => dispatch({
+    type: 'error',
+    text: 'Unknown event'
+  })
+}
+
+export default const dummyProtocol = (config, dispatch) => {
+  // mock connect event
+  dispatch({
+    type: 'connect',
+    network: config.network
+  })
+
+  return mapEvents({ message: messageHandler, default: defaultHandler })
+}
 ```
