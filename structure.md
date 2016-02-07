@@ -1,3 +1,31 @@
+# Connecting
+
+TODO
+
+```js
+import connect from 'coffea'
+
+const networks = connect([
+  {
+    protocol: 'irc',
+    network: '...',
+    channels: ['#foo', '#bar']
+  },
+  {
+    protocol: 'telegram',
+    token: '...'
+  },
+  {
+    protocol: 'slack',
+    token: '...'
+  }
+])
+```
+
+**Note:** You need to install `coffea-PROTOCOLNAME` to use that protocol, e.g. `npm install coffea-slack`
+
+---
+
 # Events
 
 Events are a central concept in coffea. They have a certain structure (object with a `type` key):
@@ -91,3 +119,9 @@ We can use the `message` helper function here:
 ```js
 networks.send(message('#dev', 'Commit!'))
 ```
+
+---
+
+# Protocols
+
+TODO
