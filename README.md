@@ -12,7 +12,35 @@ This is a work in progress. It may be unstable and the branch build might be fai
 
 ## Connecting
 
-TODO
+The coffea core exposes a `connect` function as the default export. It can be imported like this:
+
+```js
+import connect from 'coffea'
+```
+
+This function loads the required protocols (via `node_modules`) and returns an instance container, which has the `on` and `send` functions.
+
+```js
+// create an instance container for one irc instance
+// Note: options get passed to the protocol, which handles them (e.g. autojoin channels on irc)
+//       please refer to the protocol documentation for more information about these options
+//       (usually available at https://npmjs.com/package/coffea-PROTOCOLNAME)
+const networks = connect([
+  {
+    protocol: 'irc',
+    network: '...',
+    channels: ['#foo', '#bar']
+  }
+])
+
+// the instance container exposes the `on` and `send` functions:
+networks.send({...}) // we'll learn about sending events later
+networks.on('message', (msg, send) => {...}) // we'll learn about listening to events later
+```
+
+You can now use this function to connect to networks and create instance containers! :tada:
+
+### Example
 
 ```js
 import connect from 'coffea'
@@ -59,16 +87,18 @@ For a message, it could look like this (imagine a git bot):
 }
 ```
 
-**Note:** In coffea, outgoing and ingoing events are always consistent.
+**Note:** In coffea, outgoing and ingoing events are always consistent - they look the same. That way you don't need to memorize two separate structures for sending/receiving events - awesome! (might even save some code)
 
 
-### Listening to events
+### Listening on events
 
-coffea returns an enhanced array (instance container) after initialization. This means you can use `filter`, like on normal arrays, to only send to certain networks. Or you could use `map` to send a message to all networks. Or you could even combine them!
+coffea's `connect` function transforms the passed configuration array into an instance container, which is an enhanced array. This means you can use normal array functions, like `map` and `filter`. e.g. you could filter networks and only listen to `slack` networks, or you could use `map` to send a message to all networks. You could even combine them!
 
 ```js
+// only listen to `slack` networks:
 networks.filter(network => network.protocol === 'slack')
 
+// `map` and `filter` combined
 networks
   .filter(network => network.protocol === 'slack')
   .map(network => console.log(network))
@@ -91,7 +121,7 @@ networks.on('message', parrot)
 
 ### Event helpers
 
-There are helper functions that create events, they can be imported like this:
+You probably don't want to deal with raw event objects all the time - you write a lot of boilerplate and it's prone to error. That's why coffea (and the protocols) provide helper functions that create events, they can be imported like this:
 
 ```js
 // `message` is a core event helper (it works on all protocols)
@@ -101,7 +131,7 @@ import { message } from 'coffea'
 import { attachment } from 'coffea-slack'
 ```
 
-Protocols should try to keep similar functionality consistent (e.g. if two protocols support attachments, keep the api consistent so you can use either helper function and it will work for both protocols).
+**Note:** Protocols should try to keep similar functionality consistent (e.g. if two protocols support attachments, keep the api consistent so you can use either helper function and it will work for both protocols).
 
 Now you can create an event like this:
 
@@ -109,11 +139,13 @@ Now you can create an event like this:
 message('#dev', 'New commit!')
 ```
 
-The structure for event helpers is (eventName should always equal the type of the event that is returned to avoid confusion!):
+The structure for event helpers is:
 
 ```js
 eventName(requiredArgs, { optionalArgs })
 ```
+
+(`eventName` should always equal the `type` of the event that is returned to avoid confusion!)
 
 Multiple protocols can expose the same helper functions, but with enhanced functionality. e.g. for Slack you could do:
 
@@ -122,18 +154,29 @@ import { message, attachment } from 'coffea-slack'
 message(channel, text, { attachment: attachment('test.png') })
 ```
 
+**Note:** coffea core's `message` helper function (if you import with `import { message } from 'coffea'`) does not implement the `attachment` option!
+
 
 ### Sending events
 
-Now that you know how to create events, let's send them.
+Now that you know how to create events, let's send them to the networks.
 
-The array is also enhanced with a `send` function, which allows you to send *calling events* to the networks. e.g. sending a calling `message` event will send a message to the network.
+The instance container is also enhanced with a `send` function, which allows you to send *calling events* to the networks. e.g. sending a calling `message` event will send a message to the network.
 
-We can use the `message` helper function here:
+**Note:** As mentioned before, in coffea *calling events* and *receiving events* always look the same.
+
+You can use the `message` helper function to send an event to all networks:
 
 ```js
 import { message } from 'coffea'
+
+// send to all networks:
 networks.send(message('#dev', 'Commit!'))
+
+// send to slack networks only:
+networks
+  .filter(network => network.protocol === 'slack')
+  .send(message('#random', 'Secret slack-only stuff.'))
 ```
 
 #### `send` in combination with `on`
@@ -142,8 +185,7 @@ If you're sending events as a response to another event, you should use the `sen
 
 ```js
 import { message } from 'coffea'
-const parrot = (msg, send) => send(message(msg.channel, msg.text))
-networks.on('message', parrot)
+networks.on('message', (msg, send) => send(message(msg.channel, msg.text)))
 ```
 
 You may want to keep the function definitions (`const parrot = ...`) separate from the `on` statement (`networks.on(...)`). This allows for easy unit tests:
