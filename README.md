@@ -40,7 +40,7 @@ const networks = connect([
 
 ## Events
 
-Events are a central concept in coffea. They have a certain structure (object with a `type` key):
+Events are the central concept in coffea. They have a certain structure (object with a `type` key):
 
 ```js
 {
