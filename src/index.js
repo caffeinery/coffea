@@ -1,9 +1,4 @@
 import connect from './connect'
-import join from './helpers/join'
-import message from './helpers/message'
+export default connect
 
-export {
-  connect,
-  join,
-  message
-}
+export * from './helpers'
