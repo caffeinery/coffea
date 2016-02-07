@@ -134,6 +134,34 @@ const parrot = (msg, send) => send(message(msg.channel, msg.text))
 networks.on('message', parrot)
 ```
 
+You may want to keep the function definitions (`const parrot = ...`) separate from the `on` statement (`networks.on(...)`). This allows for easy unit tests:
+
+```js
+// somefile.js
+import { message } from 'coffea'
+export const parrot = (msg, send) => send(message(msg.channel, msg.text))
+export const reverse = (msg, send) => {
+  const reversedText = msg.text.split('').reverse().join('')
+  const message = message(msg.channel, reversedText)
+
+  send(message)
+}
+
+// unittests.js
+import { assert } from 'my-favorite-testing-library'
+import { parrot, reverse } from './somefile'
+parrot('test', msg => assert(msg.text === 'test'))
+reverse('test', msg => assert(msg.text === 'tset'))
+
+// main.js
+import connect from 'coffea'
+import { parrot, reverse } from './somefile'
+const networks = connect([...]) // put network config here
+networks.on('message', reverse)
+// or...
+networks.on('message', parrot)
+```
+
 
 
 # Protocols
@@ -163,10 +191,12 @@ const networks = connect([
   }
 ])
 
-networks.on('message', (msg, send) => {
+const reverse = (msg, send) => {
   const reversedText = msg.text.split('').reverse().join('')
   const message = message(msg.channel, reversedText)
 
   send(message)
-})
+}
+
+networks.on('message', reverse)
 ```
