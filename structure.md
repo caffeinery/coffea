@@ -24,7 +24,7 @@ const networks = connect([
 
 **Note:** You need to install `coffea-PROTOCOLNAME` to use that protocol, e.g. `npm install coffea-slack`
 
----
+
 
 # Events
 
@@ -59,18 +59,21 @@ networks.filter(network => network.protocol === 'slack')
 
 networks
   .filter(network => network.protocol === 'slack')
-  // don't worry if you don't understand the following line yet, it will be explained in a bit
-  .map(network => network.send(attachment('nice.gif')))
+  .map(network => console.log(network))
 ```
 
 The array is enhanced with an `on` function (and a `send` function, more on that later), which allows you to listen to events on the instance container:
 
 ```js
-networks.on('event', event => console.log(event))
+networks.on('event', (event, send) => { ... })
 
 networks
   .filter(network => network.protocol === 'slack')
   .on('message', msg => console.log(msg.text))
+
+// sending events will be explained more later
+const parrot = (msg, send) => send(message(msg.channel, msg.text))
+networks.on('message', parrot)
 ```
 
 
@@ -117,11 +120,53 @@ The array is also enhanced with a `send` function, which allows you to send *cal
 We can use the `message` helper function here:
 
 ```js
+import { message } from 'coffea'
 networks.send(message('#dev', 'Commit!'))
 ```
 
----
+### `send` in combination with `on`
+
+If you're sending events as a response to another event, you should use the `send` function that gets passed as an argument to the listener:
+
+```js
+import { message } from 'coffea'
+const parrot = (msg, send) => send(message(msg.channel, msg.text))
+networks.on('message', parrot)
+```
+
+
 
 # Protocols
 
 TODO
+
+
+
+# Example: Reverse bot
+
+```js
+import connect, { message } from 'coffea'
+
+const networks = connect([
+  {
+    protocol: 'irc',
+    network: '...',
+    channels: ['#foo', '#bar']
+  },
+  {
+    protocol: 'telegram',
+    token: '...'
+  },
+  {
+    protocol: 'slack',
+    token: '...'
+  }
+])
+
+networks.on('message', (msg, send) => {
+  const reversedText = msg.text.split('').reverse().join('')
+  const message = message(msg.channel, reversedText)
+
+  send(message)
+})
+```
