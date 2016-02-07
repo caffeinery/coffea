@@ -1,7 +1,7 @@
-import {message} from '../../src/index'
+import { message } from '../../src/index'
 const expect = require('chai').expect
 
-describe('helpers.message', () => {
+describe('message helper', () => {
   it('should accept just two parameters', () => {
     let m = message('#general', 'Hello World')
 
