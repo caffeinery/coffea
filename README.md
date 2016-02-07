@@ -38,31 +38,9 @@ networks.send({...}) // we'll learn about sending events later
 networks.on('message', (msg, send) => {...}) // we'll learn about listening to events later
 ```
 
-You can now use this function to connect to networks and create instance containers! :tada:
-
-### Example
-
-```js
-import connect from 'coffea'
-
-const networks = connect([
-  {
-    protocol: 'irc',
-    network: '...',
-    channels: ['#foo', '#bar']
-  },
-  {
-    protocol: 'telegram',
-    token: '...'
-  },
-  {
-    protocol: 'slack',
-    token: '...'
-  }
-])
-```
-
 **Note:** You need to install `coffea-PROTOCOLNAME` to use that protocol, e.g. `npm install coffea-slack`
+
+You can now use this function to connect to networks and create instance containers! :tada:
 
 
 
