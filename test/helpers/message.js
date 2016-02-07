@@ -14,7 +14,7 @@ describe('helpers.message', () => {
     expect(m).to.eql({ type: 'message', channel: '#general', text: 'Hello World', '0': 'test' })
   })
 
-  it('should\'nt accept any less than two parameters', () => {
+  it('should not accept any less than two parameters', () => {
     expect(() => {
       message('#general')
     }).to.throw(Error)
