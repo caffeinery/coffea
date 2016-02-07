@@ -1,4 +1,4 @@
-import { connect } from '../src/index'
+import connect from '../src/index'
 const expect = require('chai').expect
 
 const dummyProtocol = (config, register, dispatch) => {

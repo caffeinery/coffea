@@ -1,4 +1,4 @@
-import { message } from '../../src/index'
+import { message } from '../src/index'
 const expect = require('chai').expect
 
 describe('message helper', () => {
