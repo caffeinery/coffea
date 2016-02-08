@@ -31,11 +31,6 @@ export default function connect (config) {
     }
   }
 
-  const register = (name, callable) => {
-    debug(`Registering the function called "${name}".`)
-    methods[name] = callable
-  }
-
   const dispatch = (name, ...params) => {
     debug(`Dispatching event called "${name}".`)
 
@@ -46,7 +41,7 @@ export default function connect (config) {
     }
   }
 
-  protocol(config, register, dispatch)
+  let handler = protocol(config, dispatch)
 
   return {
     on: (name, callback) => {
@@ -58,12 +53,6 @@ export default function connect (config) {
         listeners[name].push(callback)
       }
     },
-    call: (method, ...args) => {
-      if (methods[method] === undefined) {
-        throw new Error('The method has not been defined for this protocol.')
-      }
-
-      return methods[method](...args)
-    }
+    send: handler
   }
 }
