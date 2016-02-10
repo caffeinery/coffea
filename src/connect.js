@@ -17,8 +17,7 @@ export default function connect (config) {
   let methods = {}
   let listeners = {}
 
-  // Does the protocol exist?
-  let protocol
+  let protocol, handler
 
   if (typeof config.protocol === 'function') {
     protocol = config.protocol
@@ -31,17 +30,26 @@ export default function connect (config) {
     }
   }
 
-  const dispatch = (name, ...params) => {
-    debug(`Dispatching event called "${name}".`)
+  const dispatch = (event) => {
+    const { type } = event
+    debug(`Dispatching "${type}" event.`)
 
-    if (listeners.hasOwnProperty(name)) {
-      for (let callback of listeners[name]) {
-        callback(...params)
+    // always dispatch `event` (wildcard) event
+    if (listeners.hasOwnProperty('event')) {
+      for (let callback of listeners['event']) {
+        callback(event, handler)
+      }
+    }
+
+    // dispatch certain event type
+    if (listeners.hasOwnProperty(type)) {
+      for (let callback of listeners[type]) {
+        callback(event, handler)
       }
     }
   }
 
-  let handler = protocol(config, dispatch)
+  handler = protocol(config, dispatch)
 
   return {
     on: (name, callback) => {
