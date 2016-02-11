@@ -1,4 +1,4 @@
-import { makeLogger } from './utils'
+import { makeLogger, defaultImport } from './utils'
 const { debug } = makeLogger('instance')
 
 /**
@@ -58,8 +58,7 @@ const makeOn = listeners => (name, callback) => {
 const loadProtocol = name => {
   try {
     info(`Attempting to load the protocol coffea-${name}`)
-    // TODO: use defaultImport util here (look at redux-undo-boilerplate)
-    protocol = require('coffea-' + name)
+    protocol = defaultImport(require('coffea-' + name))
   } catch (e) {
     throw new Error(`The protocol coffea-${name} isn't installed. We can't use this protocol.`)
   }

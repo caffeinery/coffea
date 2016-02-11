@@ -29,3 +29,21 @@ export const makeLogger = namespace => dude('coffea:' + namespace)
  */
 export const arrayify = maybeArray =>
   Array.isArray(maybeArray) ? maybeArray : [maybeArray]
+
+/**
+ * Allows for compatibility with various babel versions when using `require()`.
+ * Use like this: `defaultImport(require('...'))` instead of `require('...')`
+ *
+ * See: http://stackoverflow.com/questions/33505992/babel-6-changes-how-it-exports-default
+ * Utility function from `redux-undo-boilerplate`: https://github.com/omnidan/redux-undo-boilerplate/pull/4
+ *
+ * @param  {Object} module
+ * @return {Object} correctly imported module
+ */
+export default function defaultImport (module) {
+  if (module.__esModule && module.default) {
+    return module.default
+  } else {
+    return module
+  }
+}
