@@ -58,7 +58,7 @@ You can now use this function to connect to networks and create instance contain
 
 ## Events
 
-Events are the central concept in coffea. They have a certain structure (object with a `type` key):
+Events are *the* central concept in coffea. They have a certain structure (object with a `type` key):
 
 ```js
 {
@@ -315,19 +315,19 @@ Finally, the `logListener` function will get called, which results in the follow
 }
 ```
 
-### `mapEvents` helper
+### `forward` helper
 
 ```js
-mapEvents({
+forward({
   eventName: function,
   ...
 })
 ```
 
-You probably don't want to use `switch` statements to parse the events, which is why coffea provides a `mapEvents` helper function. It maps the events to the specific handler function and can be used like this:
+You probably don't want to use `switch` statements to parse the events, which is why coffea provides a `forward` helper function. It forwards the events (depending on their type) to the specific handler function and can be used like this:
 
 ```js
-import { mapEvents } from 'coffea'
+import { forward } from 'coffea'
 
 export default const dummyProtocol = (config, dispatch) => {
   // mock connect event
@@ -336,13 +336,13 @@ export default const dummyProtocol = (config, dispatch) => {
     network: config.network
   })
 
-  return mapEvents({
-    message: () => dispatch({
+  return forward({
+    'message': () => dispatch({
         type: 'message',
         text: event.text
       }),
 
-    default: () => dispatch({
+    'default': () => dispatch({
         type: 'error',
         text: 'Unknown event'
       })
@@ -350,12 +350,12 @@ export default const dummyProtocol = (config, dispatch) => {
 }
 ```
 
-**Note:** `default` will be called if the event doesn't match any of the other defined types.
+**Note:** `'default'` will be called if the event doesn't match any of the other defined types.
 
 This helper also allows you to separate your event handlers from the protocol logic:
 
 ```js
-import { mapEvents } from 'coffea'
+import { forward } from 'coffea'
 
 const messageHandler = (dispatch) => {
   return () => dispatch({
@@ -378,6 +378,9 @@ export default const dummyProtocol = (config, dispatch) => {
     network: config.network
   })
 
-  return mapEvents({ message: messageHandler, default: defaultHandler })
+  return forward({
+    'message': messageHandler,
+    'default': defaultHandler
+  })
 }
 ```
