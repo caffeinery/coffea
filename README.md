@@ -341,12 +341,12 @@ export default const dummyProtocol = (config, dispatch) => {
   })
 
   return forward({
-    'message': () => dispatch({
+    'message': event => dispatch({
         type: 'message',
         text: event.text
       }),
 
-    'default': () => dispatch({
+    'default': event => dispatch({
         type: 'error',
         text: 'Unknown event'
       })
@@ -362,14 +362,14 @@ This helper also allows you to separate your event handlers from the protocol lo
 import { forward } from 'coffea'
 
 const messageHandler = (dispatch) => {
-  return () => dispatch({
+  return event => dispatch({
     type: 'message',
     text: event.text
   })
 }
 
 const defaultHandler = (dispatch) => {
-  return () => dispatch({
+  return event => dispatch({
     type: 'error',
     text: 'Unknown event'
   })
