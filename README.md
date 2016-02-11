@@ -23,7 +23,7 @@ You can install the latest coffea version like this:
 npm install --save coffea@beta
 ```
 
-As for protocols, we're working on [coffea-irc](https://github.com/caffeinery/coffea-irc), [coffea-slack](https://github.com/caffeinery/coffea-slack) and [coffea-telegram](https://github.com/caffeinery/coffea-telegram). Feel free to [build your own]((#protocols) if you want to play around with coffea.
+As for protocols, we're working on [coffea-irc](https://github.com/caffeinery/coffea-irc), [coffea-slack](https://github.com/caffeinery/coffea-slack) and [coffea-telegram](https://github.com/caffeinery/coffea-telegram). Feel free to [build your own](#protocols) if you want to play around with coffea.
 
 
 ## Connecting
