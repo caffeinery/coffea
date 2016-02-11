@@ -15,6 +15,17 @@ _coffea lays the foundations you need to painlessly and effortlessly connect to 
  * [Protocols](#protocols) (implementing a new protocol)
 
 
+## Try it out!
+
+You can install the latest coffea version like this:
+
+```
+npm install --save coffea@beta
+```
+
+As for protocols, we're working on [coffea-irc](https://github.com/caffeinery/coffea-irc), [coffea-slack](https://github.com/caffeinery/coffea-slack) and [coffea-telegram](https://github.com/caffeinery/coffea-telegram). Feel free to [build your own]((#protocols) if you want to play around with coffea.
+
+
 ## Connecting
 
 The coffea core exposes a `connect` function as the default export. It can be imported like this:
