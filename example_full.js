@@ -1,4 +1,4 @@
-import connect, { message, mapEvents } from './src/index'
+import connect, { message, forward } from './src/index'
 
 // protocol
 const messageHandler = dispatch =>
@@ -30,7 +30,7 @@ const registerEvents = dispatch =>
 const exampleProtocol = (config, dispatch) => {
   connectTo(config.token, dispatch)
   registerEvents(dispatch)
-  return mapEvents({
+  return forward({
     'message': messageHandler,
     'default': defaultHandler
   })

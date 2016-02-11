@@ -13,7 +13,7 @@ const makeDispatch = (listeners, getHandler) => event => {
   const handler = getHandler()
 
   const { type } = event
-  debug(`Dispatching "${type}" event.`)
+  info(`Dispatching "${type}" event.`)
 
   // always dispatch `event` (wildcard) event
   if (listeners.hasOwnProperty('event')) {
@@ -38,7 +38,7 @@ const makeDispatch = (listeners, getHandler) => event => {
  * @return {Function} on
  */
 const makeOn = listeners => (name, callback) => {
-  debug(`Listener being subscribed with the name "${name}".`)
+  info(`Listener being subscribed with the name "${name}".`)
 
   if (listeners[name] === undefined) {
     listeners[name] = [callback]
@@ -57,7 +57,7 @@ const makeOn = listeners => (name, callback) => {
  */
 const loadProtocol = name => {
   try {
-    debug(`Attempting to load the protocol coffea-${name}`)
+    info(`Attempting to load the protocol coffea-${name}`)
     // TODO: use defaultImport util here (look at redux-undo-boilerplate)
     protocol = require('coffea-' + name)
   } catch (e) {
