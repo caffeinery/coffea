@@ -3,6 +3,12 @@ const { debug } = makeLogger('connect')
 
 import instance from './instance'
 
+const execAll = (func, instances) => (...args) => {
+  instances.forEach(
+    instance => instance[func](...args)
+  )
+}
+
 /**
  * Create an instance container, which allows handling multiple networks on
  * various protocols.
@@ -15,7 +21,9 @@ export default function connect (rawConfig) {
   debug('connect(' + JSON.stringify(config) + ')')
   const instances = config.map(instance)
 
-  // TODO: enhance `instances` array with `.on` and `.send`
+  // enhance `instances` array
+  instances.on = execAll('on', instances)
+  instances.send = execAll('send', instances)
 
   return instances
 }
