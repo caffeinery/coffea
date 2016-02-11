@@ -1,5 +1,5 @@
 import { makeLogger, defaultImport } from './utils'
-const { debug } = makeLogger('instance')
+const { info, debug } = makeLogger('instance')
 
 /**
  * Higher-order function to make a `dispatch` function given a `listeners`
