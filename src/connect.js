@@ -1,13 +1,7 @@
-import { makeLogger, arrayify } from './utils'
+import { makeLogger, arrayify, execAll } from './utils'
 const { debug } = makeLogger('connect')
 
 import instance from './instance'
-
-const execAll = (func, instances) => (...args) => {
-  instances.forEach(
-    instance => instance[func](...args)
-  )
-}
 
 /**
  * Create an instance container, which allows handling multiple networks on

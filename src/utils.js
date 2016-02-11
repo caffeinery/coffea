@@ -1,6 +1,19 @@
 import dude from 'debug-dude'
 
 /**
+ * Higher-order function that creates a function that will execute `func` on all
+ * `objects` with the given arguments.
+ *
+ * @param  {Object|Array} rawConfig
+ * @return {Array}
+ */
+export const execAll = (func, objects) => (...args) => {
+  objects.forEach(
+    obj => obj[func](...args)
+  )
+}
+
+/**
  * Make a coffea logger given a namespace
  *
  * @param  {String) namespace
