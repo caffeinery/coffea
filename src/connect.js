@@ -10,7 +10,7 @@ import instance from './instance'
  * @param  {Object|Array} rawConfig
  * @return {Array}
  */
-export default const connect = rawConfig => {
+export default function connect (rawConfig) {
   const config = arrayify(rawConfig)
   debug('connect(' + JSON.stringify(config) + ')')
   const instances = config.map(instance)

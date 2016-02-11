@@ -3,13 +3,15 @@ const { debug } = makeLogger('instance')
 
 /**
  * Higher-order function to make a `dispatch` function given a `listeners`
- * object.
+ * object and a `handler`, which will handle calling events sent to the protocol.
  *
  * @private
  * @param  {Object} listeners
  * @return {Function} dispatch
  */
-const makeDispatch = listeners => event => {
+const makeDispatch = (listeners, getHandler) => event => {
+  const handler = getHandler()
+
   const { type } = event
   debug(`Dispatching "${type}" event.`)
 
@@ -70,7 +72,7 @@ const loadProtocol = name => {
  * @param  {Object} config
  * @return {Object}
  */
-export default const instance = config => {
+export default function instance (config) {
   if (!config.protocol || !(typeof config.protocol === 'string' || typeof config.protocol === 'function')) {
     throw new Error('Please pass a string or function as the protocol parameter.')
   }
@@ -78,13 +80,12 @@ export default const instance = config => {
   let methods = {}
   let listeners = {}
 
-  let protocol, handler
-
+  let protocol
   if (typeof config.protocol === 'function') protocol = config.protocol
   else protocol = loadProtocol(config.protocol)
 
-  const dispatch = makeDispatch(listeners)
-
+  let handler
+  const dispatch = makeDispatch(listeners, () => handler)
   handler = protocol(config, dispatch)
 
   return {
