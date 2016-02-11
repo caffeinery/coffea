@@ -31,8 +31,8 @@ const exampleProtocol = (config, dispatch) => {
   connectTo(config.token, dispatch)
   registerEvents(dispatch)
   return forward({
-    'message': messageHandler,
-    'default': defaultHandler
+    'message': messageHandler(dispatch),
+    'default': defaultHandler(dispatch)
   })
 }
 // /protocol

@@ -361,19 +361,17 @@ This helper also allows you to separate your event handlers from the protocol lo
 ```js
 import { forward } from 'coffea'
 
-const messageHandler = (dispatch) => {
-  return event => dispatch({
+const messageHandler = dispatch => event =>
+  dispatch({
     type: 'message',
     text: event.text
   })
-}
 
-const defaultHandler = (dispatch) => {
-  return event => dispatch({
+const defaultHandler = dispatch => event =>
+  dispatch({
     type: 'error',
     text: 'Unknown event'
   })
-}
 
 export default const dummyProtocol = (config, dispatch) => {
   // mock connect event
@@ -383,8 +381,8 @@ export default const dummyProtocol = (config, dispatch) => {
   })
 
   return forward({
-    'message': messageHandler,
-    'default': defaultHandler
+    'message': messageHandler(dispatch),
+    'default': defaultHandler(dispatch)
   })
 }
 ```
