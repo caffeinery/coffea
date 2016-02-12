@@ -47,11 +47,11 @@ const networks = connect([
 
 networks.on('event', e => console.log(e))
 
-const reverse = (msg, send) => {
+const reverse = (msg, reply) => {
   const reversedText = msg.text.split('').reverse().join('')
   const reversedMessage = message(msg.channel, reversedText)
 
-  send(reversedMessage)
+  reply(reversedMessage)
 }
 
 networks.on('message', reverse)

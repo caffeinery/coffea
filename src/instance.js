@@ -12,20 +12,24 @@ const { info, debug } = makeLogger('instance')
 const makeDispatch = (listeners, getHandler) => event => {
   const handler = getHandler()
 
+  const reply = handler
+  // TODO: enhance `handler` to only send to certain networks
+  //       e.g. only dispatch event to the network as a `reply`
+
   const { type } = event
   info(`Dispatching "${type}" event.`)
 
   // always dispatch `event` (wildcard) event
   if (listeners.hasOwnProperty('event')) {
     for (let callback of listeners['event']) {
-      callback(event, handler)
+      callback(event, reply)
     }
   }
 
   // dispatch certain event type
   if (listeners.hasOwnProperty(type)) {
     for (let callback of listeners[type]) {
-      callback(event, handler)
+      callback(event, reply)
     }
   }
 }
