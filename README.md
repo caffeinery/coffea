@@ -51,7 +51,7 @@ const networks = connect([
 
 // the instance container exposes the `on` and `send` functions:
 networks.send({...}) // we'll learn about sending events later
-networks.on('message', (msg, send) => {...}) // we'll learn about listening to events later
+networks.on('message', (msg, reply) => {...}) // we'll learn about listening to events later
 ```
 
 **Note:** You need to install `coffea-PROTOCOLNAME` to use that protocol, e.g. `npm install coffea-slack`
@@ -101,14 +101,14 @@ networks
 The array is enhanced with an `on` function (and a `send` function, more on that later), which allows you to listen to events on the instance container:
 
 ```js
-networks.on('event', (event, send) => { ... })
+networks.on('event', (event, reply) => { ... })
 
 networks
   .filter(network => network.protocol === 'slack')
   .on('message', msg => console.log(msg.text))
 
 // sending events will be explained more later
-const parrot = (msg, send) => send(message(msg.channel, msg.text))
+const parrot = (msg, reply) => send(message(msg.channel, msg.text))
 networks.on('message', parrot)
 ```
 
@@ -175,11 +175,11 @@ networks
 
 #### `send` in combination with `on`
 
-If you're sending events as a response to another event, you should use the `send` function that gets passed as an argument to the listener:
+If you're sending events as a response to another event, you should use the `reply` function that gets passed as an argument to the listener. It will automatically figure out where to send the message instead of sending it to all networks (like `networks.send` does):
 
 ```js
 import { message } from 'coffea'
-networks.on('message', (msg, send) => send(message(msg.channel, msg.text)))
+networks.on('message', (msg, reply) => reply(message(msg.channel, msg.text)))
 ```
 
 You may want to keep the function definitions (`const parrot = ...`) separate from the `on` statement (`networks.on(...)`). This allows for easy unit tests:
@@ -187,12 +187,12 @@ You may want to keep the function definitions (`const parrot = ...`) separate fr
 ```js
 // somefile.js
 import { message } from 'coffea'
-export const parrot = (msg, send) => send(message(msg.channel, msg.text))
-export const reverse = (msg, send) => {
+export const parrot = (msg, reply) => reply(message(msg.channel, msg.text))
+export const reverse = (msg, reply) => {
   const reversedText = msg.text.split('').reverse().join('')
   const message = message(msg.channel, reversedText)
 
-  send(message)
+  reply(message)
 }
 
 // unittests.js
@@ -233,11 +233,11 @@ const networks = connect([
   }
 ])
 
-const reverse = (msg, send) => {
+const reverse = (msg, reply) => {
   const reversedText = msg.text.split('').reverse().join('')
   const message = message(msg.channel, reversedText)
 
-  send(message)
+  reply(message)
 }
 
 networks.on('message', reverse)
