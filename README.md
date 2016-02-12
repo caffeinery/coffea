@@ -108,7 +108,7 @@ networks
   .on('message', msg => console.log(msg.text))
 
 // sending events will be explained more later
-const parrot = (msg, reply) => send(message(msg.channel, msg.text))
+const parrot = (msg, reply) => reply(message(msg.channel, msg.text))
 networks.on('message', parrot)
 ```
 
