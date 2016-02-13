@@ -10,7 +10,7 @@ const { debug, info, warn } = makeLogger('forward')
  * @return {Function} that maps events and calls the corresponding function
  */
 export default function forward (mapping) {
-  return event => {
+  return (event) => {
     const { type } = event
     if (mapping.hasOwnProperty(type)) {
       if (typeof mapping[type] === 'function') {

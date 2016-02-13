@@ -1,3 +1,4 @@
+/*globals describe,it*/
 import { message } from '../src/index'
 const expect = require('chai').expect
 

@@ -23,31 +23,29 @@
     "debug": "^2.2.0",
     "debug-dude": "^1.0.3"
   },
-  "devDependencies": {
-    "babel": "^6.3.26",
-    "babel-cli": "^6.4.5",
-    "babel-core": "^6.4.5",
-    "babel-eslint": "^4.1.6",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-plugin-transform-object-rest-spread": "^6.3.13",
-    "babel-register": "^6.4.3",
-    "chai": "^3.4.1",
-    "coveralls": "^2.11.6",
-    "eslint": "^1.10.3",
-    "eslint-config-standard": "^4.4.0",
-    "eslint-config-touchlay": "^0.1.1",
-    "gulp": "^3.9.0",
-    "gulp-babel": "^6.1.1",
-    "isparta": "^4.0.0",
-    "mocha": "^2.3.4"
-  },
   "engine": "node >= 4.0.0",
-  "scripts": {
-    "build": "babel --presets es2015 --out-file Gulpfile.js Gulpfile.babel.js",
-    "test": "mocha --compilers js:babel-register --recursive",
-    "test:cov": "isparta cover ./node_modules/mocha/bin/_mocha src --include-all-sources -x Gulpfile.babel.js --report lcovonly -- --reporter spec --compilers js:babel-register --bail",
-    "test:cov:upload": "cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls.js",
-    "linter": "eslint src"
+  "license": "BSD-2-Clause",
+  "devDependencies": {
+    "babel-core": "^6.5.1",
+    "babel-eslint": "^4.1.8",
+    "babel-loader": "^6.2.2",
+    "babel-plugin-transform-object-rest-spread": "^6.5.0",
+    "babel-preset-es2015": "^6.5.0",
+    "babel-register": "^6.5.2",
+    "chai": "^3.5.0",
+    "eslint": "^2.0.0",
+    "eslint-config-standard": "^5.1.0",
+    "isparta": "^4.0.0",
+    "mocha": "^2.4.5",
+    "rimraf": "^2.5.2",
+    "webpack": "^1.12.13"
   },
-  "license": "BSD-2-Clause"
+  "scripts": {
+    "clean": "rimraf lib",
+    "build": "webpack",
+    "lint": "eslint src test",
+    "test": "mocha --compilers js:babel-register --recursive",
+    "test:cov": "babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha -- --recursive",
+    "prepublish": "npm run lint && npm run test && npm run clean && npm run build"
+  }
 }

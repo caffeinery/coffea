@@ -1,5 +1,5 @@
 import { makeLogger, defaultImport } from './utils'
-const { info, debug } = makeLogger('instance')
+const { info } = makeLogger('instance')
 
 /**
  * Higher-order function to make a `dispatch` function given a `listeners`
@@ -9,7 +9,7 @@ const { info, debug } = makeLogger('instance')
  * @param  {Object} listeners
  * @return {Function} dispatch
  */
-const makeDispatch = (listeners, getHandler) => event => {
+const makeDispatch = (listeners, getHandler) => (event) => {
   const handler = getHandler()
 
   const reply = handler
@@ -41,7 +41,7 @@ const makeDispatch = (listeners, getHandler) => event => {
  * @param  {Object} listeners
  * @return {Function} on
  */
-const makeOn = listeners => (name, callback) => {
+const makeOn = (listeners) => (name, callback) => {
   info(`Listener being subscribed with the name "${name}".`)
 
   if (listeners[name] === undefined) {
@@ -59,10 +59,10 @@ const makeOn = listeners => (name, callback) => {
  * @return {Object} protocol instance
  * @throws {Error} if the protocol couldn't be `require`'d
  */
-const loadProtocol = name => {
+const loadProtocol = (name) => {
   try {
     info(`Attempting to load the protocol coffea-${name}`)
-    protocol = defaultImport(require('coffea-' + name))
+    defaultImport(require('coffea-' + name))
   } catch (e) {
     throw new Error(`The protocol coffea-${name} isn't installed. We can't use this protocol.`)
   }
@@ -80,7 +80,6 @@ export default function instance (config) {
     throw new Error('Please pass a string or function as the protocol parameter.')
   }
 
-  let methods = {}
   let listeners = {}
 
   let protocol

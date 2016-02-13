@@ -1,3 +1,4 @@
+/*globals describe,it*/
 import connect from '../src/index'
 const expect = require('chai').expect
 
