@@ -18,3 +18,5 @@ test*.js
 .srclib-cache
 
 coverage/
+
+lib
