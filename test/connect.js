@@ -2,18 +2,15 @@
 import connect from '../src/index'
 const expect = require('chai').expect
 
-const dummyProtocol = (config, register, dispatch) => {
-  register('test', () => {
-    return 'It works!'
-  })
-
+const dummyProtocol = (config, dispatch) => {
   setTimeout(() => {
-    if (config.multipleParams) {
-      dispatch('test event', {success: true}, false)
-    } else {
-      dispatch('test event', {success: true})
-    }
+    dispatch({
+      type: 'test event',
+      success: true
+    })
   }, 5)
+
+  return event => event.type === 'test' ? 'It works!' : 'Unknown event.'
 }
 
 describe('connect function', () => {
@@ -36,13 +33,13 @@ describe('connect function', () => {
       done()
     })
 
-    it('should return an object with two functions - "on" and "call"', (done) => {
+    it('should return an object with two functions - "on" and "send"', (done) => {
       let c = connect({
         protocol: dummyProtocol
       })
 
       expect(c.on).to.exist
-      expect(c.call).to.exist
+      expect(c.send).to.exist
 
       done()
     })
@@ -66,20 +63,6 @@ describe('connect function', () => {
 
       c.on('test event', (e) => {
         expect(e.success).to.eql(true)
-
-        done()
-      })
-    })
-
-    it('allow multiple parameters in the event callback', (done) => {
-      let c = connect({
-        protocol: dummyProtocol,
-        multipleParams: true
-      })
-
-      c.on('test event', (e, bool) => {
-        expect(e.success).to.eql(true)
-        expect(bool).to.eql(false)
 
         done()
       })
