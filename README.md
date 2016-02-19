@@ -28,10 +28,10 @@ As for protocols, we're working on [coffea-irc](https://github.com/caffeinery/co
 
 ## Connecting
 
-The coffea core exposes a `connect` function as the default export. It can be imported like this:
+The coffea core exposes a `connect` function (along with other functions, which are explained later). It can be imported like this:
 
 ```js
-import connect from 'coffea'
+import { connect } from 'coffea'
 ```
 
 This function loads the required protocols (via `node_modules`) and returns an instance container, which has the `on` and `send` functions.
@@ -215,7 +215,7 @@ networks.on('message', parrot)
 ## Example: Reverse bot
 
 ```js
-import connect, { message } from 'coffea'
+import { connect, message } from 'coffea'
 
 const networks = connect([
   {
@@ -283,7 +283,7 @@ export default const dummyProtocol = (config, dispatch) => {
 To use this protocol, you have to pass the protocol function to `connect`:
 
 ```js
-import connect, { message } from 'coffea'
+import { connect, message } from 'coffea'
 import dummyProtocol from './dummy'
 
 const networks = connect([
