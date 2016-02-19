@@ -10,7 +10,7 @@ const dummyProtocol = (config, dispatch) => {
     })
   }, 5)
 
-  return event => event.type === 'test' ? 'It works!' : 'Unknown event.'
+  return (event) => event.type === 'test' ? 'It works!' : 'Unknown event.'
 }
 
 describe('connect function', () => {
