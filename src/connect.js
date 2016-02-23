@@ -18,6 +18,7 @@ export default function connect (rawConfig) {
   // enhance `instances` array
   instances.on = execAll('on', instances)
   instances.send = execAll('send', instances)
+  instances.dispatch = execAll('dispatch', instances)
 
   return instances
 }

@@ -1,6 +1,6 @@
 {
   "name": "coffea",
-  "version": "1.0.0-beta8",
+  "version": "1.0.0-beta9",
   "description": "an extensible library built to handle multiple chat protocols",
   "main": "./lib/index.js",
   "author": "Caffeinery Developers <daniel.bugl@touchlay.com>",

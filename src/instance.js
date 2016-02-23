@@ -92,6 +92,7 @@ export default function instance (config) {
 
   return {
     on: makeOn(listeners),
-    send: handler
+    send: handler,
+    dispatch: dispatch
   }
 }
