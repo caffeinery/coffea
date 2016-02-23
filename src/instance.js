@@ -51,6 +51,12 @@ const makeOn = (listeners) => (name, callback) => {
   } else {
     listeners[name].push(callback)
   }
+
+  return function unsubscribe () {
+    const i = listeners[name].indexOf(callback)
+    listeners[name].splice(i, 1)
+    info(`Unsubscribed listener for "${name}": ${callback.toString()}`)
+  }
 }
 
 /**

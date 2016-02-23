@@ -8,9 +8,10 @@ import dude from 'debug-dude'
  * @return {Array}
  */
 export const execAll = (func, objects) => (...args) => {
-  objects.forEach(
+  const functions = objects.map(
     (obj) => obj[func](...args)
   )
+  return () => functions.forEach((f) => f())
 }
 
 /**
