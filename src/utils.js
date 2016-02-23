@@ -14,12 +14,20 @@ export const execAll = (func, objects) => (...args) => {
 }
 
 /**
+ * Make a `makeLogger` function given a root namespace
+ *
+ * @param  {String) root namespace
+ * @return {Function} makeLogger
+ */
+export const makeLoggerMaker = (root) => (namespace) => dude(root + ':' + namespace)
+
+/**
  * Make a coffea logger given a namespace
  *
  * @param  {String) namespace
  * @return {Object} of debug, log, info, warn and error functions
  */
-export const makeLogger = (namespace) => dude('coffea:' + namespace)
+export const makeLogger = makeLoggerMaker('coffea')
 
 /**
  * Wrap an object into an array if it isn't already.
@@ -40,7 +48,7 @@ export const arrayify = (maybeArray) =>
  * @param  {Object} module
  * @return {Object} correctly imported module
  */
-export default function defaultImport (module) {
+export function defaultImport (module) {
   if (module.__esModule && module.default) {
     return module.default
   } else {
