@@ -10,6 +10,8 @@ const { info } = makeLogger('instance')
  * @return {Function} dispatch
  */
 const makeDispatch = (listeners, getHandler) => (event) => {
+  if (!event || !event.type) throw new Error('event does not have the required `type` property')
+
   const handler = getHandler()
 
   const reply = handler
