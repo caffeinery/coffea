@@ -2,24 +2,26 @@ import { makeLogger, defaultImport } from './utils'
 const { info } = makeLogger('instance')
 
 /**
- * Higher-order function to make a `dispatch` function given a `listeners`
- * object and a `handler`, which will handle calling events sent to the protocol.
+ * Higher-order function to make a `dispatch` function given a network name,
+ * `listeners` object and a `getHandler` function, which returns a handler that
+ * will handle calling events sent to the protocol.
  *
  * @private
+ * @param  {String} networkName
  * @param  {Object} listeners
+ * @param  {Function} getHandler
  * @return {Function} dispatch
  */
-const makeDispatch = (listeners, getHandler) => (event) => {
+const makeDispatch = (networkName, listeners, getHandler) => (event) => {
   if (!event || !event.type) throw new Error('event does not have the required `type` property')
 
   const handler = getHandler()
-
   const reply = handler
-  // TODO: enhance `handler` to only send to certain networks
-  //       e.g. only dispatch event to the network as a `reply`
 
   const { type } = event
   info(`Dispatching "${type}" event.`)
+
+  event.network = networkName
 
   // always dispatch `event` (wildcard) event
   if (listeners.hasOwnProperty('event')) {
@@ -77,6 +79,27 @@ const loadProtocol = (name) => {
 }
 
 /**
+ * Get the name of a protocol.
+ *
+ * @private
+ * @param  {String|Function} protocol
+ * @return {String} protocol name
+ */
+const protocolName = (protocol) =>
+  (typeof protocol === 'string') ? protocol : protocol.name
+
+
+/**
+ * Return a random name (with the specified length).
+ *
+ * @private
+ * @param  {Number} length
+ * @return {String} random name
+ */
+const randomName = (length = 5) =>
+  Math.random().toString(36).substr(2, length)
+
+/**
  * Create an instance of coffea which loads a protocol, uses it to connect to a
  * service and then provides events.
  *
@@ -88,6 +111,8 @@ export default function instance (config) {
     throw new Error('Please pass a string or function as the protocol parameter.')
   }
 
+  let name = config.name || (protocolName(config.protocol) + '_' + randomName())
+
   let listeners = {}
 
   let protocol
@@ -95,7 +120,7 @@ export default function instance (config) {
   else protocol = loadProtocol(config.protocol)
 
   let handler
-  const dispatch = makeDispatch(listeners, () => handler)
+  const dispatch = makeDispatch(name, listeners, () => handler)
   handler = protocol(config, dispatch)
 
   return {

@@ -1,4 +1,4 @@
-import connect, { message } from './src/index'
+import { connect, message } from './src/index'
 
 const slack = (config, dispatch) => {
   setTimeout(() => {
@@ -31,12 +31,17 @@ const slack = (config, dispatch) => {
   }
 }
 
-const networks = connect(
+const networks = connect([
   {
-     protocol: slack,
-     token: '...'
+    name: 'definedName',
+    protocol: slack,
+    token: '...'
+  },
+  {
+    protocol: slack,
+    token: '...'
   }
-)
+])
 
 networks.on('event', e => console.log(e))
 
