@@ -88,7 +88,6 @@ const loadProtocol = (name) => {
 const protocolName = (protocol) =>
   (typeof protocol === 'string') ? protocol : protocol.name
 
-
 /**
  * Return a random name (with the specified length).
  *
