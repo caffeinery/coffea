@@ -249,7 +249,7 @@ networks.on('message', reverse)
 
 This is a guide on how to implement a new protocol with coffea.
 
-Protocols are functions that take `config`, a network configuration, and a `dispatch` function as arguments. They return a function that will handle all *calling events* sent to the protocol later.
+Protocols are functions that take `config` (a network configuration), and a `dispatch` function as arguments. They return a function that will handle all *calling events* sent to the protocol later.
 
 A simple protocol could look like this:
 
