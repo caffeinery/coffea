@@ -45,7 +45,7 @@ export const command = (channel, cmd, args, ...options) => {
   return {
     ...options,
     type: 'command',
-    cmd, args
+    channel, cmd, args
   }
 }
 
