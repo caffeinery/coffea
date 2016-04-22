@@ -14,8 +14,9 @@ export const message = (channel, text, ...options) => {
   }
 
   return {
+    ...options,
     type: 'message',
-    ...options, channel, text
+    channel, text
   }
 }
 
@@ -42,8 +43,9 @@ export const command = (channel, cmd, args, ...options) => {
   }
 
   return {
+    ...options,
     type: 'command',
-    ...options, channel
+    cmd, args
   }
 }
 
@@ -60,7 +62,8 @@ export const error = (err, ...options) => {
   }
 
   return {
+    ...options,
     type: 'error',
-    ...options, err
+    err
   }
 }
