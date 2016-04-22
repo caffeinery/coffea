@@ -42,7 +42,7 @@ export const command = (channel, cmd, args, ...options) => {
   }
 
   return {
-    type: 'message',
+    type: 'command',
     ...options, channel
   }
 }
