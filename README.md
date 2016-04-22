@@ -1,6 +1,6 @@
 # coffea
 
-[![NPM version (>=0.4)](https://img.shields.io/npm/v/coffea.svg?style=flat-square)](https://www.npmjs.com/package/coffea) [![Build Status](https://img.shields.io/travis/caffeinery/coffea/master.svg?style=flat-square)](https://travis-ci.org/caffeinery/coffea) [![Dependencies](https://img.shields.io/david/caffeinery/coffea.svg?style=flat-square)](https://david-dm.org/caffeinery/coffea) [![Documentation Status](https://readthedocs.org/projects/coffea/badge/?style=flat-square&version=latest)](https://readthedocs.org/projects/coffea/?badge=latest) [![Code Climate](https://img.shields.io/codeclimate/github/caffeinery/coffea.svg?style=flat-square)](https://codeclimate.com/github/caffeinery/coffea) [![Coverage](https://img.shields.io/coveralls/caffeinery/coffea.svg?style=flat-square)](https://coveralls.io/r/caffeinery/coffea)
+[![NPM version](https://img.shields.io/badge/npm-beta-blue.svg?style=flat-square)](https://www.npmjs.com/package/coffea) [![Build Status](https://img.shields.io/travis/caffeinery/coffea/1.0-beta.svg?style=flat-square)](https://travis-ci.org/caffeinery/coffea) [![Dependencies](https://img.shields.io/david/caffeinery/coffea/1.0-beta.svg?style=flat-square)](https://david-dm.org/caffeinery/coffea) [![Code Climate](https://img.shields.io/codeclimate/github/caffeinery/coffea/1.0-beta.svg?style=flat-square)](https://codeclimate.com/github/caffeinery/coffea) [![Coverage](https://img.shields.io/coveralls/caffeinery/coffea/1.0-beta.svg?style=flat-square)](https://coveralls.io/r/caffeinery/coffea)
 
 _coffea lays the foundations you need to painlessly and effortlessly connect to multiple chat protocols_
 
@@ -14,6 +14,7 @@ _coffea lays the foundations you need to painlessly and effortlessly connect to 
  * [Example: Reverse bot](#example-reverse-bot) (quickstart example)
  * [Protocols](#protocols) (implementing a new protocol)
 
+**Note:** If you want to use coffea with irc, [coffea-irc](https://github.com/caffeinery/coffea-irc) for the new beta is still work-in-progress, so you will have to use [coffea 0.x](https://github.com/caffeinery/coffea/tree/master).
 
 ## Try it out!
 
