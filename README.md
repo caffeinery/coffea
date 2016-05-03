@@ -1,6 +1,6 @@
 # coffea
 
-[![NPM version](https://img.shields.io/badge/npm-beta-blue.svg?style=flat-square)](https://www.npmjs.com/package/coffea) [![Build Status](https://img.shields.io/travis/caffeinery/coffea/1.0-beta.svg?style=flat-square)](https://travis-ci.org/caffeinery/coffea) [![Dependencies](https://img.shields.io/david/caffeinery/coffea/1.0-beta.svg?style=flat-square)](https://david-dm.org/caffeinery/coffea) [![Code Climate](https://img.shields.io/codeclimate/github/caffeinery/coffea/1.0-beta.svg?style=flat-square)](https://codeclimate.com/github/caffeinery/coffea) [![Coverage](https://img.shields.io/coveralls/caffeinery/coffea/1.0-beta.svg?style=flat-square)](https://coveralls.io/r/caffeinery/coffea)
+[![NPM version](https://img.shields.io/badge/npm-beta-blue.svg?style=flat-square)](https://www.npmjs.com/package/coffea) [![Dependencies](https://img.shields.io/david/caffeinery/coffea/1.0-beta.svg?style=flat-square)](https://david-dm.org/caffeinery/coffea)
 
 _coffea lays the foundations you need to painlessly and effortlessly connect to multiple chat protocols_
 
