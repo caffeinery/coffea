@@ -223,8 +223,8 @@ import { connect, message } from 'coffea'
 const networks = connect([
   {
     protocol: 'irc',
-    network: '...',
-    channels: ['#foo', '#bar']
+    network: 'irc.6697.eu',
+    channels: ['#coffea', '#test']
   },
   {
     protocol: 'telegram',
