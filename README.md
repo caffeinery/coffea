@@ -16,7 +16,11 @@ _coffea lays the foundations you need to painlessly and effortlessly connect to 
 
 **Note:** If you want to use coffea with irc, [coffea-irc](https://github.com/caffeinery/coffea-irc) for the new beta is still work-in-progress, so you will have to use [coffea 0.x](https://github.com/caffeinery/coffea/tree/master).
 
-## Try it out!
+## Quickstart
+
+Use the [coffea-starter](https://github.com/coffea-bots/coffea-starter) project to quickly get started developing with coffea!
+
+## Installation
 
 You can install the latest coffea version like this:
 
