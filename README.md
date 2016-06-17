@@ -14,8 +14,6 @@ _coffea lays the foundations you need to painlessly and effortlessly connect to 
  * [Example: Reverse bot](#example-reverse-bot) (quickstart example)
  * [Protocols](#protocols) (implementing a new protocol)
 
-**Note:** If you want to use coffea with irc, [coffea-irc](https://github.com/caffeinery/coffea-irc) for the new beta is still work-in-progress, so you will have to use [coffea 0.x](https://github.com/caffeinery/coffea/tree/master).
-
 ## Quickstart
 
 Use the [coffea-starter](https://github.com/coffea-bots/coffea-starter) project to quickly get started developing with coffea!
