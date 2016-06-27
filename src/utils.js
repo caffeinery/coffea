@@ -1,18 +1,34 @@
 import dude from 'debug-dude'
 
 /**
- * Higher-order function that creates a function that will execute `func` on all
- * `objects` with the given arguments.
+ * Check if data is an object (and not a function or `null`)
  *
- * @param  {Object|Array} rawConfig
- * @return {Array}
+ * @param  {any} data
+ * @return {Boolean}
  */
-export const execAll = (func, objects) => (...args) => {
-  const functions = objects.map(
-    (obj) => obj[func](...args)
-  )
-  return () => functions.forEach((f) => f())
+export const isObject = (data) => {
+  return data !== null &&
+    typeof data === 'object' &&
+    !(data instanceof Function)
 }
+
+/**
+ * A function to map over an object.
+ *
+ * @param  {Object} obj
+ * @param  {Function} fn
+ * @return {Object}
+ */
+export const mapObject = (obj, fn) =>
+  Object.keys(obj).reduce(
+    (res, key) => {
+      const val = obj[key]
+      if (isObject(val)) {
+        res[key] = fn(val)
+      }
+      return res
+    }, {}
+  )
 
 /**
  * Make a `makeLogger` function given a root namespace
