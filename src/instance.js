@@ -74,7 +74,7 @@ const loadProtocol = (name) => {
     info(`Attempting to load the protocol coffea-${name}`)
     return defaultImport(require('coffea-' + name))
   } catch (e) {
-    throw new Error(`The protocol coffea-${name} isn't installed. Try running: npm install --save coffea-${name}`)
+    throw new Error(`The protocol coffea-${name} isn't installed. Try running: npm install coffea-${name}`)
   }
 }
 
