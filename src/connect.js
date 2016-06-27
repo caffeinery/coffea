@@ -12,10 +12,7 @@ import instance from './instance'
  * @return {Array}
  */
 const execAll = (func, instances) => (...args) => {
-  const mappingFn = (obj) => {
-    console.log('OBJ', obj)
-    obj[func](...args)
-  }
+  const mappingFn = (obj) => obj[func](...args)
 
   let functions
   if (Array.isArray(instances)) functions = instances.map(mappingFn)
