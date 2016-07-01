@@ -3,6 +3,15 @@ import { message } from './helpers'
 
 const { info } = makeLogger('instance')
 
+/**
+ * Higher-order function to make a `reply` function given a handler and a chat
+ * identifier. It returns a function that will handle replies.
+ *
+ * @private
+ * @param  {Function} handler
+ * @param  {String} chat
+ * @return {Function} reply
+ */
 const makeReply = (handler, chat) => (event) => {
   if (typeof event === 'string') { // simple message event
     return handler(message(chat, event))

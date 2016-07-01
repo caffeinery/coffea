@@ -75,3 +75,5 @@ export const error = ({ err, ...options }) => {
     err
   }
 }
+
+// TODO: add `connect` event helper

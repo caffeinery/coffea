@@ -125,7 +125,7 @@ networks
   .on('message', msg => console.log(msg.text))
 
 // sending events will be explained more later
-const parrot = (msg, reply) => reply(message(msg.chat, msg.text))
+const parrot = (msg, reply) => reply(msg.text)
 networks.on('message', parrot)
 ```
 
@@ -147,13 +147,13 @@ import { attachment } from 'coffea-slack'
 Now you can create an event like this:
 
 ```js
-message('#dev', 'New commit!')
+message({ chat: '#dev', text: 'New commit!' })
 ```
 
 The structure for event helpers is:
 
 ```js
-eventName(requiredArgs, { optionalArgs })
+eventName({ ...arguments })
 ```
 
 (`eventName` should always equal the `type` of the event that is returned to avoid confusion!)
@@ -162,7 +162,7 @@ Multiple protocols can expose the same helper functions, but with enhanced funct
 
 ```js
 import { message, attachment } from 'coffea-slack'
-message(chat, text, { attachment: attachment('test.png') })
+message({ chat, text, attachment: attachment('test.png') })
 ```
 
 **Note:** coffea core's `message` helper function (if you import with `import { message } from 'coffea'`) does not implement the `attachment` option!
@@ -182,12 +182,12 @@ You can use the `message` helper function to send an event to all networks:
 import { message } from 'coffea'
 
 // send to all networks:
-networks.send(message('#dev', 'Commit!'))
+networks.send(message({ chat: '#dev', text: 'Commit!' }))
 
 // send to slack networks only:
 networks
   .filter(network => network.protocol === 'slack')
-  .send(message('#random', 'Secret slack-only stuff.'))
+  .send(message({ chat: '#random', text: 'Secret slack-only stuff.' }))
 ```
 
 #### `send` in combination with `on`
@@ -195,28 +195,24 @@ networks
 If you're sending events as a response to another event, you should use the `reply` function that gets passed as an argument to the listener. It will automatically figure out where to send the message instead of sending it to all networks (like `networks.send` does):
 
 ```js
-import { message } from 'coffea'
-networks.on('message', (msg, reply) => reply(message(msg.chat, msg.text)))
+networks.on('message', (msg, reply) => reply(msg.text))
 ```
 
 You may want to keep the function definitions (`const parrot = ...`) separate from the `on` statement (`networks.on(...)`). This allows for easy unit tests:
 
 ```js
 // somefile.js
-import { message } from 'coffea'
-export const parrot = (msg, reply) => reply(message(msg.chat, msg.text))
+export const parrot = (msg, reply) => reply(msg.text)
 export const reverse = (msg, reply) => {
   const reversedText = msg.text.split('').reverse().join('')
-  const message = message(msg.chat, reversedText)
-
-  reply(message)
+  reply(reversedText)
 }
 
 // unittests.js
 import { assert } from 'my-favorite-testing-library'
 import { parrot, reverse } from './somefile'
-parrot('test', msg => assert(msg.text === 'test'))
-reverse('test', msg => assert(msg.text === 'tset'))
+parrot('hello world', (msg) => assert(msg.text === 'hello world'))
+reverse('hello world', (msg) => assert(msg.text === 'dlrow olleh'))
 
 // main.js
 import connect from 'coffea'
@@ -252,9 +248,7 @@ const networks = connect([
 
 const reverse = (msg, reply) => {
   const reversedText = msg.text.split('').reverse().join('')
-  const message = message(msg.chat, reversedText)
-
-  reply(message)
+  reply(reversedText)
 }
 
 networks.on('message', reverse)
@@ -387,8 +381,33 @@ const messageHandler = dispatch => event =>
 const defaultHandler = dispatch => event =>
   dispatch({
     type: 'error',
-    text: 'Unknown event'
+    err: new Error('Unknown event')
   })
+
+export default const dummyProtocol = (config, dispatch) => {
+  // mock connect event
+  dispatch({
+    type: 'connect',
+    network: config.network
+  })
+
+  return forward({
+    'message': messageHandler(dispatch),
+    'default': defaultHandler(dispatch)
+  })
+}
+```
+
+You can (and should!) use the same coffea helpers for protocols:
+
+```js
+import { forward, message, error } from 'coffea'
+
+const messageHandler = dispatch => event =>
+  dispatch(message({ text: event.text })
+
+const defaultHandler = dispatch => event =>
+  dispatch(error({ err: new Error('Unknown event') })
 
 export default const dummyProtocol = (config, dispatch) => {
   // mock connect event
