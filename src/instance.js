@@ -14,7 +14,7 @@ const { info } = makeLogger('instance')
  */
 const makeReply = (handler, chat) => (event) => {
   if (typeof event === 'string') { // simple message event
-    return handler(message(chat, event))
+    return handler(message({ chat, text: event }))
   }
 
   if (!event.chat) { // default to current chat
