@@ -1,38 +1,38 @@
 /**
- * Create a `message` event that will be sent to the given `channel` containing
+ * Create a `message` event that will be sent to the given `chat` containing
  * the given `text`. Additional `options` can be added that will be parsed by
  * the protocol.
  *
- * @param  {String} channel
+ * @param  {String} chat
  * @param  {String} text
  * @param  {Object} [options]
  * @return {Object} message event
  */
-export const message = (channel, text, ...options) => {
-  if (channel === undefined || text === undefined) {
+export const message = (chat, text, ...options) => {
+  if (chat === undefined || text === undefined) {
     throw new Error('Not enough parameters to construct a proper event')
   }
 
   return {
     ...options,
     type: 'message',
-    channel, text
+    chat, text
   }
 }
 
 /**
- * Create a `command` event that will be sent to the given `channel` containing
+ * Create a `command` event that will be sent to the given `chat` containing
  * the given command `cmd` and arguments `args`. Additional `options` can be
  * added that will be parsed by the protocol.
  *
- * @param  {String} channel
+ * @param  {String} chat
  * @param  {String} cmd
  * @param  {Array}  args
  * @param  {Object} [options]
  * @return {Object} message event
  */
-export const command = (channel, cmd, args, ...options) => {
-  if (channel === undefined || cmd === undefined || args === undefined) {
+export const command = (chat, cmd, args, ...options) => {
+  if (chat === undefined || cmd === undefined || args === undefined) {
     throw new Error('Not enough parameters to construct a proper event')
   }
 
@@ -45,7 +45,7 @@ export const command = (channel, cmd, args, ...options) => {
   return {
     ...options,
     type: 'command',
-    channel, cmd, args
+    chat, cmd, args
   }
 }
 

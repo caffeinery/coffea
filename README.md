@@ -79,7 +79,7 @@ For a message, it could look like this (imagine a git bot):
 ```js
 {
   type: 'message',
-  channel: '#dev',
+  chat: '#dev',
   text: 'New commit!'
 }
 ```
@@ -111,7 +111,7 @@ networks
   .on('message', msg => console.log(msg.text))
 
 // sending events will be explained more later
-const parrot = (msg, reply) => reply(message(msg.channel, msg.text))
+const parrot = (msg, reply) => reply(message(msg.chat, msg.text))
 networks.on('message', parrot)
 ```
 
@@ -148,7 +148,7 @@ Multiple protocols can expose the same helper functions, but with enhanced funct
 
 ```js
 import { message, attachment } from 'coffea-slack'
-message(channel, text, { attachment: attachment('test.png') })
+message(chat, text, { attachment: attachment('test.png') })
 ```
 
 **Note:** coffea core's `message` helper function (if you import with `import { message } from 'coffea'`) does not implement the `attachment` option!
@@ -182,7 +182,7 @@ If you're sending events as a response to another event, you should use the `rep
 
 ```js
 import { message } from 'coffea'
-networks.on('message', (msg, reply) => reply(message(msg.channel, msg.text)))
+networks.on('message', (msg, reply) => reply(message(msg.chat, msg.text)))
 ```
 
 You may want to keep the function definitions (`const parrot = ...`) separate from the `on` statement (`networks.on(...)`). This allows for easy unit tests:
@@ -190,10 +190,10 @@ You may want to keep the function definitions (`const parrot = ...`) separate fr
 ```js
 // somefile.js
 import { message } from 'coffea'
-export const parrot = (msg, reply) => reply(message(msg.channel, msg.text))
+export const parrot = (msg, reply) => reply(message(msg.chat, msg.text))
 export const reverse = (msg, reply) => {
   const reversedText = msg.text.split('').reverse().join('')
-  const message = message(msg.channel, reversedText)
+  const message = message(msg.chat, reversedText)
 
   reply(message)
 }
@@ -238,7 +238,7 @@ const networks = connect([
 
 const reverse = (msg, reply) => {
   const reversedText = msg.text.split('').reverse().join('')
-  const message = message(msg.channel, reversedText)
+  const message = message(msg.chat, reversedText)
 
   reply(message)
 }

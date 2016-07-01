@@ -11,12 +11,12 @@ const slack = (config, dispatch) => {
   setTimeout(() => {
     dispatch({
       type: 'message',
-      channel: '#test',
+      chat: '#test',
       text: 'test'
     })
   }, 250)
 
-  return event => {
+  return (event) => {
     switch (event.type) {
       case 'message':
         console.log('message received:', event.text)
@@ -43,11 +43,11 @@ const networks = connect([
   }
 ])
 
-networks.on('event', e => console.log(e))
+networks.on('event', (e) => console.log(e))
 
 const reverse = (msg, reply) => {
   const reversedText = msg.text.split('').reverse().join('')
-  const reversedMessage = message(msg.channel, reversedText)
+  const reversedMessage = message(msg.chat, reversedText)
 
   reply(reversedMessage)
 }
