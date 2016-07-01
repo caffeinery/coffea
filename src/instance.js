@@ -1,5 +1,19 @@
 import { makeLogger, defaultImport } from './utils'
+import { message } from './helpers'
+
 const { info } = makeLogger('instance')
+
+const makeReply = (handler, chat) => (event) => {
+  if (typeof event === 'string') { // simple message event
+    return handler(message(chat, event))
+  }
+
+  if (!event.chat) { // default to current chat
+    return handler({ ...event, chat })
+  }
+
+  return handler(event)
+}
 
 /**
  * Higher-order function to make a `dispatch` function given a network name,
@@ -15,12 +29,15 @@ const { info } = makeLogger('instance')
 const makeDispatch = (networkName, listeners, getHandler) => (event) => {
   if (!event || !event.type) throw new Error('event does not have the required `type` property')
 
-  const handler = getHandler()
-  const reply = handler
-
-  const { type } = event
+  const { type, chat } = event
   info(`Dispatching "${type}" event.`)
 
+  const handler = getHandler()
+
+  // pass `chat` from received event
+  const reply = makeReply(handler, chat)
+
+  // always set the correct network name before dispatching the event
   event.network = networkName
 
   // always dispatch `event` (wildcard) event
@@ -110,6 +127,7 @@ export default function instance (config) {
     throw new Error('Please pass a string or function as the protocol parameter.')
   }
 
+  // TODO: use the name from the config object (if available) here
   let name = config.name || (protocolName(config.protocol) + '_' + randomName())
 
   let listeners = {}

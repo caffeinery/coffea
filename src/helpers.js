@@ -8,9 +8,12 @@
  * @param  {Object} [options]
  * @return {Object} message event
  */
-export const message = (chat, text, ...options) => {
-  if (chat === undefined || text === undefined) {
-    throw new Error('Not enough parameters to construct a proper event')
+export const message = ({ chat, text, ...options }) => {
+  if (text === undefined) {
+    throw new Error(
+      'A `message` event needs at least a `text` parameter, ' +
+      'e.g. message({ text: \'hello world!\'})'
+    )
   }
 
   return {
@@ -31,15 +34,16 @@ export const message = (chat, text, ...options) => {
  * @param  {Object} [options]
  * @return {Object} message event
  */
-export const command = (chat, cmd, args, ...options) => {
-  if (chat === undefined || cmd === undefined || args === undefined) {
-    throw new Error('Not enough parameters to construct a proper event')
+export const command = ({ chat, cmd, args = [], ...options }) => {
+  if (cmd === undefined) {
+    throw new Error(
+      'A `command` event needs at least a `cmd` parameter, ' +
+      'e.g. command({ cmd: \'send\', args: [\'hello\', \'world\'] })'
+    )
   }
 
-  // TODO: more sanity checks here and in other event helpers
-
   if (!Array.isArray(args)) {
-    throw new Error('`args` parameter is not an array')
+    throw new Error('Invalid `command` event: `args` parameter is not an array')
   }
 
   return {
@@ -56,9 +60,13 @@ export const command = (chat, cmd, args, ...options) => {
  * @param  {Object} [options]
  * @return {Object} error event
  */
-export const error = (err, ...options) => {
+export const error = ({ err, ...options }) => {
   if (!err instanceof Error) {
-    throw new Error('Parameter is not an Error object (`instanceof Error`)')
+    throw new Error(
+      'An `error` event needs at least a `err` parameter, ' +
+      'which has to be an Error object, ' +
+      'e.g. error({ err: new Error(\'error message\') })'
+    )
   }
 
   return {

@@ -3,16 +3,29 @@ import { message } from '../src/index'
 const expect = require('chai').expect
 
 describe('message helper', () => {
-  it('should accept just two parameters', () => {
-    let m = message('#general', 'Hello World')
+  it('should accept just `text` parameter', () => {
+    let m = message({ text: 'Hello World' })
+
+    expect(m).to.eql({ type: 'message', text: 'Hello World' })
+  })
+
+  it('should accept `text` and `chat` parameters', () => {
+    let m = message({ chat: '#general', text: 'Hello World' })
 
     expect(m).to.eql({ type: 'message', chat: '#general', text: 'Hello World' })
   })
 
-  it('should accept more than two parameters', () => {
-    let m = message('#general', 'Hello World', 'test')
+  it('should accept additional parameters', () => {
+    let m = message({
+      chat: '#general', text: 'Hello World',
+      protocolSpecificOption: 'something'
+    })
 
-    expect(m).to.eql({ type: 'message', chat: '#general', text: 'Hello World', '0': 'test' })
+    expect(m).to.eql({
+      type: 'message',
+      chat: '#general', text: 'Hello World',
+      protocolSpecificOption: 'something'
+    })
   })
 
   it('should not accept any less than two parameters', () => {

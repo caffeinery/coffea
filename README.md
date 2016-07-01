@@ -4,6 +4,20 @@
 
 _coffea lays the foundations you need to painlessly and effortlessly connect to multiple chat protocols_
 
+**Attention:** `beta15` changed `event.channel` to `event.chat` for more
+consistency across protocols. Furthermore, helper functions now accept only
+*one* argument with all the options for building the event. Make sure to update
+your code when upgrading! You can also use the improved `reply` function now
+(which defaults to the current chat if `chat` is not supplied):
+
+```js
+reply('hello world!') // reply with a simple message
+reply(message({ // reply with a more complex message
+  text: 'hello world!',
+  protocolSpecificOption: 'something'
+}))
+```
+
 **Table of contents:**
 
  * [Connecting](#connecting) (connecting to multiple networks on various protocols)
