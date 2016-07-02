@@ -6,7 +6,7 @@ describe('message helper', () => {
   it('should accept just `text` parameter', () => {
     let m = message({ text: 'Hello World' })
 
-    expect(m).to.eql({ type: 'message', text: 'Hello World' })
+    expect(m).to.eql({ type: 'message', chat: undefined, text: 'Hello World' })
   })
 
   it('should accept `text` and `chat` parameters', () => {

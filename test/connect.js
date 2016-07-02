@@ -15,8 +15,14 @@ const dummyProtocol = (config, dispatch) => {
 
 describe('connect function', () => {
   describe('core functionality', () => {
-    it('should return an error if protocol is not defined', (done) => {
+    it('should return an error if no configs are defined', (done) => {
       expect(() => { connect({}) }).to.throw(Error)
+
+      done()
+    })
+
+    it('should return an error if a protocol isn\'t passed', (done) => {
+      expect(() => { connect({ instanceName: {} }) })
 
       done()
     })

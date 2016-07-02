@@ -133,7 +133,7 @@ const randomName = (length = 5) =>
  */
 export default function instance (config) {
   if (!config.protocol || !(typeof config.protocol === 'string' || typeof config.protocol === 'function')) {
-    throw new Error('Please pass a string or function as the protocol parameter.')
+    throw new Error('please pass a string or function as the `protocol` parameter')
   }
 
   // TODO: use the name from the config object (if available) here

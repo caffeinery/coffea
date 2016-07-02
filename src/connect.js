@@ -59,5 +59,10 @@ export default function connect (rawConfig) {
     instances = mapObject(rawConfig, instance)
   }
 
+  if (
+    (Array.isArray(instances) && instances.length === 0) ||
+    (Object.keys(instances).length === 0)
+  ) throw new Error('no config/s defined')
+
   return enhanceInstances(instances)
 }
