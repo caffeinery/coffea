@@ -14,11 +14,8 @@ import instance from './instance'
 const execAll = (func, instances) => (...args) => {
   const mappingFn = (obj) => obj[func](...args)
 
-  let functions
-  if (Array.isArray(instances)) functions = instances.map(mappingFn)
-  else functions = mapObject(instances, mappingFn)
-
-  return () => functions.forEach((f) => f())
+  if (Array.isArray(instances)) return instances.map(mappingFn)
+  else return mapObject(instances, mappingFn)
 }
 
 /**
