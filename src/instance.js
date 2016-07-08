@@ -13,6 +13,8 @@ const { info } = makeLogger('instance')
  * @return {Function} reply
  */
 const makeReply = (handler, chat) => (event) => {
+  if (!event) throw new Error('no event passed to reply function')
+
   if (typeof event === 'string') { // simple message event
     return handler(message({ chat, text: event }))
   }
