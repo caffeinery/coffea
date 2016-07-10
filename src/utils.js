@@ -24,7 +24,7 @@ export const mapObject = (obj, fn) =>
     (res, key) => {
       const val = obj[key]
       if (isObject(val)) {
-        res[key] = fn(val)
+        res[key] = fn(val, key)
       }
       return res
     }, {}

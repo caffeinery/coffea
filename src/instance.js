@@ -133,13 +133,15 @@ const randomName = (length = 5) =>
  * @param  {Object} config
  * @return {Object}
  */
-export default function instance (config) {
+export default function instance (config, keyName) {
   if (!config.protocol || !(typeof config.protocol === 'string' || typeof config.protocol === 'function')) {
     throw new Error('please pass a string or function as the `protocol` parameter')
   }
 
-  // TODO: use the name from the config object (if available) here
-  let name = config.name || (protocolName(config.protocol) + '_' + randomName())
+  let name =
+    config.name || // try using config.name
+    keyName || // if not defined, use key from config object
+    (protocolName(config.protocol) + '_' + randomName()) // otherwise generate random name
 
   let listeners = {}
 
