@@ -12,6 +12,7 @@ your code when upgrading! You can also use the improved `reply` function now
 
 ```js
 reply('hello world!') // reply with a simple message
+reply(message('hello world!')) // or you can do this
 reply(message({ // reply with a more complex message
   text: 'hello world!',
   protocolSpecificOption: 'something'
@@ -24,6 +25,8 @@ reply(message({ // reply with a more complex message
  * [Events](#events)
    * [Listening on events](#listening-on-events)
    * [Event helpers](#event-helpers) (creating events)
+     * [Core events](#core-events) (list of coffea events)
+     * [Example: Writing an event helper](#example-writing-an-event-helper)
    * [Sending events](#sending-events)
  * [Example: Reverse bot](#example-reverse-bot) (quickstart example)
  * [Protocols](#protocols) (implementing a new protocol)
@@ -147,13 +150,32 @@ import { attachment } from 'coffea-slack'
 Now you can create an event like this:
 
 ```js
-message({ chat: '#dev', text: 'New commit!' })
+message(name, chat, options)
+message('New commit!', '#dev', { protocolSpecificOption: 'something' })
+```
+
+Or you can use an object instead:
+
+```js
+message({
+  text: 'New commit!',
+  chat: '#dev',
+  protocolSpecificOption: 'something'
+})
 ```
 
 The structure for event helpers is:
 
 ```js
-eventName({ ...arguments })
+eventName(argument1, argument2, ..., options) // for global events
+eventName(argument1, argument2, ..., chat, options) // for events that are specific to a certain chat
+```
+
+Make sure your event helper is also usable with an object:
+
+```js
+eventName({ argument1, argument2, ..., option1, option2, ...})
+eventName({ argument1, argument2, ..., chat, option1, option2, ...})
 ```
 
 (`eventName` should always equal the `type` of the event that is returned to avoid confusion!)
@@ -166,6 +188,68 @@ message({ chat, text, attachment: attachment('test.png') })
 ```
 
 **Note:** coffea core's `message` helper function (if you import with `import { message } from 'coffea'`) does not implement the `attachment` option!
+
+#### Core events
+
+coffea defines certain event helpers that should be used when developing protocols
+in order to ensure consistency. You can import and use all helpers like this:
+
+```js
+import { event, connection, message, privatemessage, command, error } from 'coffea'
+event(name, data) // `name` required; e.g. event('ping')
+connection()
+message(text, chat, options) // `text` required; e.g. message('hi!')
+privatemessage(text, chat, options) // `text` required; e.g. privatemessage('hi!')
+command(cmd, args, chat, options) // `cmd` required; e.g. `command('ping')`
+error(err, options) // `err` required; e.g. `error(new Error('fail'))`
+```
+
+You can alternatively pass an object as the first parameter instead, e.g.:
+
+```js
+message({
+  text: 'hello world',
+  someOption: true // instead of using `options` as a separate argument, you can just pass them directly in the object
+})
+```
+
+#### Example: Writing an event helper
+
+```js
+import { isObject } from 'coffea'
+
+/**
+ * Make sure to add some information about the event helper here.
+ *
+ * @param  {type} arg
+ * @param  {type} [optionalArg]
+ * @return {Object} example event
+ */
+export const example = (arg, optionalArg, options) => {
+  // make the helper work with an object
+  if (isObject(arg)) {
+    // we need to rename `arg` to `_arg` here to avoid overshadowing the variable
+    let { arg: _arg, optionalArg, ...options } = arg
+    return example(_arg, optionalArg, options)
+  }
+
+  // do some sanity checks
+  if (!arg) {
+    throw new Error(
+      'An `example` event needs at least a `arg` parameter, ' +
+      'e.g. example(\'arg\') or example({ arg: \'arg\' })'
+    )
+  }
+
+  // create the event
+  // make sure to put ...options first or it will overwrite other properties!
+  return {
+    ...options,
+    type: 'example',
+    arg, optionalArg
+  }
+}
+```
 
 
 ### Sending events
@@ -250,6 +334,8 @@ const reverse = (msg, reply) => {
   const reversedText = msg.text.split('').reverse().join('')
   reply(reversedText)
 }
+
+networks.on('connection', (evt) => console.log('connected to ' + evt.network))
 
 networks.on('message', reverse)
 ```
