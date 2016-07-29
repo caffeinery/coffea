@@ -1,30 +1,23 @@
-import connect, { message, forward } from './src/index'
+import { connect, error, connection, message, forward } from '../src/index'
 
 // protocol
 const messageHandler = (dispatch) =>
   (e) => console.log('message received:', e.text)
 
 const defaultHandler = (dispatch) =>
-  (e) => dispatch({
-    type: 'error',
-    text: 'Unknown event'
-  })
+  (e) => dispatch(error(new Error('unknown event')))
 
 const connectTo = (token, dispatch) =>
   setTimeout(() => {
-    dispatch({
-      type: 'connect',
-      token: token
-    })
+    dispatch(connection({ token }))
   }, 100)
 
 const registerEvents = (dispatch) =>
   setInterval(() => {
-    dispatch({
-      type: 'message',
-      chat: '#test',
-      text: Math.random().toString(36).substring(7)
-    })
+    dispatch(message({
+      text: Math.random().toString(36).substring(7),
+      chat: '#test'
+    }))
   }, 250)
 
 const exampleProtocol = (config, dispatch) => {
@@ -45,14 +38,16 @@ const networks = connect([
   }
 ])
 
-networks.on('event', (e) => console.log(e))
+networks.on('event', (e) =>
+  console.log('<-', e)
+)
 
-const reverse = (msg, reply) => {
-  const reversedText = msg.text.split('').reverse().join('')
-  const reversedMessage = message(msg.chat, reversedText)
+networks.on('connection', (e) =>
+  console.log('connected to', e.network, 'with token:', e.token)
+)
 
-  reply(reversedMessage)
-}
+const reverse = (msg, reply) =>
+  reply(msg.text.split('').reverse().join(''))
 
 networks.on('message', reverse)
 // /app
