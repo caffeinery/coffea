@@ -40,7 +40,7 @@ Use the [coffea-starter](https://github.com/coffea-bots/coffea-starter) project 
 You can install the latest coffea version like this:
 
 ```
-npm install --save coffea@beta
+npm install --save coffea@1.0.0-beta18
 ```
 
 As for protocols, we're working on [coffea-irc](https://github.com/caffeinery/coffea-irc), [coffea-slack](https://github.com/caffeinery/coffea-slack) and [coffea-telegram](https://github.com/caffeinery/coffea-telegram). Feel free to [build your own](#protocols) if you want to play around with coffea.
