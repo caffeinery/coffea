@@ -1,6 +1,6 @@
 {
   "name": "coffea",
-  "version": "0.4.24",
+  "version": "0.4.25",
   "description": "event based and extensible nodejs irc client library with multi-network support",
   "author": "Caffeinery Developers <daniel.bugl@touchlay.com>",
   "repository": {
