@@ -1,0 +1,12 @@
+language: node_js
+sudo: false
+node_js:
+- '4'
+- '5'
+script:
+- npm run lint
+- npm run test
+- npm run test:cov
+notifications:
+  slack:
+    secure: blskmU4sRQURc40o+RYR8laXHugdB5hQxO9qo+69sU/47ihBbEWxxXcixf2K4nOVX5m+VB6IUdxvBTNFnEck/EHY0nCaYQ5Y2nl8ubaBKG4xlTVYNVQczqpuBKSK872RFNXRJsDiUilVszdx6rWPkKzTgBBWjpFSpWZTL/9uENnhvJ7IV+2L2zxvnj4Kwq9StPZjIeU+Gb44HHRK/CNoOsyzAsvPUJZvUQcVQxi8B5+zGU18gxpvC4XJbr0Y6yTWNZFzSvU2eqfNbRaprvLZ32JL0+O5LDxLctN53zOw8rhFExuqAWuHoMIG4Ryk0w0pU562aFvC1n85dWUocKVNCNX6NYTvToo8NTkjiYWn1EPN/K2DCpi5t0s576O3BJXKrMZ4vjpj62pMuscEpz2htQx1hSc8tDBRRAWoC9cfK69cTF3wMWV0hw0e6KcUOj+mN3hgUGDljfU/IKki4wWwxFKi0I3JCm4YokM+WA1SIHRtp53DLWjbdzW1AnjkTL+hcwr4uqd8kuHNjfCfBEOc0DG9cQSSL0o4I2AbQj393Wccg4hl/nAs0XIzyVvr/JF/MMC/Nv/AtCaxlZkCyvi0N2qlAetuaL1SX6wkkab2EO2I7Oyk0ESaF3AU1vKsohu58LORCnCCQfhCUhNslaumXAzRsjuYc1eeHLMof2fpwOg=

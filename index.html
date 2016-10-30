@@ -1,0 +1,640 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Read Me · coffea</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="docs/introduction.html" />
+    
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter active" data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Read Me
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="docs/introduction.html">
+            
+                <a href="docs/introduction.html">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Read Me</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="coffea">coffea</h1>
+<p><a href="https://www.npmjs.com/package/coffea" target="_blank"><img src="https://img.shields.io/badge/npm-beta-blue.svg?style=flat-square" alt="NPM version"></a> <a href="https://david-dm.org/caffeinery/coffea" target="_blank"><img src="https://img.shields.io/david/caffeinery/coffea/1.0-beta.svg?style=flat-square" alt="Dependencies"></a></p>
+<p><em>coffea lays the foundations you need to painlessly and effortlessly connect to multiple chat protocols</em></p>
+<p><strong>Attention:</strong> <code>beta15</code> changed <code>event.channel</code> to <code>event.chat</code> for more
+consistency across protocols. Furthermore, helper functions now accept only
+<em>one</em> argument with all the options for building the event. Make sure to update
+your code when upgrading! You can also use the improved <code>reply</code> function now
+(which defaults to the current chat if <code>chat</code> is not supplied):</p>
+<pre><code class="lang-js"><span class="token function">reply</span><span class="token punctuation">(</span><span class="token string">&apos;hello world!&apos;</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// reply with a simple message</span>
+<span class="token function">reply</span><span class="token punctuation">(</span><span class="token function">message</span><span class="token punctuation">(</span><span class="token string">&apos;hello world!&apos;</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// or you can do this</span>
+<span class="token function">reply</span><span class="token punctuation">(</span><span class="token function">message</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// reply with a more complex message</span>
+  text<span class="token punctuation">:</span> <span class="token string">&apos;hello world!&apos;</span><span class="token punctuation">,</span>
+  protocolSpecificOption<span class="token punctuation">:</span> <span class="token string">&apos;something&apos;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p><strong>Table of contents:</strong></p>
+<ul>
+<li><a href="#connecting">Connecting</a> (connecting to multiple networks on various protocols)</li>
+<li><a href="#events">Events</a><ul>
+<li><a href="#listening-on-events">Listening on events</a></li>
+<li><a href="#event-helpers">Event helpers</a> (creating events)<ul>
+<li><a href="#core-events">Core events</a> (list of coffea events)</li>
+<li><a href="#example-writing-an-event-helper">Example: Writing an event helper</a></li>
+</ul>
+</li>
+<li><a href="#sending-events">Sending events</a></li>
+</ul>
+</li>
+<li><a href="#example-reverse-bot">Example: Reverse bot</a> (quickstart example)</li>
+<li><a href="#protocols">Protocols</a> (implementing a new protocol)</li>
+</ul>
+<h2 id="quickstart">Quickstart</h2>
+<p>Use the <a href="https://github.com/coffea-bots/coffea-starter" target="_blank">coffea-starter</a> project to quickly get started developing with coffea!</p>
+<h2 id="installation">Installation</h2>
+<p>You can install the latest coffea version like this:</p>
+<pre><code>npm install --save coffea@1.0.0-beta18
+</code></pre><p>As for protocols, we&apos;re working on <a href="https://github.com/caffeinery/coffea-irc" target="_blank">coffea-irc</a>, <a href="https://github.com/caffeinery/coffea-slack" target="_blank">coffea-slack</a> and <a href="https://github.com/caffeinery/coffea-telegram" target="_blank">coffea-telegram</a>. Feel free to <a href="#protocols">build your own</a> if you want to play around with coffea.</p>
+<h2 id="connecting">Connecting</h2>
+<p>The coffea core exposes a <code>connect</code> function (along with other functions, which are explained later). It can be imported like this:</p>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> connect <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;coffea&apos;</span>
+</code></pre>
+<p>This function loads the required protocols (via <code>node_modules</code>) and returns an instance container, which has the <code>on</code> and <code>send</code> functions.</p>
+<pre><code class="lang-js"><span class="token comment" spellcheck="true">// create an instance container for one irc instance</span>
+<span class="token comment" spellcheck="true">// Note: options get passed to the protocol, which handles them (e.g. autojoin channels on irc)</span>
+<span class="token comment" spellcheck="true">//       please refer to the protocol documentation for more information about these options</span>
+<span class="token comment" spellcheck="true">//       (usually available at https://npmjs.com/package/coffea-PROTOCOLNAME)</span>
+<span class="token keyword">const</span> networks <span class="token operator">=</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    protocol<span class="token punctuation">:</span> <span class="token string">&apos;irc&apos;</span><span class="token punctuation">,</span>
+    network<span class="token punctuation">:</span> <span class="token string">&apos;...&apos;</span><span class="token punctuation">,</span>
+    channels<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&apos;#foo&apos;</span><span class="token punctuation">,</span> <span class="token string">&apos;#bar&apos;</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// the instance container exposes the `on` and `send` functions:</span>
+networks<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// we&apos;ll learn about sending events later</span>
+networks<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">&apos;message&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>msg<span class="token punctuation">,</span> reply<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// we&apos;ll learn about listening to events later</span>
+</code></pre>
+<p><strong>Note:</strong> You need to install <code>coffea-PROTOCOLNAME</code> to use that protocol, e.g. <code>npm install coffea-slack</code></p>
+<p>You can now use this function to connect to networks and create instance containers! :tada:</p>
+<h2 id="events">Events</h2>
+<p>Events are <em>the</em> central concept in coffea. They have a certain structure (object with a <code>type</code> key):</p>
+<pre><code class="lang-js"><span class="token punctuation">{</span>
+  type<span class="token punctuation">:</span> <span class="token string">&apos;EVENT_NAME&apos;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>For a message, it could look like this (imagine a git bot):</p>
+<pre><code class="lang-js"><span class="token punctuation">{</span>
+  type<span class="token punctuation">:</span> <span class="token string">&apos;message&apos;</span><span class="token punctuation">,</span>
+  chat<span class="token punctuation">:</span> <span class="token string">&apos;#dev&apos;</span><span class="token punctuation">,</span>
+  text<span class="token punctuation">:</span> <span class="token string">&apos;New commit!&apos;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong>Note:</strong> In coffea, outgoing and ingoing events are always consistent - they look the same. That way you don&apos;t need to memorize two separate structures for sending/receiving events - awesome! (might even save some code)</p>
+<h3 id="listening-on-events">Listening on events</h3>
+<p>coffea&apos;s <code>connect</code> function transforms the passed configuration array into an instance container, which is an enhanced array. This means you can use normal array functions, like <code>map</code> and <code>filter</code>. e.g. you could filter networks and only listen to <code>slack</code> networks, or you could use <code>map</code> to send a message to all networks. You could even combine them!</p>
+<pre><code class="lang-js"><span class="token comment" spellcheck="true">// only listen to `slack` networks:</span>
+networks<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>network <span class="token operator">=</span><span class="token operator">&gt;</span> network<span class="token punctuation">.</span>protocol <span class="token operator">===</span> <span class="token string">&apos;slack&apos;</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// `map` and `filter` combined</span>
+networks
+  <span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>network <span class="token operator">=</span><span class="token operator">&gt;</span> network<span class="token punctuation">.</span>protocol <span class="token operator">===</span> <span class="token string">&apos;slack&apos;</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>network <span class="token operator">=</span><span class="token operator">&gt;</span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>network<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>The array is enhanced with an <code>on</code> function (and a <code>send</code> function, more on that later), which allows you to listen to events on the instance container:</p>
+<pre><code class="lang-js">networks<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">&apos;event&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>event<span class="token punctuation">,</span> reply<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+networks
+  <span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>network <span class="token operator">=</span><span class="token operator">&gt;</span> network<span class="token punctuation">.</span>protocol <span class="token operator">===</span> <span class="token string">&apos;slack&apos;</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">&apos;message&apos;</span><span class="token punctuation">,</span> msg <span class="token operator">=</span><span class="token operator">&gt;</span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>text<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// sending events will be explained more later</span>
+<span class="token keyword">const</span> parrot <span class="token operator">=</span> <span class="token punctuation">(</span>msg<span class="token punctuation">,</span> reply<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token function">reply</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+networks<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">&apos;message&apos;</span><span class="token punctuation">,</span> parrot<span class="token punctuation">)</span>
+</code></pre>
+<h3 id="event-helpers">Event helpers</h3>
+<p>You probably don&apos;t want to deal with raw event objects all the time - you write a lot of boilerplate and it&apos;s prone to error. That&apos;s why coffea (and the protocols) provide helper functions that create events, they can be imported like this:</p>
+<pre><code class="lang-js"><span class="token comment" spellcheck="true">// `message` is a core event helper (it works on all protocols)</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> message <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;coffea&apos;</span>
+
+<span class="token comment" spellcheck="true">// `attachment` is a protocol specific event helper (it only works on certain protocols)</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> attachment <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;coffea-slack&apos;</span>
+</code></pre>
+<p><strong>Note:</strong> Protocols should try to keep similar functionality consistent (e.g. if two protocols support attachments, keep the api consistent so you can use either helper function and it will work for both protocols).</p>
+<p>Now you can create an event like this:</p>
+<pre><code class="lang-js"><span class="token function">message</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> chat<span class="token punctuation">,</span> options<span class="token punctuation">)</span>
+<span class="token function">message</span><span class="token punctuation">(</span><span class="token string">&apos;New commit!&apos;</span><span class="token punctuation">,</span> <span class="token string">&apos;#dev&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> protocolSpecificOption<span class="token punctuation">:</span> <span class="token string">&apos;something&apos;</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Or you can use an object instead:</p>
+<pre><code class="lang-js"><span class="token function">message</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  text<span class="token punctuation">:</span> <span class="token string">&apos;New commit!&apos;</span><span class="token punctuation">,</span>
+  chat<span class="token punctuation">:</span> <span class="token string">&apos;#dev&apos;</span><span class="token punctuation">,</span>
+  protocolSpecificOption<span class="token punctuation">:</span> <span class="token string">&apos;something&apos;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>The structure for event helpers is:</p>
+<pre><code class="lang-js"><span class="token function">eventName</span><span class="token punctuation">(</span>argument1<span class="token punctuation">,</span> argument2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> options<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// for global events</span>
+<span class="token function">eventName</span><span class="token punctuation">(</span>argument1<span class="token punctuation">,</span> argument2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> chat<span class="token punctuation">,</span> options<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// for events that are specific to a certain chat</span>
+</code></pre>
+<p>Make sure your event helper is also usable with an object:</p>
+<pre><code class="lang-js"><span class="token function">eventName</span><span class="token punctuation">(</span><span class="token punctuation">{</span> argument1<span class="token punctuation">,</span> argument2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> option1<span class="token punctuation">,</span> option2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token function">eventName</span><span class="token punctuation">(</span><span class="token punctuation">{</span> argument1<span class="token punctuation">,</span> argument2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> chat<span class="token punctuation">,</span> option1<span class="token punctuation">,</span> option2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>(<code>eventName</code> should always equal the <code>type</code> of the event that is returned to avoid confusion!)</p>
+<p>Multiple protocols can expose the same helper functions, but with enhanced functionality. e.g. for Slack you could do:</p>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> message<span class="token punctuation">,</span> attachment <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;coffea-slack&apos;</span>
+<span class="token function">message</span><span class="token punctuation">(</span><span class="token punctuation">{</span> chat<span class="token punctuation">,</span> text<span class="token punctuation">,</span> attachment<span class="token punctuation">:</span> <span class="token function">attachment</span><span class="token punctuation">(</span><span class="token string">&apos;test.png&apos;</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p><strong>Note:</strong> coffea core&apos;s <code>message</code> helper function (if you import with <code>import { message } from &apos;coffea&apos;</code>) does not implement the <code>attachment</code> option!</p>
+<h4 id="core-events">Core events</h4>
+<p>coffea defines certain event helpers that should be used when developing protocols
+in order to ensure consistency. You can import and use all helpers like this:</p>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> event<span class="token punctuation">,</span> connection<span class="token punctuation">,</span> message<span class="token punctuation">,</span> privatemessage<span class="token punctuation">,</span> command<span class="token punctuation">,</span> error <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;coffea&apos;</span>
+<span class="token function">event</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> data<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// `name` required; e.g. event(&apos;ping&apos;)</span>
+<span class="token function">connection</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token function">message</span><span class="token punctuation">(</span>text<span class="token punctuation">,</span> chat<span class="token punctuation">,</span> options<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// `text` required; e.g. message(&apos;hi!&apos;)</span>
+<span class="token function">privatemessage</span><span class="token punctuation">(</span>text<span class="token punctuation">,</span> chat<span class="token punctuation">,</span> options<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// `text` required; e.g. privatemessage(&apos;hi!&apos;)</span>
+<span class="token function">command</span><span class="token punctuation">(</span>cmd<span class="token punctuation">,</span> args<span class="token punctuation">,</span> chat<span class="token punctuation">,</span> options<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// `cmd` required; e.g. `command(&apos;ping&apos;)`</span>
+<span class="token function">error</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> options<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// `err` required; e.g. `error(new Error(&apos;fail&apos;))`</span>
+</code></pre>
+<p>You can alternatively pass an object as the first parameter instead, e.g.:</p>
+<pre><code class="lang-js"><span class="token function">message</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  text<span class="token punctuation">:</span> <span class="token string">&apos;hello world&apos;</span><span class="token punctuation">,</span>
+  someOption<span class="token punctuation">:</span> <span class="token boolean">true</span> <span class="token comment" spellcheck="true">// instead of using `options` as a separate argument, you can just pass them directly in the object</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h4 id="example-writing-an-event-helper">Example: Writing an event helper</h4>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> isObject <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;coffea&apos;</span>
+
+<span class="token comment" spellcheck="true">/**
+ * Make sure to add some information about the event helper here.
+ *
+ * @param  {type} arg
+ * @param  {type} [optionalArg]
+ * @return {Object} example event
+ */</span>
+<span class="token keyword">export</span> <span class="token keyword">const</span> example <span class="token operator">=</span> <span class="token punctuation">(</span>arg<span class="token punctuation">,</span> optionalArg<span class="token punctuation">,</span> options<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// make the helper work with an object</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">isObject</span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// we need to rename `arg` to `_arg` here to avoid overshadowing the variable</span>
+    <span class="token keyword">let</span> <span class="token punctuation">{</span> arg<span class="token punctuation">:</span> _arg<span class="token punctuation">,</span> optionalArg<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>options <span class="token punctuation">}</span> <span class="token operator">=</span> arg
+    <span class="token keyword">return</span> <span class="token function">example</span><span class="token punctuation">(</span>_arg<span class="token punctuation">,</span> optionalArg<span class="token punctuation">,</span> options<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment" spellcheck="true">// do some sanity checks</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>arg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span>
+      &apos;An <span class="token template-string"><span class="token string">`example`</span></span> event needs at least a <span class="token template-string"><span class="token string">`arg`</span></span> parameter<span class="token punctuation">,</span> &apos; <span class="token operator">+</span>
+      <span class="token string">&apos;e.g. example(\&apos;arg\&apos;) or example({ arg: \&apos;arg\&apos; })&apos;</span>
+    <span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment" spellcheck="true">// create the event</span>
+  <span class="token comment" spellcheck="true">// make sure to put ...options first or it will overwrite other properties!</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>options<span class="token punctuation">,</span>
+    type<span class="token punctuation">:</span> <span class="token string">&apos;example&apos;</span><span class="token punctuation">,</span>
+    arg<span class="token punctuation">,</span> optionalArg
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="sending-events">Sending events</h3>
+<p>Now that you know how to create events, let&apos;s send them to the networks.</p>
+<p>The instance container is also enhanced with a <code>send</code> function, which allows you to send <em>calling events</em> to the networks. e.g. sending a calling <code>message</code> event will send a message to the network.</p>
+<p><strong>Note:</strong> As mentioned before, in coffea <em>calling events</em> and <em>receiving events</em> always look the same.</p>
+<p>You can use the <code>message</code> helper function to send an event to all networks:</p>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> message <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;coffea&apos;</span>
+
+<span class="token comment" spellcheck="true">// send to all networks:</span>
+networks<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token function">message</span><span class="token punctuation">(</span><span class="token punctuation">{</span> chat<span class="token punctuation">:</span> <span class="token string">&apos;#dev&apos;</span><span class="token punctuation">,</span> text<span class="token punctuation">:</span> <span class="token string">&apos;Commit!&apos;</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// send to slack networks only:</span>
+networks
+  <span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>network <span class="token operator">=</span><span class="token operator">&gt;</span> network<span class="token punctuation">.</span>protocol <span class="token operator">===</span> <span class="token string">&apos;slack&apos;</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token function">message</span><span class="token punctuation">(</span><span class="token punctuation">{</span> chat<span class="token punctuation">:</span> <span class="token string">&apos;#random&apos;</span><span class="token punctuation">,</span> text<span class="token punctuation">:</span> <span class="token string">&apos;Secret slack-only stuff.&apos;</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<h4 id="send-in-combination-with-on"><code>send</code> in combination with <code>on</code></h4>
+<p>If you&apos;re sending events as a response to another event, you should use the <code>reply</code> function that gets passed as an argument to the listener. It will automatically figure out where to send the message instead of sending it to all networks (like <code>networks.send</code> does):</p>
+<pre><code class="lang-js">networks<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">&apos;message&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>msg<span class="token punctuation">,</span> reply<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token function">reply</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>text<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>You may want to keep the function definitions (<code>const parrot = ...</code>) separate from the <code>on</code> statement (<code>networks.on(...)</code>). This allows for easy unit tests:</p>
+<pre><code class="lang-js"><span class="token comment" spellcheck="true">// somefile.js</span>
+<span class="token keyword">export</span> <span class="token keyword">const</span> parrot <span class="token operator">=</span> <span class="token punctuation">(</span>msg<span class="token punctuation">,</span> reply<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token function">reply</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">const</span> reverse <span class="token operator">=</span> <span class="token punctuation">(</span>msg<span class="token punctuation">,</span> reply<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> reversedText <span class="token operator">=</span> msg<span class="token punctuation">.</span>text<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">&apos;&apos;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">reverse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">&apos;&apos;</span><span class="token punctuation">)</span>
+  <span class="token function">reply</span><span class="token punctuation">(</span>reversedText<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// unittests.js</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> assert <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;my-favorite-testing-library&apos;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> parrot<span class="token punctuation">,</span> reverse <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;./somefile&apos;</span>
+<span class="token function">parrot</span><span class="token punctuation">(</span><span class="token string">&apos;hello world&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>msg<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token function">assert</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>text <span class="token operator">===</span> <span class="token string">&apos;hello world&apos;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token function">reverse</span><span class="token punctuation">(</span><span class="token string">&apos;hello world&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>msg<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token function">assert</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>text <span class="token operator">===</span> <span class="token string">&apos;dlrow olleh&apos;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// main.js</span>
+<span class="token keyword">import</span> connect <span class="token keyword">from</span> <span class="token string">&apos;coffea&apos;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> parrot<span class="token punctuation">,</span> reverse <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;./somefile&apos;</span>
+<span class="token keyword">const</span> networks <span class="token operator">=</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// put network config here</span>
+networks<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">&apos;message&apos;</span><span class="token punctuation">,</span> reverse<span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// or...</span>
+networks<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">&apos;message&apos;</span><span class="token punctuation">,</span> parrot<span class="token punctuation">)</span>
+</code></pre>
+<h2 id="example-reverse-bot">Example: Reverse bot</h2>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> connect<span class="token punctuation">,</span> message <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;coffea&apos;</span>
+
+<span class="token keyword">const</span> networks <span class="token operator">=</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    protocol<span class="token punctuation">:</span> <span class="token string">&apos;irc&apos;</span><span class="token punctuation">,</span>
+    network<span class="token punctuation">:</span> <span class="token string">&apos;...&apos;</span><span class="token punctuation">,</span>
+    channels<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&apos;#foo&apos;</span><span class="token punctuation">,</span> <span class="token string">&apos;#bar&apos;</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    protocol<span class="token punctuation">:</span> <span class="token string">&apos;telegram&apos;</span><span class="token punctuation">,</span>
+    token<span class="token punctuation">:</span> <span class="token string">&apos;...&apos;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    protocol<span class="token punctuation">:</span> <span class="token string">&apos;slack&apos;</span><span class="token punctuation">,</span>
+    token<span class="token punctuation">:</span> <span class="token string">&apos;...&apos;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> reverse <span class="token operator">=</span> <span class="token punctuation">(</span>msg<span class="token punctuation">,</span> reply<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> reversedText <span class="token operator">=</span> msg<span class="token punctuation">.</span>text<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">&apos;&apos;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">reverse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">&apos;&apos;</span><span class="token punctuation">)</span>
+  <span class="token function">reply</span><span class="token punctuation">(</span>reversedText<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+networks<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">&apos;connection&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>evt<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&apos;connected to &apos;</span> <span class="token operator">+</span> evt<span class="token punctuation">.</span>network<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+networks<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">&apos;message&apos;</span><span class="token punctuation">,</span> reverse<span class="token punctuation">)</span>
+</code></pre>
+<h2 id="protocols">Protocols</h2>
+<p>This is a guide on how to implement a new protocol with coffea.</p>
+<p>Protocols are functions that take <code>config</code> (a network configuration), and a <code>dispatch</code> function as arguments. They return a function that will handle all <em>calling events</em> sent to the protocol later.</p>
+<p>A simple protocol could look like this:</p>
+<pre><code class="lang-js"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">const</span> dummyProtocol <span class="token operator">=</span> <span class="token punctuation">(</span>config<span class="token punctuation">,</span> dispatch<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// mock connect event</span>
+  <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> <span class="token string">&apos;connect&apos;</span><span class="token punctuation">,</span>
+    network<span class="token punctuation">:</span> config<span class="token punctuation">.</span>network
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">return</span> event <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">switch</span> <span class="token punctuation">(</span>event<span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">case</span> <span class="token string">&apos;message&apos;</span><span class="token punctuation">:</span>
+        <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+          type<span class="token punctuation">:</span> <span class="token string">&apos;message&apos;</span><span class="token punctuation">,</span>
+          text<span class="token punctuation">:</span> event<span class="token punctuation">.</span>text
+        <span class="token punctuation">}</span><span class="token punctuation">)</span>
+        <span class="token keyword">break</span>
+      <span class="token keyword">default</span><span class="token punctuation">:</span>
+        <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+          type<span class="token punctuation">:</span> <span class="token string">&apos;error&apos;</span><span class="token punctuation">,</span>
+          text<span class="token punctuation">:</span> <span class="token string">&apos;Unknown event&apos;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span>
+        <span class="token keyword">break</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>To use this protocol, you have to pass the protocol function to <code>connect</code>:</p>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> connect<span class="token punctuation">,</span> message <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;coffea&apos;</span>
+<span class="token keyword">import</span> dummyProtocol <span class="token keyword">from</span> <span class="token string">&apos;./dummy&apos;</span>
+
+<span class="token keyword">const</span> networks <span class="token operator">=</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    protocol<span class="token punctuation">:</span> dummyProtocol<span class="token punctuation">,</span>
+    network<span class="token punctuation">:</span> <span class="token string">&apos;test&apos;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> logListener <span class="token operator">=</span> msg <span class="token operator">=</span><span class="token operator">&gt;</span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span>
+networks<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">&apos;message&apos;</span><span class="token punctuation">,</span> logListener<span class="token punctuation">)</span>
+
+networks<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token function">message</span><span class="token punctuation">(</span><span class="token string">&apos;hello world!&apos;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p><code>dummyProtocol</code>&apos;s event handler will then receive the following as the <code>event</code> argument:</p>
+<pre><code class="lang-js"><span class="token punctuation">{</span>
+  type<span class="token punctuation">:</span> <span class="token string">&apos;message&apos;</span><span class="token punctuation">,</span>
+  text<span class="token punctuation">:</span> <span class="token string">&apos;hello world!&apos;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Which means it will dispatch the <code>message</code> event, which results in the <code>on(&apos;message&apos;, listener)</code> listeners getting called with the same <code>event</code> argument.</p>
+<p>Finally, the <code>logListener</code> function will get called, which results in the following output on the console:</p>
+<pre><code>{
+  type: &apos;message&apos;,
+  text: &apos;hello world!&apos;
+}
+</code></pre><h3 id="forward-helper"><code>forward</code> helper</h3>
+<pre><code class="lang-js"><span class="token function">forward</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  eventName<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">,</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>You probably don&apos;t want to use <code>switch</code> statements to parse the events, which is why coffea provides a <code>forward</code> helper function. It forwards the events (depending on their type) to the specific handler function and can be used like this:</p>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> forward <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;coffea&apos;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">const</span> dummyProtocol <span class="token operator">=</span> <span class="token punctuation">(</span>config<span class="token punctuation">,</span> dispatch<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// mock connect event</span>
+  <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> <span class="token string">&apos;connect&apos;</span><span class="token punctuation">,</span>
+    network<span class="token punctuation">:</span> config<span class="token punctuation">.</span>network
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">return</span> <span class="token function">forward</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    <span class="token string">&apos;message&apos;</span><span class="token punctuation">:</span> event <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        type<span class="token punctuation">:</span> <span class="token string">&apos;message&apos;</span><span class="token punctuation">,</span>
+        text<span class="token punctuation">:</span> event<span class="token punctuation">.</span>text
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+    <span class="token string">&apos;default&apos;</span><span class="token punctuation">:</span> event <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        type<span class="token punctuation">:</span> <span class="token string">&apos;error&apos;</span><span class="token punctuation">,</span>
+        text<span class="token punctuation">:</span> <span class="token string">&apos;Unknown event&apos;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong>Note:</strong> <code>&apos;default&apos;</code> will be called if the event doesn&apos;t match any of the other defined types.</p>
+<p>This helper also allows you to separate your event handlers from the protocol logic:</p>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> forward <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;coffea&apos;</span>
+
+<span class="token keyword">const</span> messageHandler <span class="token operator">=</span> dispatch <span class="token operator">=</span><span class="token operator">&gt;</span> event <span class="token operator">=</span><span class="token operator">&gt;</span>
+  <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> <span class="token string">&apos;message&apos;</span><span class="token punctuation">,</span>
+    text<span class="token punctuation">:</span> event<span class="token punctuation">.</span>text
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> defaultHandler <span class="token operator">=</span> dispatch <span class="token operator">=</span><span class="token operator">&gt;</span> event <span class="token operator">=</span><span class="token operator">&gt;</span>
+  <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> <span class="token string">&apos;error&apos;</span><span class="token punctuation">,</span>
+    err<span class="token punctuation">:</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">&apos;Unknown event&apos;</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">const</span> dummyProtocol <span class="token operator">=</span> <span class="token punctuation">(</span>config<span class="token punctuation">,</span> dispatch<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// mock connect event</span>
+  <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> <span class="token string">&apos;connect&apos;</span><span class="token punctuation">,</span>
+    network<span class="token punctuation">:</span> config<span class="token punctuation">.</span>network
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">return</span> <span class="token function">forward</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    <span class="token string">&apos;message&apos;</span><span class="token punctuation">:</span> <span class="token function">messageHandler</span><span class="token punctuation">(</span>dispatch<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token string">&apos;default&apos;</span><span class="token punctuation">:</span> <span class="token function">defaultHandler</span><span class="token punctuation">(</span>dispatch<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>You can (and should!) use the same coffea helpers for protocols:</p>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> forward<span class="token punctuation">,</span> message<span class="token punctuation">,</span> error <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;coffea&apos;</span>
+
+<span class="token keyword">const</span> messageHandler <span class="token operator">=</span> dispatch <span class="token operator">=</span><span class="token operator">&gt;</span> event <span class="token operator">=</span><span class="token operator">&gt;</span>
+  <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token function">message</span><span class="token punctuation">(</span><span class="token punctuation">{</span> text<span class="token punctuation">:</span> event<span class="token punctuation">.</span>text <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> defaultHandler <span class="token operator">=</span> dispatch <span class="token operator">=</span><span class="token operator">&gt;</span> event <span class="token operator">=</span><span class="token operator">&gt;</span>
+  <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token punctuation">{</span> err<span class="token punctuation">:</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">&apos;Unknown event&apos;</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">const</span> dummyProtocol <span class="token operator">=</span> <span class="token punctuation">(</span>config<span class="token punctuation">,</span> dispatch<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// mock connect event</span>
+  <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> <span class="token string">&apos;connect&apos;</span><span class="token punctuation">,</span>
+    network<span class="token punctuation">:</span> config<span class="token punctuation">.</span>network
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">return</span> <span class="token function">forward</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    <span class="token string">&apos;message&apos;</span><span class="token punctuation">:</span> <span class="token function">messageHandler</span><span class="token punctuation">(</span>dispatch<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token string">&apos;default&apos;</span><span class="token punctuation">:</span> <span class="token function">defaultHandler</span><span class="token punctuation">(</span>dispatch<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                
+                <a href="docs/introduction.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Introduction">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Read Me","level":"1.1","depth":1,"next":{"title":"Introduction","level":"1.2","depth":1,"path":"docs/introduction.md","ref":"docs/introduction.md","articles":[]},"dir":"ltr"},"config":{"plugins":["edit-link","prism","-highlight","github","anchorjs"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"prism":{},"github":{"url":"https://github.com/caffeinery/coffea"},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/caffeinery/coffea/tree/master"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchorjs":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"coffea","gitbook":">=3.2.1"},"file":{"path":"README.md","mtime":"2016-10-30T13:59:51.000Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2016-10-30T14:38:46.855Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.1/anchor.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-anchorjs/anchor-style.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

@@ -1,0 +1,24 @@
+# node modules
+node_modules/
+
+# osx finder file
+.DS_Store
+
+# (npm) log files
+*.log
+
+# sublime files
+*.sublime-project
+*.sublime-workspace
+
+# test file
+test.js
+test*.js
+
+.srclib-cache
+
+coverage/
+
+lib
+
+_book/
