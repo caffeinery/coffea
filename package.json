@@ -38,6 +38,7 @@
     "eslint-config-standard": "^5.1.0",
     "eslint-plugin-promise": "^2.0.1",
     "eslint-plugin-standard": "^2.0.0",
+    "gitbook-cli": "^2.3.0",
     "isparta": "^4.0.0",
     "mocha": "^3.0.2",
     "rimraf": "^2.5.2"
@@ -48,6 +49,10 @@
     "lint": "./node_modules/.bin/eslint src test",
     "test": "./node_modules/.bin/mocha --compilers js:babel-register --recursive",
     "test:cov": "./node_modules/.bin/babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha -- --recursive",
-    "prepublish": "npm run lint && npm run test && npm run clean && npm run compile"
+    "prepublish": "npm run lint && npm run test && npm run clean && npm run compile",
+    "docs:prepare": "gitbook install",
+    "docs:watch": "npm run docs:prepare && gitbook serve",
+    "docs:build": "npm run docs:prepare && rm -rf _book && gitbook build",
+    "docs:publish": "npm run docs:build && cd _book && git init && git commit --allow-empty -m 'Update docs' && git checkout -b gh-pages && git add . && git commit -am 'Update docs' && git push git@github.com:caffeinery/coffea gh-pages --force"
   }
 }
