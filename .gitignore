@@ -20,3 +20,5 @@ test*.js
 coverage/
 
 lib
+
+_book/
