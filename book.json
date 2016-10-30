@@ -1,0 +1,14 @@
+{
+  "gitbook": ">=3.2.1",
+  "title": "coffea",
+  "plugins": ["edit-link", "prism", "-highlight", "github", "anchorjs"],
+  "pluginsConfig": {
+    "edit-link": {
+      "base": "https://github.com/caffeinery/coffea/tree/master",
+      "label": "Edit This Page"
+    },
+    "github": {
+      "url": "https://github.com/caffeinery/coffea"
+    }
+  }
+}
