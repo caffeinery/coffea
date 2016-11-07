@@ -75,6 +75,38 @@ describe('connect function', () => {
     })
   })
 
+  describe('multi-network functionality', () => {
+    it('should be filterable', (done) => {
+      let c = connect([{
+        name: 'net1',
+        protocol: dummyProtocol
+      }, {
+        name: 'net2',
+        protocol: dummyProtocol
+      }])
+
+      // it should return only one instance
+      expect(Array.from(c.filter(network => network.name)).length === 1)
+      done()
+    })
+
+    it('should return special functions from filter', (done) => {
+      let c = connect([{
+        name: 'net1',
+        protocol: dummyProtocol
+      }, {
+        name: 'net2',
+        protocol: dummyProtocol
+      }])
+
+      c.filter(network => network.name === 'net1').on('test event', (e) => {
+        expect(e.success).to.eql(true)
+
+        done()
+      })
+    })
+  })
+
   // TODO: Add unit tests for new API
   // describe('register() and call()', () => {
   //   it('should throw an error if there\'s no method registered', (done) => {
