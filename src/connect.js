@@ -12,7 +12,7 @@ import instance from './instance'
  * @return {Array}
  */
 const execAll = (func, instances) => (...args) => {
-  const mappingFn = (obj) => obj[func](...args)
+  const mappingFn = (obj) => obj && obj[func] && obj[func](...args)
 
   if (Array.isArray(instances)) return instances.map(mappingFn)
   else return mapObject(instances, mappingFn)
@@ -29,9 +29,9 @@ const enhanceInstances = (instances) => {
   instances.on = execAll('on', instances)
   instances.send = execAll('send', instances)
   instances.dispatch = execAll('dispatch', instances)
-  instances.filter = (fn) => enhanceInstances(Array.filter(instances, fn))
-  instances.map = (fn) => enhanceInstances(Array.map(instances, fn))
-  instances.reduce = (fn) => enhanceInstances(Array.reduce(instances, fn))
+  instances.filter = (fn) => enhanceInstances(Array.from(instances).filter(fn))
+  instances.map = (fn) => enhanceInstances(Array.from(instances).map(fn))
+  instances.reduce = (fn) => enhanceInstances(Array.from(instances).reduce(fn))
   return instances
 }
 
