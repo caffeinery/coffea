@@ -153,9 +153,9 @@ export default function instance (config, keyName) {
   const dispatch = makeDispatch(name, listeners, () => handler)
   handler = protocol(config, dispatch)
 
-  return {
+  return Object.assign(config, {
     on: makeOn(listeners),
     send: handler,
     dispatch: dispatch
-  }
+  })
 }

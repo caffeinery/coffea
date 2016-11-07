@@ -29,6 +29,9 @@ const enhanceInstances = (instances) => {
   instances.on = execAll('on', instances)
   instances.send = execAll('send', instances)
   instances.dispatch = execAll('dispatch', instances)
+  instances.filter = (fn) => enhanceInstances(Array.filter(instances, fn))
+  instances.map = (fn) => enhanceInstances(Array.map(instances, fn))
+  instances.reduce = (fn) => enhanceInstances(Array.reduce(instances, fn))
   return instances
 }
 
