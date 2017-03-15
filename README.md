@@ -64,7 +64,7 @@ This function loads the required protocols (via `node_modules`) and returns an i
 const networks = connect([
   {
     protocol: 'irc',
-    network: '...',
+    network: 'irc.6697.eu',
     channels: ['#foo', '#bar']
   }
 ])
@@ -317,8 +317,8 @@ import { connect, message } from 'coffea'
 const networks = connect([
   {
     protocol: 'irc',
-    network: '...',
-    channels: ['#foo', '#bar']
+    network: 'irc.6697.eu',
+    channels: ['#coffea', '#test']
   },
   {
     protocol: 'telegram',
