@@ -4,6 +4,8 @@
 
 _coffea lays the foundations you need to painlessly and effortlessly connect to multiple chat protocols_
 
+**Not maintained:** coffea is currently not maintained anymore due to lack of time. If you are interested in continuing this project feel free to contact me at [me@omnidan.net](mailto:me@omnidan.net)
+
 **Attention:** `beta15` changed `event.channel` to `event.chat` for more
 consistency across protocols. Furthermore, helper functions now accept only
 *one* argument with all the options for building the event. Make sure to update
